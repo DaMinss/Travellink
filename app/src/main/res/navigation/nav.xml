@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.travellink.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/userInfoFragment"
+        android:name="com.example.travellink.UserInfoFragment"
+        android:label="fragment_user_info"
+        tools:layout="@layout/fragment_user_info" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.travellink.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/viewAllTripFragment"
+        android:name="com.example.travellink.Trip.ViewAllTripFragment"
+        android:label="fragment_view_all_trip"
+        tools:layout="@layout/fragment_view_all_trip" />
+    <fragment
+        android:id="@+id/viewStatFragment"
+        android:name="com.example.travellink.ViewStatFragment"
+        android:label="fragment_view_stat"
+        tools:layout="@layout/fragment_view_stat" />
+    <activity
+        android:id="@+id/createNewTrip"
+        android:name="com.example.travellink.Trip.CreateNewTrip"
+        android:label="activity_create_new_trip"
+        tools:layout="@layout/activity_create_new_trip" />
+</navigation>

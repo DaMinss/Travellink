@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "768454902049",
+    "project_id": "travellink-c2794",
+    "storage_bucket": "travellink-c2794.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768454902049:android:b09ba7702eafd17afbbe60",
+        "android_client_info": {
+          "package_name": "com.example.travellink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768454902049-rssireo45v828eb0icbf2362eakht1q8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYDqAb8xwkhx7uZsbYfZww83tQRl2SooI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768454902049-rssireo45v828eb0icbf2362eakht1q8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

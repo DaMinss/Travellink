@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_createTrip"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main"
+    tools:context=".Trip.CreateNewTrip">
+
+    <ImageView
+        android:id="@+id/logo1"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:src="@drawable/logo_name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/auth_bg"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".82"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/note"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Note"
+            app:boxStrokeColor="#EAEAEE"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@+id/buttonCreateTrip"
+            app:layout_constraintEnd_toEndOf="@+id/Date"
+            app:layout_constraintStart_toStartOf="@+id/Date"
+            app:layout_constraintTop_toBottomOf="@+id/Date">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/Note"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:drawableRight="@drawable/ic_baseline_edit_note_24"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/Date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:layout_marginEnd="52dp"
+            android:layout_marginBottom="16dp"
+            android:hint="Start Date"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="#EAEAEE"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@+id/note"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/depart"
+            app:layout_constraintVertical_bias="0.39">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/start_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:clickable="true"
+                android:drawableRight="@drawable/ic_baseline_date_range_24"
+                android:focusable="false"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/arrive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:hint="Arrival"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="#EAEAEE"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toBottomOf="@+id/depart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/depart"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            app:layout_constraintVertical_bias="1.0">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tripArrival"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:drawableRight="@drawable/ic_baseline_flight_land_24"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:errorEnabled="true"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/name"
+            android:layout_width="268dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginBottom="18dp"
+            android:hint="Enter your trip name"
+            app:boxStrokeColor="#EAEAEE"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@+id/arrive"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.05">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tripName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:drawableRight="@drawable/ic_baseline_airplane_ticket_24"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/depart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:hint="Departure"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="#EAEAEE"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@+id/Date"
+            app:layout_constraintEnd_toStartOf="@+id/arrive"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tripDepart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:drawableRight="@drawable/ic_baseline_flight_takeoff_24"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonCreateTrip"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="144dp"
+            android:background="@drawable/btn_login"
+            android:text="Create"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/note"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="@+id/note"
+            app:layout_constraintTop_toBottomOf="@+id/note" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimationView"
+            android:layout_width="235dp"
+            android:layout_height="178dp"
+            android:layout_centerVertical="true"
+            android:minHeight="90dp"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:lottie_autoPlay="true"
+            app:lottie_colorFilter="@color/purple_200"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/flight"
+            app:lottie_speed="1"></com.airbnb.lottie.LottieAnimationView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/darker_grotesque_semibold"
+        android:text="Create your new trip"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo1" />
+
+    <ImageView
+        android:id="@+id/backBTN"
+        android:layout_width="52dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/logo1"
+        app:layout_constraintEnd_toEndOf="@+id/logo1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/logo1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.32"
+        app:srcCompat="@drawable/back_btn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

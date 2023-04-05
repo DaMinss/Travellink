@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Auth.SignUpFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/registerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtConfirmPassword"
+            android:layout_width="276dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:hint="Confirm Your Password"
+            android:textColorHint="#A7A7A7"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="#EAEAEE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/arrive"
+            app:passwordToggleDrawable="@drawable/icon_toggle"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:inputType="textPassword"
+                android:textColor="#5B5B5B"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/name"
+            android:layout_width="276dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:hint="Enter your phone number"
+            android:textColorHint="#A7A7A7"
+            app:boxStrokeColor="#EAEAEE"
+            app:layout_constraintBottom_toTopOf="@+id/txtEmail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtLastName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/registerPhonenumb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:inputType="text"
+                android:textColor="#5B5B5B"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtFirstName"
+            android:layout_width="276dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:hint="Enter Your First Name"
+            android:textColorHint="#A7A7A7"
+            app:boxStrokeColor="#EAEAEE"
+            app:layout_constraintBottom_toTopOf="@+id/txtLastName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/registerFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:inputType="text"
+                android:textColor="#5B5B5B"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtEmail"
+            android:layout_width="276dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:hint="Enter Your Email"
+            android:textColorHint="#A7A7A7"
+            app:boxStrokeColor="#EAEAEE"
+            app:layout_constraintBottom_toTopOf="@+id/arrive"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/registerEmail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:inputType="textEmailAddress"
+                android:textColor="#5B5B5B"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/arrive"
+            android:layout_width="276dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/white"
+            android:hint="Enter Your Password"
+            android:textColorHint="#A7A7A7"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="#EAEAEE"
+            app:layout_constraintBottom_toTopOf="@id/txtConfirmPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtEmail"
+            app:passwordToggleDrawable="@drawable/icon_toggle"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/registerPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:inputType="textPassword"
+                android:textColor="#5B5B5B"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/googleAuth"
+            android:layout_width="163dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="31dp"
+            android:background="@drawable/btn_login"
+            android:backgroundTint="#F4F4F8"
+            android:drawableLeft="@drawable/google"
+            android:text="Continue with Google"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonSignup"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonSignup"
+            android:layout_width="271dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/btn_login"
+            android:text="Sign up"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/txtConfirmPassword"
+            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintStart_toStartOf="@+id/txtConfirmPassword"
+            app:layout_constraintTop_toBottomOf="@+id/txtConfirmPassword"
+            app:layout_constraintVertical_bias="0.042" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtLastName"
+            android:layout_width="276dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:hint="Enter Your Last Name"
+            android:textColorHint="#A7A7A7"
+            app:boxStrokeColor="#EAEAEE"
+            app:layout_constraintBottom_toTopOf="@+id/name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtFirstName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/registerLastName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:inputType="text"
+                android:textColor="#5B5B5B"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/otpLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimationView"
+            android:layout_width="150dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/otp_message"
+            app:lottie_speed="0.8"></com.airbnb.lottie.LottieAnimationView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter your received OTP code from your registered phone number "
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="+84 962780783"
+            android:textAlignment="center"
+            android:textSize="18sp"/>
+
+        <in.aabhasjindal.otptextview.OtpTextView
+            android:id="@+id/OTPView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:bar_enabled="true"
+            app:bar_height="2dp"
+            app:height="40dp"
+            app:length="6"
+            app:otp_text_size="26dp"
+            app:width="40dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonVerify"
+            android:layout_width="271dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_login"
+            android:layout_gravity="center"
+            android:text="Verify"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/purple_200"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Don't get the OTP ?"
+                android:textColor="#A7A7A7"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/resentOTP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:text="Resent OTP"
+                android:textColor="@color/purple_200"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_gravity="center"
+            android:text="Back to SignUp"
+            android:textColor="@color/purple_200"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</FrameLayout>

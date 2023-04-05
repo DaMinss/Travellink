@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main"
+    tools:context=".OnboardingScreen">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager2"
+        android:layout_width="417dp"
+        android:layout_height="653dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.023"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"></androidx.viewpager2.widget.ViewPager2>
+
+
+    <me.relex.circleindicator.CircleIndicator3
+        android:id="@+id/indicator"
+        android:layout_width="52dp"
+        android:layout_height="42dp"
+        app:ci_drawable="@drawable/circle"
+        app:ci_height="8dp"
+        app:ci_width="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.043"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewPager2"
+        app:layout_constraintVertical_bias="0.678"></me.relex.circleindicator.CircleIndicator3>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/Next"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginBottom="23dp"
+        android:background="@drawable/btn_next"
+        android:drawableEnd="@drawable/ic_baseline_arrow_right_alt_24"
+        android:text="Next"
+        android:textColor="@color/main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.939"
+        app:layout_constraintStart_toEndOf="@+id/indicator" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/Finish"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginBottom="23dp"
+        android:background="@drawable/btn_next"
+        android:text="Finish"
+        android:textColor="@color/main"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.939"
+        app:layout_constraintStart_toEndOf="@+id/indicator" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

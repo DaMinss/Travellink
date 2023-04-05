@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Auth.LoginFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/name"
+            android:layout_width="276dp"
+            android:layout_height="60dp"
+            android:hint="User Email"
+            android:textColorHint="#A7A7A7"
+            app:boxStrokeColor="#EAEAEE"
+            app:layout_constraintBottom_toTopOf="@+id/arrive"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.832">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tripName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/arrive"
+            android:layout_width="276dp"
+            android:layout_height="61dp"
+            android:background="@color/white"
+            android:hint="Password"
+            android:textColorHint="#A7A7A7"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="#EAEAEE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.326"
+            app:passwordToggleDrawable="@drawable/icon_toggle"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/pass"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:inputType="textPassword"
+                android:textColor="#5B5B5B"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="139dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="283dp"
+            android:text="Don't have an account?"
+            android:textColor="#A7A7A7"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
+
+        <TextView
+            android:id="@+id/forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="228dp"
+            android:layout_marginEnd="70dp"
+
+            android:text="Forgot Password?"
+            android:textColor="@color/purple_200"
+            app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/arrive"
+            app:layout_constraintVertical_bias="0.503" />
+
+        <TextView
+            android:id="@+id/createNewAccount"
+            android:layout_width="135dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="32dp"
+            android:text="Swipe left to SIGNUP"
+            android:textColor="@color/purple_200"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.157"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/googleAuth"
+            android:layout_width="163dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/btn_login"
+            android:backgroundTint="#F4F4F8"
+            android:drawableLeft="@drawable/google"
+            android:text="Continue with Google"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/offline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/offline"
+            android:layout_width="163dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="116dp"
+            android:background="@drawable/btn_login"
+            android:backgroundTint="#F4F4F8"
+            android:drawableLeft="@drawable/ic_baseline_boy_24"
+            android:text="Continue with Personal mode"
+            android:textColor="@color/black"
+            android:textSize="9sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonLogin"
+            android:layout_width="271dp"
+            android:layout_height="35dp"
+            android:background="@drawable/btn_login"
+            android:text="LOGIN"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/arrive"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toStartOf="@+id/arrive"
+            app:layout_constraintTop_toBottomOf="@+id/arrive"
+            app:layout_constraintVertical_bias="0.179" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
