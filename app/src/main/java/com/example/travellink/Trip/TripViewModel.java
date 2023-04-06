@@ -19,10 +19,8 @@ public class TripViewModel extends AndroidViewModel {
         repo = new TripRepo(application);
        Trips = repo.getAllData();
     }
-    public static void insert(Trip trip) { repo.insert(trip); }
     public LiveData<Trip> getTrip(int id) { return repo.getTrip(id);}
-    public static void updateTrip( LiveData<Trip> trip) {repo.updateTrip(trip);}
-    public static void deleteTrip(Trip trip) {repo.deleteTrip(trip);}
+//    public static void updateTrip( LiveData<Trip> trip) {repo.updateTrip(trip);}
     public LiveData<List<TripDAO.Trip_withTotalPrice>> getTripandPrice() {return repo.getTripAndSum();}
     public void deleteAll() {repo.resetLocalDatabase();}
 }

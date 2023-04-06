@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_marginTop="25dp"
     app:mode="same_level"
     android:layout_gravity="center_horizontal"
     app:dragEdge="right"
@@ -40,10 +39,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="2dp"
-            android:padding="10dp"
-            android:backgroundTint="#F3F3F3"
+            android:padding="8dp"
+            android:backgroundTint="@color/trip_card"
             app:cardUseCompatPadding="true"
-            app:cardElevation="5dp">
+            app:cardElevation="4dp">
             <LinearLayout
                 android:id="@+id/Card_layout"
                 android:layout_width="match_parent"

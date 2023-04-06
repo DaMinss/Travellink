@@ -1,6 +1,7 @@
 package com.example.travellink.Trip;
 
 import android.animation.LayoutTransition;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.transition.AutoTransition;
@@ -24,13 +25,14 @@ import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.travellink.R;
 import com.example.travellink.database.TripDAO;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder> {
     private String status = "";
-    private int trip_id;
     private List<TripDAO.Trip_withTotalPrice> listOfTrips;
+
     Context context;
     private ViewBinderHelper viewBinder = new ViewBinderHelper();
 
@@ -145,7 +147,13 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             delete_trip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    TripDAO.Trip_withTotalPrice trip =  listOfTrips.get(getAdapterPosition());
+                    FragmentActivity fragmentActivity = (FragmentActivity) view.getContext();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("trip_id",trip.getTrip().getId());
+                    DeleteTripFragment deleteTripFragment = new DeleteTripFragment();
+                    deleteTripFragment.setArguments(bundle);
+                    deleteTripFragment.show(fragmentActivity.getSupportFragmentManager(),null);
                 }
             });
         }
