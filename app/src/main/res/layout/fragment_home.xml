@@ -1,21 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationViewNodata"
+        android:layout_width="wrap_content"
+        android:layout_height="413dp"
+        android:layout_gravity="center_horizontal"
+        android:minHeight="90dp"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/nodata"
+        app:lottie_speed="1"
+        android:visibility="gone"></com.airbnb.lottie.LottieAnimationView>
 
+    <LinearLayout
+        android:id="@+id/notrip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lottieAnimationViewNodata"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/instruct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:fontFamily="@font/darker_grotesque_semibold"
+            android:text="Unavailable trip currently
+
+                         You can add your new trip here"
+            android:textSize="28sp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimationViewArrow"
+            android:layout_width="46dp"
+            android:layout_height="95dp"
+            android:layout_gravity="center_horizontal"
+            android:minHeight="90dp"
+            android:scaleType="fitXY"
+            app:lottie_autoPlay="true"
+            app:lottie_colorFilter="@color/purple_200"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/arrow"
+            app:lottie_speed="1"></com.airbnb.lottie.LottieAnimationView>
+    </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/home_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/recent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:fontFamily="@font/darker_grotesque_semibold"
                 android:text="Recent Trips"
                 android:textSize="28sp"
@@ -26,43 +73,81 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.007" />
 
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimationView5"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="8dp"
+                android:minHeight="90dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="@+id/recent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/recent"
+                app:layout_constraintTop_toTopOf="@+id/recent"
+                app:layout_constraintVertical_bias="1.0"
+                app:lottie_autoPlay="true"
+                app:lottie_rawRes="@raw/recent"
+                app:lottie_speed="0.8"></com.airbnb.lottie.LottieAnimationView>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recent_trip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.003" />
 
             <TextView
                 android:id="@+id/top_spent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
                 android:fontFamily="@font/darker_grotesque_semibold"
-                android:text="Top 5 trips"
+                android:text="Top 3 trips"
                 android:textSize="28sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.053"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recent_trip"
-                app:layout_constraintVertical_bias="0.107" />
+                app:layout_constraintVertical_bias="0.0" />
+
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimationView4"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center_horizontal"
+                android:minHeight="90dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="@+id/top_spent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/top_spent"
+                app:layout_constraintTop_toTopOf="@+id/top_spent"
+                app:layout_constraintVertical_bias="1.0"
+                app:lottie_autoPlay="true"
+                app:lottie_rawRes="@raw/top"
+                app:lottie_speed="1"></com.airbnb.lottie.LottieAnimationView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/top_trip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/top_spent"
                 app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-</ScrollView>
+</RelativeLayout>

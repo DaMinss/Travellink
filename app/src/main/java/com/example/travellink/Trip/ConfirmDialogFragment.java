@@ -1,4 +1,4 @@
-package com.example.travellink;
+package com.example.travellink.Trip;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.travellink.Trip.Trip;
+import com.example.travellink.MainActivity;
+import com.example.travellink.R;
+import com.example.travellink.Trip.TripModel.Trip;
 import com.example.travellink.database.TravelDatabase;
 
 
@@ -52,11 +54,11 @@ public class ConfirmDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 long status = TravelDatabase.getInstance(getActivity()).tripDAO().insertTrip(trip);
                 if(status > 0){
-                    Toast.makeText(getActivity(), "Your trip has been added successfully", Toast.LENGTH_SHORT);
+                    Toast.makeText(getActivity(), "Your trip has been added successfully", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getContext(), MainActivity.class));
                 getActivity().overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
                 }else {
-                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT);
+                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -3,12 +3,12 @@ package com.example.travellink.database;
 import androidx.lifecycle.LiveData;
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Embedded;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
-import com.example.travellink.Trip.Trip;
+import com.example.travellink.Trip.TripModel.Trip;
 
 import java.util.List;
 
@@ -20,8 +20,17 @@ public interface TripDAO {
     @Query("SELECT * FROM trip WHERE id = :tripIds")
     LiveData<Trip> loadTripByID(int tripIds);
 
+    @Query("SELECT * FROM trip WHERE id = :tripIds")
+    Trip TripByID(int tripIds);
+
     @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.id = expense.Trip_ID  GROUP BY trip.id")
     LiveData<List<Trip_withTotalPrice>> getAllTripWithTotalExpense();
+
+    @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.id = expense.Trip_ID  GROUP BY trip.id ORDER BY trip.Trip_start_date DESC LIMIT 5")
+    List<Trip_withTotalPrice> getRecent5TripWithTotalExpense();
+
+    @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.id = expense.Trip_ID  GROUP BY trip.id ORDER BY TotalOfExpenses DESC LIMIT 3")
+    LiveData<List<Trip_withTotalPrice>> getTop3TripWithTotalExpense();
 
     class Trip_withTotalPrice {
         @Embedded
@@ -41,10 +50,12 @@ public interface TripDAO {
     @Insert
     long insertTrip(Trip trip);
 
-//    @Update
-//    void update( LiveData<Trip> trip);
+    @Update
+    int updateTrip(Trip trip);
+
     @Query("Delete FROM trip WHERE  id = :tripIds")
-    int Delete( int tripIds);
+    int Delete(int tripIds);
+
     @Query("DELETE FROM Trip")
     void deleteAll();
 

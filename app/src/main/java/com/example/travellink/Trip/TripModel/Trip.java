@@ -1,4 +1,4 @@
-package com.example.travellink.Trip;
+package com.example.travellink.Trip.TripModel;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

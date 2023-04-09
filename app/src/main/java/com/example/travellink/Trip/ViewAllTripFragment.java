@@ -14,7 +14,8 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 
 import com.example.travellink.R;
-import com.example.travellink.Trip.TripAdapter;
+import com.example.travellink.Trip.TripModel.TripAdapter;
+import com.example.travellink.Trip.TripModel.TripViewModel;
 import com.example.travellink.database.TripDAO;
 
 import java.util.List;

@@ -1,12 +1,11 @@
-package com.example.travellink.Expense;
+package com.example.travellink.Expense.ExpenseModel;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import com.example.travellink.Trip.Trip;
-import com.google.api.Billing;
+import com.example.travellink.Trip.TripModel.Trip;
 
 @Entity(tableName = "expense", foreignKeys = {@ForeignKey(entity = Trip.class,
         parentColumns = "id",
@@ -17,34 +16,33 @@ public class Expense {
     @NonNull
     @PrimaryKey(autoGenerate = true)
     private int Expense_Id;
-
     private String Expense_Name;
     private String Expense_Type;
     private String Expense_Comment;
     private String Image_Bill;
-    private String Expense_Location;
+    private String Expense_Location_Departure;
+    private String Expense_Location_Arrival;
     private String Expense_Price;
     private String Expense_Date;
     private String Expense_Time;
 
     private int Trip_ID;
 
-    public Expense() {
-
-    }
-
-
-    public Expense(int expense_Id, String expense_Name, String expense_Type, String expense_Comment, String expense_Image, String expense_location, String expense_Price, String expense_Date, String expense_Time, int trip_Id) {
-        this.Expense_Id = expense_Id;
+    public Expense(int expense_Id, String expense_Name, String expense_Type, String expense_Comment, String image_Bill, String expense_Location_Departure, String expense_Location_Arrival, String expense_Price, String expense_Date, String expense_Time, int trip_ID) {
+        Expense_Id = expense_Id;
         Expense_Name = expense_Name;
         Expense_Type = expense_Type;
         Expense_Comment = expense_Comment;
-        Image_Bill = expense_Image;
-        Expense_Location = expense_location;
+        Image_Bill = image_Bill;
+        Expense_Location_Departure = expense_Location_Departure;
+        Expense_Location_Arrival = expense_Location_Arrival;
         Expense_Price = expense_Price;
         Expense_Date = expense_Date;
         Expense_Time = expense_Time;
-        Trip_ID = trip_Id;
+        Trip_ID = trip_ID;
+    }
+    public Expense(){
+
     }
 
     public int getExpense_Id() {
@@ -79,6 +77,30 @@ public class Expense {
         Expense_Comment = expense_Comment;
     }
 
+    public String getImage_Bill() {
+        return Image_Bill;
+    }
+
+    public void setImage_Bill(String image_Bill) {
+        Image_Bill = image_Bill;
+    }
+
+    public String getExpense_Location_Departure() {
+        return Expense_Location_Departure;
+    }
+
+    public void setExpense_Location_Departure(String expense_Location_Departure) {
+        Expense_Location_Departure = expense_Location_Departure;
+    }
+
+    public String getExpense_Location_Arrival() {
+        return Expense_Location_Arrival;
+    }
+
+    public void setExpense_Location_Arrival(String expense_Location_Arrival) {
+        Expense_Location_Arrival = expense_Location_Arrival;
+    }
+
     public String getExpense_Price() {
         return Expense_Price;
     }
@@ -107,23 +129,9 @@ public class Expense {
         return Trip_ID;
     }
 
-    public void setTrip_ID(int trip_Id) {
-        Trip_ID = trip_Id;
-    }
-
-    public String getExpense_Location() {
-        return Expense_Location;
-    }
-
-    public void setExpense_Location(String expense_Location) {
-        Expense_Location = expense_Location;
-    }
-
-    public String getImage_Bill() {
-        return Image_Bill;
-    }
-
-    public void setImage_Bill(String expense_Image) {
-        Image_Bill = expense_Image;
+    public void setTrip_ID(int trip_ID) {
+        Trip_ID = trip_ID;
     }
 }
+
+

@@ -16,13 +16,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="16dp"
             app:iconifiedByDefault="false"
+            android:elevation="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:queryHint="Search your trip ..."
+            android:padding="10dp"
             app:searchIcon="@drawable/ic_baseline_search_24" />
 
         <androidx.recyclerview.widget.RecyclerView

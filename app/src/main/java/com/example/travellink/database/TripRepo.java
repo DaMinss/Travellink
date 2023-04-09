@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.travellink.Trip.Trip;
+import com.example.travellink.Trip.TripModel.Trip;
 
 import java.util.List;
 
@@ -34,16 +34,14 @@ public class TripRepo {
     public LiveData<Trip> getTrip(int id) {
         return tripDao.loadTripByID(id);
     }
-//    public void updateTrip( LiveData<Trip> trip){
-//     TravelDatabase.databaseWriteExecutor.execute(() -> tripDao.update(trip));
-//    }
-//    public void deleteTrip(Trip trip) {
-//       TravelDatabase.databaseWriteExecutor.execute(() -> tripDao.delete(trip));
-//    }
+
     public LiveData<List<TripDAO.Trip_withTotalPrice>> getTripAndSum(){
         return tripDao.getAllTripWithTotalExpense();
     }
-    public void resetLocalDatabase() {
-        tripDao.deleteAll();
+    public List<TripDAO.Trip_withTotalPrice> getRecentTripAndSum(){
+        return tripDao.getRecent5TripWithTotalExpense();
+    }
+    public LiveData<List<TripDAO.Trip_withTotalPrice>> getTop3TripAndSum(){
+        return tripDao.getTop3TripWithTotalExpense();
     }
 }

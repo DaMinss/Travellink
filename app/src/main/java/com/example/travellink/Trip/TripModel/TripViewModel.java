@@ -1,4 +1,4 @@
-package com.example.travellink.Trip;
+package com.example.travellink.Trip.TripModel;
 
 import android.app.Application;
 
@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.travellink.Trip.TripModel.Trip;
 import com.example.travellink.database.TripDAO;
 import com.example.travellink.database.TripRepo;
 
@@ -20,7 +21,5 @@ public class TripViewModel extends AndroidViewModel {
        Trips = repo.getAllData();
     }
     public LiveData<Trip> getTrip(int id) { return repo.getTrip(id);}
-//    public static void updateTrip( LiveData<Trip> trip) {repo.updateTrip(trip);}
     public LiveData<List<TripDAO.Trip_withTotalPrice>> getTripandPrice() {return repo.getTripAndSum();}
-    public void deleteAll() {repo.resetLocalDatabase();}
 }

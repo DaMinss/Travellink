@@ -1,8 +1,8 @@
-package com.example.travellink.Trip;
+package com.example.travellink.Trip.TripModel;
 
 import android.animation.LayoutTransition;
-import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
@@ -15,18 +15,17 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.travellink.R;
+import com.example.travellink.Trip.DeleteTripFragment;
+import com.example.travellink.Trip.UpdateTripFragment;
+import com.example.travellink.Trip.TripDetails;
 import com.example.travellink.database.TripDAO;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder> {
@@ -106,8 +105,8 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             Trip_Name = item_view.findViewById(R.id.trip_name);
             Trip_Price = item_view.findViewById(R.id.trip_price);
             Trip_endDate = item_view.findViewById(R.id.end_date);
-            Trip_Depart = item_view.findViewById(R.id.depart);
-            Trip_Arrival = item_view.findViewById(R.id.des);
+            Trip_Depart = item_view.findViewById(R.id.startDateandTime);
+            Trip_Arrival = item_view.findViewById(R.id.endDateandTime);
             Trip_StartDate = item_view.findViewById(R.id.start_date);
             swipe_Layout = item_view.findViewById(R.id.swipe_layout);
             update_trip = item_view.findViewById(R.id.updateTrips);
@@ -116,7 +115,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             cardView = item_view.findViewById(R.id.trip_Id);
             details_layout = item_view.findViewById(R.id.toggle);
             card_layout = item_view.findViewById(R.id.Card_layout);
-            details = item_view.findViewById(R.id.next);
+            details = item_view.findViewById(R.id.detail);
             to = item_view.findViewById(R.id.to);
             LayoutTransition layoutTransition = new LayoutTransition();
             layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
@@ -134,6 +133,10 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, TripDetails.class);
+                    // extras
+                    context.startActivity(intent);
 
                 }
             });
@@ -141,7 +144,13 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             update_trip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    TripDAO.Trip_withTotalPrice trip =  listOfTrips.get(getAdapterPosition());
+                    FragmentActivity fragmentActivity = (FragmentActivity) view.getContext();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("trip_id",trip.getTrip().getId());
+                    UpdateTripFragment updateTripFragment = new UpdateTripFragment();
+                    updateTripFragment.setArguments(bundle);
+                    updateTripFragment.show(fragmentActivity.getSupportFragmentManager(),null);
                 }
             });
             delete_trip.setOnClickListener(new View.OnClickListener() {

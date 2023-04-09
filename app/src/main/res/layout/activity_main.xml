@@ -7,15 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/AppBar"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:background="@color/transparent"
             android:elevation="0dp"
             app:elevation="0dp"
@@ -90,17 +88,33 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </RelativeLayout>
         </com.google.android.material.appbar.AppBarLayout>
-    <include  layout="@layout/fragment_container" app:layout_anchor="@id/bottom_bar"/>
+    <include android:layout_width="match_parent" android:layout_height="wrap_content"  layout="@layout/fragment_container" android:layout_above="@id/content" android:layout_below="@id/AppBar" />
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple_200"
+            app:tint="@color/white"
+            android:src="@drawable/ic_baseline_add_24"
+            app:layout_anchor="@id/bottom_bar"
+            app:fabCustomSize="42dp"
 
+            />
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:fabCradleMargin="10dp"
-            app:fabCradleRoundedCornerRadius="10dp"
-            app:fabCradleVerticalOffset="10dp">
+            app:fabCradleMargin="27dp"
+            app:fabCradleRoundedCornerRadius="70dp"
+            app:fabCradleVerticalOffset="1dp"
+           >
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottomNavigationView"
@@ -113,19 +127,11 @@
                 />
         </com.google.android.material.bottomappbar.BottomAppBar>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/purple_200"
-            app:tint="@color/white"
-            android:src="@drawable/ic_baseline_add_24"
-            app:layout_anchor="@id/bottom_bar"
 
-            />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+</RelativeLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
@@ -133,4 +139,5 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/header_menu"
         app:menu="@menu/side_menu" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

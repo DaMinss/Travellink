@@ -1,14 +1,9 @@
 package com.example.travellink.Trip;
 
-import android.app.Activity;
-import android.app.Application;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -18,14 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.travellink.MainActivity;
 import com.example.travellink.R;
+import com.example.travellink.Trip.TripModel.TripViewModel;
 import com.example.travellink.database.TravelDatabase;
-import com.example.travellink.database.TripDAO;
-import com.example.travellink.database.TripRepo;
-
-import java.io.Console;
-import java.util.Objects;
 
 public class DeleteTripFragment extends DialogFragment {
 Button proceed;
@@ -65,10 +55,11 @@ TextView name;
             public void onClick(View view) {
                 int status = TravelDatabase.getInstance(getActivity()).tripDAO().Delete(id);
                 if(status > 0){
-                    Toast.makeText(getActivity(), "The selected trip has been deleted successfully", Toast.LENGTH_SHORT);
+                    Toast.makeText(getActivity(), "The selected trip has been deleted successfully", Toast.LENGTH_SHORT).show();
+                    dismiss();
 
                 }else {
-                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT);
+                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });

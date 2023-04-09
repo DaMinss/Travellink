@@ -155,7 +155,7 @@
                 >
 
                 <TextView
-                    android:id="@+id/depart"
+                    android:id="@+id/startDateandTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -172,7 +172,7 @@
                     app:layout_constraintVertical_bias="1.0" />
 
                 <TextView
-                    android:id="@+id/des"
+                    android:id="@+id/endDateandTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="80dp"
@@ -190,21 +190,21 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
                     android:src="@drawable/plane"
-                    app:layout_constraintBottom_toBottomOf="@+id/depart"
-                    app:layout_constraintEnd_toStartOf="@+id/des"
-                    app:layout_constraintStart_toEndOf="@+id/depart"
-                    app:layout_constraintTop_toTopOf="@+id/depart" />
+                    app:layout_constraintBottom_toBottomOf="@+id/startDateandTime"
+                    app:layout_constraintEnd_toStartOf="@+id/endDateandTime"
+                    app:layout_constraintStart_toEndOf="@+id/startDateandTime"
+                    app:layout_constraintTop_toTopOf="@+id/startDateandTime" />
 
                 <ImageView
-                    android:id="@+id/next"
+                    android:id="@+id/detail"
                     android:layout_width="24dp"
                     android:layout_height="30dp"
                     android:layout_marginBottom="4dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.805"
-                    app:layout_constraintStart_toEndOf="@+id/des"
-                    app:layout_constraintTop_toTopOf="@+id/des"
+                    app:layout_constraintStart_toEndOf="@+id/endDateandTime"
+                    app:layout_constraintTop_toTopOf="@+id/endDateandTime"
                     app:layout_constraintVertical_bias="0.789"
                     app:srcCompat="@drawable/next_page" />
 
@@ -220,7 +220,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView16"
+                    android:id="@+id/expense_des1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="154dp"

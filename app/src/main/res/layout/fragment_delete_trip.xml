@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ConfirmDialogFragment"
+    tools:context=".Trip.ConfirmDialogFragment"
     app:cardCornerRadius="20dp"
     app:cardUseCompatPadding="true"
     app:cardElevation="10dp">
