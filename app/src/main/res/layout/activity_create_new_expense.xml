@@ -7,7 +7,47 @@
     android:background="@color/main"
     tools:context=".CreateNewExpense">
 
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="Create your new expense"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo1" />
+
+    <ImageView
+        android:id="@+id/backBTN"
+        android:layout_width="52dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/logo1"
+        app:layout_constraintEnd_toEndOf="@+id/logo1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/logo1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.32"
+        app:srcCompat="@drawable/back_btn" />
+    <ImageView
+        android:id="@+id/logo1"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:src="@drawable/logo_name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0" />
+
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@drawable/expense_bg"
@@ -21,7 +61,7 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="vertical">
 
@@ -46,7 +86,6 @@
                         android:layout_marginTop="36dp"
                         android:layout_marginEnd="24dp"
                         android:hint="Expense Name"
-                        app:boxStrokeColor="#EAEAEE"
                         app:errorEnabled="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.496"
@@ -58,7 +97,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/trip_card"
-                            android:drawableRight="@drawable/ic_baseline_airplane_ticket_24"
+                            android:drawableRight="@drawable/cashbook"
                             android:textSize="15sp"
                             android:textStyle="bold"
                             tools:ignore="TouchTargetSizeCheck" />
@@ -71,7 +110,6 @@
                         android:layout_marginStart="24dp"
                         android:layout_marginEnd="24dp"
                         android:hint="Description"
-                        app:boxStrokeColor="#EAEAEE"
                         app:errorEnabled="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.496"
@@ -93,77 +131,9 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/category_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/trip_card"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="5dp"
-                app:cardUseCompatPadding="true">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/name1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="36dp"
-                        android:layout_marginEnd="24dp"
-                        android:hint="Expense Name"
-                        app:boxStrokeColor="#EAEAEE"
-                        app:errorEnabled="true"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.496"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/expenseName1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/trip_card"
-                            android:drawableRight="@drawable/ic_baseline_airplane_ticket_24"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            tools:ignore="TouchTargetSizeCheck" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/description1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginEnd="24dp"
-                        android:hint="Description"
-                        app:boxStrokeColor="#EAEAEE"
-                        app:errorEnabled="true"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.496"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/name1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/expenseDescription1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/trip_card"
-                            android:drawableRight="@drawable/comments"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            tools:ignore="TouchTargetSizeCheck" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/trip_Id"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/trip_card"
                 android:padding="8dp"
                 app:cardCornerRadius="10dp"
@@ -172,7 +142,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/category"
@@ -180,28 +150,315 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
-                        android:layout_marginTop="36dp"
+                        android:layout_marginTop="24dp"
                         android:layout_marginEnd="24dp"
+                        android:layout_marginBottom="8dp"
                         android:hint="Choose Your Category"
                         app:errorEnabled="true"
+                        app:layout_constraintBottom_toTopOf="@+id/detail_expense"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.496"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <AutoCompleteTextView
-                            android:id="@+id/food"
+                            android:id="@+id/selection"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="none"
                             android:background="@color/trip_card"
-                          />
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/detail_expense"
+                        android:layout_width="394dp"
+                        android:layout_height="206dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/category"
+                        app:layout_constraintVertical_bias="0.0"
+                        android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/sDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="8dp"
+                            android:hint="Start Date and Time"
+                            app:boxBackgroundColor="@color/card"
+                            app:errorEnabled="true"
+                            app:layout_constraintBottom_toBottomOf="@+id/eDate"
+                            app:layout_constraintEnd_toStartOf="@+id/eDate"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/eDate">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/start_date"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@color/trip_card"
+                                android:clickable="true"
+                                android:drawableRight="@drawable/ic_baseline_date_range_24"
+                                android:focusable="false"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                tools:ignore="TouchTargetSizeCheck" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/eDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginEnd="16dp"
+                            android:hint="End Date and Time"
+                            app:boxBackgroundColor="@color/card"
+                            app:errorEnabled="true"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/sDate"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/end_date"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@color/trip_card"
+                                android:clickable="true"
+                                android:drawableRight="@drawable/ic_baseline_date_range_24"
+                                android:focusable="false"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                tools:ignore="TouchTargetSizeCheck" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <LinearLayout
+                            android:id="@+id/depart"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="@+id/eDate"
+                            app:layout_constraintStart_toStartOf="@+id/sDate"
+                            app:layout_constraintTop_toBottomOf="@+id/sDate">
+
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/open_map"
+                                android:layout_width="200px"
+                                android:layout_height="200px"
+                                android:layout_gravity="left"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                app:lottie_rawRes="@raw/location"
+                                app:lottie_speed="1" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/destination"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Destination"
+                                app:boxBackgroundColor="@color/card"
+                                app:boxStrokeColor="#EAEAEE"
+                                app:errorEnabled="true">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/expense_destination"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/trip_card"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="TouchTargetSizeCheck" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/depart1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Departure"
+                                app:boxBackgroundColor="@color/card"
+                                app:boxStrokeColor="#EAEAEE"
+                                app:errorEnabled="true">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/expense_depart"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/trip_card"
+                                    android:drawableRight="@drawable/ic_baseline_flight_takeoff_24"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="TouchTargetSizeCheck" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/arrive"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/depart"
+                            app:layout_constraintStart_toStartOf="@+id/depart"
+                            app:layout_constraintTop_toBottomOf="@+id/depart">
+
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/open_map1"
+                                android:layout_width="200px"
+                                android:layout_height="200px"
+                                android:layout_gravity="left"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                app:lottie_rawRes="@raw/location"
+                                app:lottie_speed="1" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/arrive1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Arrival"
+                                app:boxBackgroundColor="@color/card"
+                                app:boxStrokeColor="#EAEAEE"
+                                app:errorEnabled="true">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/expense_arrival"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/trip_card"
+                                    android:drawableRight="@drawable/ic_baseline_flight_land_24"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="TouchTargetSizeCheck" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/trip_card"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/amount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:hint="Enter your amount"
+                        app:errorEnabled="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/expenseAmount"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/trip_card"
+                            android:drawableRight="@drawable/request_money"
+                            android:inputType="number"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            tools:ignore="TouchTargetSizeCheck" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Billing Attachment:"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="@+id/amount"
+                        app:layout_constraintTop_toBottomOf="@+id/amount" />
+
+                    <LinearLayout
+                        android:id="@+id/billing"
+                        android:layout_width="0dp"
+                        android:layout_height="170dp"
+                        android:layout_marginStart="122dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="122dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center_horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView14"
+                        app:layout_constraintVertical_bias="0.315"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:text="Click Here To Attach Your Receipt" />
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_sharp_receipt_24"
+                            android:alpha="0.6"
+                            />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/image_billing"
+                        android:layout_width="0dp"
+                        android:layout_height="270dp"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="80dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center_horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView14"
+                        app:layout_constraintVertical_bias="0.315" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonCreateExpense"
+                android:layout_width="180dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="44dp"
+                android:background="@drawable/btn_login"
+                android:text="Create"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>
