@@ -2,5 +2,14 @@
     <string name="app_name">Travellink</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="map_key">	AIzaSyAkBUDf5C59DyDND6dEBvkuipbCmcpAysU</string>
+    <string name="map_key">AIzaSyAkBUDf5C59DyDND6dEBvkuipbCmcpAysU</string>
+    <string name="place_key">AIzaSyCa2Fenm3MCZ-pQYE-RnayRNlakIg6DCCE</string>
+    <string-array name="menu">
+        <item>Flight</item>
+        <item>Taxi</item>
+        <item>Hotel</item>
+        <item>Shopping</item>
+        <item>Food</item>
+        <item>Others</item>
+    </string-array>
 </resources>

@@ -45,7 +45,7 @@ public class CreateNewTrip extends AppCompatActivity {
         setContentView(R.layout.activity_create_new_trip);
         title = findViewById(R.id.textView9);
         name = findViewById(R.id.name);
-        depart = findViewById(R.id.startDateandTime);
+        depart = findViewById(R.id.depart);
         departure = findViewById(R.id.depart1);
         arrive = findViewById(R.id.arrival);
         arrival = findViewById(R.id.arrive);

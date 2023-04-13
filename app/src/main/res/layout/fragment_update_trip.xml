@@ -62,7 +62,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startDateandTime"
+        app:layout_constraintTop_toBottomOf="@+id/depart"
         app:layout_constraintVertical_bias="0.39">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -84,11 +84,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/startDateandTime"
+        app:layout_constraintBottom_toBottomOf="@+id/depart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/startDateandTime"
-        app:layout_constraintTop_toTopOf="@+id/startDateandTime"
+        app:layout_constraintStart_toEndOf="@+id/depart"
+        app:layout_constraintTop_toTopOf="@+id/depart"
         app:layout_constraintVertical_bias="1.0">
         <ImageView
             android:id="@+id/edit_open_map1"
@@ -144,7 +144,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
-        android:id="@+id/startDateandTime"
+        android:id="@+id/depart"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

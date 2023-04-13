@@ -1,3 +1,5 @@
+
+
 package com.example.travellink;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -58,6 +60,7 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
         getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,16 +88,20 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
                         if (addressList.size() > 0) {
                             LatLng search_location = new LatLng(addressList.get(0).getLatitude(), addressList.get(0).getLongitude());
                             currentAddress = addressList.get(0);
-                            String address = currentAddress.getFeatureName().toString();
+                            String currentQueryText = searchView.getQuery().toString();
+                            // Set updated query text back to SearchView
+                            String address = currentAddress.getThoroughfare().toString();
+                            String updatedQueryText =  currentAddress.getFeatureName() + " " + address;
                             getLocation(search_location);
                             Map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                                 @Override
                                 public boolean onMarkerClick(@NonNull Marker marker) {
-                                    searchView.setQuery(address, false);
+                                    searchView.setQuery(updatedQueryText, false);
+//                                    btn_add_location.setVisibility(View.VISIBLE);
                                     return false;
                                 }
                             });
-//                            btn_add_location.setVisibility(View.VISIBLE);
+
                         } else {
                             Toast.makeText(getContext(), "No location found! Please re-check and retry", Toast.LENGTH_SHORT).show();
                         }
@@ -116,10 +123,10 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
     }
 
     private void getLocation(LatLng latLng) {
-        Map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
+        Map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title(String.valueOf(currentAddress.getFeatureName()));
+        markerOptions.title(currentAddress.getAddressLine(0).toString());
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         Map.addMarker(markerOptions);
     }

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.example.travellink.CreateNewExpense;
 import com.example.travellink.R;
 import com.example.travellink.Trip.DeleteTripFragment;
 import com.example.travellink.Trip.UpdateTripFragment;
@@ -105,7 +106,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             Trip_Name = item_view.findViewById(R.id.trip_name);
             Trip_Price = item_view.findViewById(R.id.trip_price);
             Trip_endDate = item_view.findViewById(R.id.end_date);
-            Trip_Depart = item_view.findViewById(R.id.startDateandTime);
+            Trip_Depart = item_view.findViewById(R.id.depart);
             Trip_Arrival = item_view.findViewById(R.id.endDateandTime);
             Trip_StartDate = item_view.findViewById(R.id.start_date);
             swipe_Layout = item_view.findViewById(R.id.swipe_layout);
@@ -134,9 +135,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
                 @Override
                 public void onClick(View view) {
                     Context context = view.getContext();
-                    Intent intent = new Intent(context, TripDetails.class);
-                    // extras
-                    context.startActivity(intent);
+                    context.startActivity(new Intent(context, TripDetails.class));
 
                 }
             });

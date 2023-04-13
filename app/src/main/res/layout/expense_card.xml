@@ -180,7 +180,7 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintBottom_toBottomOf="@+id/view2"
                             app:layout_constraintEnd_toStartOf="@+id/endDateandTime"
-                            app:layout_constraintStart_toEndOf="@+id/startDateandTime"
+                            app:layout_constraintStart_toEndOf="@+id/depart"
                             app:layout_constraintTop_toTopOf="@+id/view2">
 
                             <ImageView
@@ -244,7 +244,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
-                            android:id="@+id/startDateandTime"
+                            android:id="@+id/depart"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
@@ -265,11 +265,11 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="2dp"
                             android:background="@color/black"
-                            app:layout_constraintBottom_toBottomOf="@+id/startDateandTime"
+                            app:layout_constraintBottom_toBottomOf="@+id/depart"
                             app:layout_constraintEnd_toStartOf="@+id/Category1"
                             app:layout_constraintHorizontal_bias="1.0"
-                            app:layout_constraintStart_toEndOf="@+id/startDateandTime"
-                            app:layout_constraintTop_toTopOf="@+id/startDateandTime"></View>
+                            app:layout_constraintStart_toEndOf="@+id/depart"
+                            app:layout_constraintTop_toTopOf="@+id/depart"></View>
 
                         <View
                             android:id="@+id/view3"
@@ -289,9 +289,9 @@
                             android:layout_height="wrap_content"
                             android:text="22/2/2022 11:11"
                             android:textSize="12sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/startDateandTime"
+                            app:layout_constraintBottom_toBottomOf="@+id/depart"
                             app:layout_constraintStart_toStartOf="@+id/expense_des1"
-                            app:layout_constraintTop_toTopOf="@+id/startDateandTime" />
+                            app:layout_constraintTop_toTopOf="@+id/depart" />
 
                         <ImageView
                             android:id="@+id/detail"
