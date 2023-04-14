@@ -1,6 +1,9 @@
 package com.example.travellink.Trip.TripModel;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.travellink.R;
+import com.example.travellink.Trip.TripDetails;
 import com.example.travellink.database.TripDAO;
 
 import java.util.List;
@@ -30,6 +34,9 @@ public class TripHomeAdapter extends RecyclerView.Adapter<TripHomeAdapter.TripVi
         listOfTrips = _list;
         this.context = context;
         notifyDataSetChanged();
+    }
+    private Context getContext() {
+        return context;
     }
 
 
@@ -85,7 +92,7 @@ public class TripHomeAdapter extends RecyclerView.Adapter<TripHomeAdapter.TripVi
             Trip_Price = item_view.findViewById(R.id.trip_price_home);
             Trip_endDate = item_view.findViewById(R.id.end_date_home);
             Trip_StartDate = item_view.findViewById(R.id.start_date_home);
-            cardView = item_view.findViewById(R.id.trip_Id);
+            cardView = item_view.findViewById(R.id.expense_Id);
             card_layout = item_view.findViewById(R.id.Card_layout);
             to = item_view.findViewById(R.id.to);
 
@@ -93,7 +100,13 @@ public class TripHomeAdapter extends RecyclerView.Adapter<TripHomeAdapter.TripVi
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    TripDAO.Trip_withTotalPrice trip =  listOfTrips.get(getAdapterPosition());
+                    Intent intent = new Intent(view.getContext(), TripDetails.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("trip_id", trip.getTrip().getId());
+                    intent.putExtras(bundle);
+                    view.getContext().startActivity(intent);
+                    ((Activity) getContext()).overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
                 }
             });
 

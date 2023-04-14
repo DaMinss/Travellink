@@ -20,16 +20,10 @@ public class ExpenseRepo {
     public LiveData<List<Expense>> getAllExpensesByTripId(int trip_id) {
         return expenseDAO.getAll(trip_id);
     }
-//    public void insert(Trip trip) {
-//        TravelDatabase.databaseWriteExecutor.execute(() -> {
-//            tripDao.insertTrip(trip);
-//        });
-//    }
-//    public void deleteTrip( int id) {
-//        TravelDatabase.databaseWriteExecutor.execute(() -> {
-//            tripDao.Delete(id);
-//        });
-//    }
+    public List<ExpenseDAO.Expense_amountByType>getExpenseAmountByType(int trip_id) {
+        return expenseDAO.getExpenseAmountByType(trip_id);
+    }
+
     public LiveData<Expense> getExpenseByID(int id) {
         return expenseDAO.loadExpenseByID(id);
     }

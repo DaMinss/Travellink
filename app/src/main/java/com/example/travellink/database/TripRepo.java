@@ -41,7 +41,7 @@ public class TripRepo {
     public List<TripDAO.Trip_withTotalPrice> getRecentTripAndSum(){
         return tripDao.getRecent5TripWithTotalExpense();
     }
-    public LiveData<List<TripDAO.Trip_withTotalPrice>> getTop3TripAndSum(){
+    public List<TripDAO.Trip_withTotalPrice> getTop3TripAndSum(){
         return tripDao.getTop3TripWithTotalExpense();
     }
 }

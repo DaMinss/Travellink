@@ -405,7 +405,7 @@ public class CreateNewExpense extends AppCompatActivity {
     private void popUpConfirm() {
         if (validation() == true) {
             Expense expense = get_data();
-            new ConfirmExpenseFragment(expense).show(getSupportFragmentManager(), null);
+            new ConfirmExpenseFragment(expense, myTripId).show(getSupportFragmentManager(), null);
             return;
         }
     }

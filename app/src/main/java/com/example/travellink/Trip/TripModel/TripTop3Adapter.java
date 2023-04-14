@@ -22,6 +22,9 @@ import java.util.List;
 
 public class TripTop3Adapter extends RecyclerView.Adapter<TripTop3Adapter.TripViewHolder> {
     private String status = "";
+    float highest ;
+    float secondHighest;
+    float thirdHighest;
     private List<TripDAO.Trip_withTotalPrice> listOfTrips;
 
     Context context;
@@ -49,9 +52,7 @@ public class TripTop3Adapter extends RecyclerView.Adapter<TripTop3Adapter.TripVi
         if (trip_withTotalPrice == null) {
             return;
         }
-        float highest = 0;
-        float secondHighest = 0;
-        float thirdHighest = 0;
+
 
         if (!listOfTrips.isEmpty() && trip_withTotalPrice.getTotalOfExpense() != null) {
             highest = listOfTrips.get(0).getTotalOfExpense();
@@ -115,7 +116,7 @@ public class TripTop3Adapter extends RecyclerView.Adapter<TripTop3Adapter.TripVi
             Trip_Price = item_view.findViewById(R.id.trip_price_home);
             Trip_endDate = item_view.findViewById(R.id.end_date_home);
             Trip_StartDate = item_view.findViewById(R.id.start_date_home);
-            cardView = item_view.findViewById(R.id.trip_Id);
+            cardView = item_view.findViewById(R.id.expense_Id);
             card_layout = item_view.findViewById(R.id.Card_layout);
             to = item_view.findViewById(R.id.to);
             top1 = item_view.findViewById(R.id.top1);

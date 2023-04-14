@@ -40,6 +40,7 @@
             android:textStyle="bold"
             android:textAlignment="center"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/setting_bg"/>
+            android:background="@drawable/setting_bg"
+            android:visibility="gone"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

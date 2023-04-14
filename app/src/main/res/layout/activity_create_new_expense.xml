@@ -241,7 +241,7 @@
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <LinearLayout
-                            android:id="@+id/depart"
+                            android:id="@+id/startDateandTime"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -311,9 +311,9 @@
                             android:orientation="horizontal"
                             android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/depart"
-                            app:layout_constraintStart_toStartOf="@+id/depart"
-                            app:layout_constraintTop_toBottomOf="@+id/depart">
+                            app:layout_constraintEnd_toEndOf="@+id/startDateandTime"
+                            app:layout_constraintStart_toStartOf="@+id/startDateandTime"
+                            app:layout_constraintTop_toBottomOf="@+id/startDateandTime">
 
                             <com.airbnb.lottie.LottieAnimationView
                                 android:id="@+id/open_map1"

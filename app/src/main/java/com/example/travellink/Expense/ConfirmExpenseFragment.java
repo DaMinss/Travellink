@@ -1,11 +1,11 @@
 package com.example.travellink.Expense;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +14,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.travellink.Expense.ExpenseModel.Expense;
-import com.example.travellink.MainActivity;
 import com.example.travellink.R;
 import com.example.travellink.Trip.TripDetails;
-import com.example.travellink.Trip.TripModel.Trip;
 import com.example.travellink.database.TravelDatabase;
 
 
@@ -26,9 +24,11 @@ public class ConfirmExpenseFragment extends DialogFragment {
 
     Button Return, Confirm;
     protected Expense expense;
+    protected int trip_id;
 
-    public ConfirmExpenseFragment(Expense expense_) {
+    public ConfirmExpenseFragment(Expense expense_, int myTripId) {
         expense = expense_;
+        trip_id = myTripId;
     }
 
     @Override
@@ -61,7 +61,11 @@ public class ConfirmExpenseFragment extends DialogFragment {
                 long status = TravelDatabase.getInstance(getActivity()).expenseDAO().insertExpense(expense);
                 if (status > 0) {
                     Toast.makeText(getActivity(), "Your expense has been added successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getContext(), TripDetails.class));
+                    Intent intent = new Intent(view.getContext(), TripDetails.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("trip_id", trip_id);
+                    intent.putExtras(bundle);
+                    view.getContext().startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
                 } else {
                     Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();

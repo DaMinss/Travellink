@@ -12,6 +12,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -19,6 +20,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.protobuf.StringValue;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,11 +42,15 @@ import java.util.Locale;
 
 
 public class MapWithSearchFragment extends DialogFragment implements OnMapReadyCallback {
+    public interface MapWithSearchFragmentInterface {
+        public void getLocationFromMap(String address);
+    }
 
     private GoogleMap Map;
     SupportMapFragment supportMapFragment;
     androidx.appcompat.widget.SearchView searchView;
     Address currentAddress;
+    AppCompatButton confirm;
 
     private int ACCESS_LOCATION_REQUEST_CODE = 1001;
 
@@ -74,6 +81,7 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
         // Inflate the layout for this fragment
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_map_with_search, container, false);
         searchView = root.findViewById(R.id.searchLocation);
+        confirm = root.findViewById(R.id.add_location);
         supportMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.googleMap);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -90,8 +98,8 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
                             currentAddress = addressList.get(0);
                             String currentQueryText = searchView.getQuery().toString();
                             // Set updated query text back to SearchView
-                            String address = currentAddress.getThoroughfare().toString();
-                            String updatedQueryText =  currentAddress.getFeatureName() + " " + address;
+                            String address = currentAddress.getThoroughfare();
+                            String updatedQueryText =  currentAddress.getFeatureName() + " " ;
                             getLocation(search_location);
                             Map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                                 @Override
@@ -99,6 +107,16 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
                                     searchView.setQuery(updatedQueryText, false);
 //                                    btn_add_location.setVisibility(View.VISIBLE);
                                     return false;
+                                }
+                            });
+                            confirm.setVisibility(View.VISIBLE);
+                            confirm.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    MapWithSearchFragmentInterface itf = (MapWithSearchFragmentInterface) getActivity();
+                                    itf.getLocationFromMap(updatedQueryText);
+                                    dismiss();
                                 }
                             });
 

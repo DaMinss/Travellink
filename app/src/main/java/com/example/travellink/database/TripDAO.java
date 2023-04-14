@@ -30,7 +30,7 @@ public interface TripDAO {
     List<Trip_withTotalPrice> getRecent5TripWithTotalExpense();
 
     @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.id = expense.Trip_ID  GROUP BY trip.id ORDER BY TotalOfExpenses DESC LIMIT 3")
-    LiveData<List<Trip_withTotalPrice>> getTop3TripWithTotalExpense();
+    List<Trip_withTotalPrice> getTop3TripWithTotalExpense();
 
     class Trip_withTotalPrice {
         @Embedded

@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <androidx.cardview.widget.CardView
-            android:id="@+id/trip_Id"
+            android:id="@+id/expense_Id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="2dp"
@@ -155,7 +155,7 @@
                 >
 
                 <TextView
-                    android:id="@+id/depart"
+                    android:id="@+id/startDateandTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -190,10 +190,10 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
                     android:src="@drawable/plane"
-                    app:layout_constraintBottom_toBottomOf="@+id/depart"
+                    app:layout_constraintBottom_toBottomOf="@+id/startDateandTime"
                     app:layout_constraintEnd_toStartOf="@+id/endDateandTime"
-                    app:layout_constraintStart_toEndOf="@+id/depart"
-                    app:layout_constraintTop_toTopOf="@+id/depart" />
+                    app:layout_constraintStart_toEndOf="@+id/startDateandTime"
+                    app:layout_constraintTop_toTopOf="@+id/startDateandTime" />
 
                 <ImageView
                     android:id="@+id/detail"

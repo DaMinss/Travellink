@@ -25,7 +25,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 
-public class CreateNewTrip extends AppCompatActivity {
+public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFragment.MapWithSearchFragmentInterface {
     TextView title;
     TextInputLayout name,departure, arrive, date, note;
     LinearLayout depart, arrival;
@@ -36,7 +36,7 @@ public class CreateNewTrip extends AppCompatActivity {
     private ImageView back;
     float v = 0;
     Button Create;
-    ImageView map;
+    ImageView map, map1;
     LottieAnimationView loading;
 
     @Override
@@ -45,7 +45,7 @@ public class CreateNewTrip extends AppCompatActivity {
         setContentView(R.layout.activity_create_new_trip);
         title = findViewById(R.id.textView9);
         name = findViewById(R.id.name);
-        depart = findViewById(R.id.depart);
+        depart = findViewById(R.id.startDateandTime);
         departure = findViewById(R.id.depart1);
         arrive = findViewById(R.id.arrival);
         arrival = findViewById(R.id.arrive);
@@ -64,6 +64,15 @@ public class CreateNewTrip extends AppCompatActivity {
             public void onClick(View view) {
                 MapWithSearchFragment mapsFragment = new MapWithSearchFragment();
                 mapsFragment.show(getSupportFragmentManager(), "Select location");
+            }
+        });
+        map1 = findViewById(R.id.open_map1);
+        map1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MapWithSearchFragment mapsFragment = new MapWithSearchFragment();
+                mapsFragment.show(getSupportFragmentManager(), "Select location");
+
             }
         });
         back = findViewById(R.id.backBTN);
@@ -188,5 +197,10 @@ public class CreateNewTrip extends AppCompatActivity {
             date.setError(null);
             return true;
         }
+    }
+
+    @Override
+    public void getLocationFromMap(String address) {
+        tripDeparture.setText(address);
     }
 }
