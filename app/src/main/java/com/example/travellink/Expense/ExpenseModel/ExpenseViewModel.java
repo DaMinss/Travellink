@@ -12,12 +12,10 @@ import java.util.List;
 
 public class ExpenseViewModel extends AndroidViewModel {
     public static ExpenseRepo repo;
-    public final LiveData<List<Expense>> Expenses;
     public ExpenseViewModel(@NonNull Application application) {
         super(application);
         repo = new ExpenseRepo(application);
-        Expenses = repo.getAllData();
     }
     public LiveData<Expense> getExpense(int id) { return repo.getExpenseByID(id);}
-    public LiveData<List<Expense>> getAllExpense() {return repo.getAllData();}
+    public LiveData<List<Expense>> getAllExpensesByTripId(int trip_id) { return repo.getAllExpensesByTripId(trip_id);}
 }

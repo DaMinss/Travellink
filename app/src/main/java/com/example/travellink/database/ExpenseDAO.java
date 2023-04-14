@@ -13,8 +13,8 @@ import java.util.List;
 
 @Dao
 public interface ExpenseDAO {
-    @Query("SELECT * FROM expense")
-    LiveData<List<Expense>>  getAll();
+    @Query("SELECT * FROM expense WHERE Trip_ID =:tripIds ")
+    LiveData<List<Expense>>  getAll(int tripIds);
 
     @Query("SELECT * FROM expense WHERE Expense_Id = :expenseIds")
     LiveData<Expense> loadExpenseByID(int expenseIds);

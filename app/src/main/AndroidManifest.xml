@@ -30,7 +30,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".CreateNewExpense"
+            android:name=".Expense.CreateNewExpense"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"

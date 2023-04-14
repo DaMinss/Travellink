@@ -23,12 +23,12 @@ public class Expense {
     private String Expense_Location_Departure;
     private String Expense_Location_Arrival;
     private String Expense_Price;
-    private String Expense_Date;
-    private String Expense_Time;
+    private String Expense_StartDate;
+    private String Expense_EndDate;
 
     private int Trip_ID;
 
-    public Expense(int expense_Id, String expense_Name, String expense_Type, String expense_Comment, String image_Bill, String expense_Location_Departure, String expense_Location_Arrival, String expense_Price, String expense_Date, String expense_Time, int trip_ID) {
+    public Expense(int expense_Id, String expense_Name, String expense_Type, String expense_Comment, String image_Bill, String expense_Location_Departure, String expense_Location_Arrival, String expense_Price, String expense_StartDate, String expense_EndDate, int trip_ID) {
         Expense_Id = expense_Id;
         Expense_Name = expense_Name;
         Expense_Type = expense_Type;
@@ -37,10 +37,11 @@ public class Expense {
         Expense_Location_Departure = expense_Location_Departure;
         Expense_Location_Arrival = expense_Location_Arrival;
         Expense_Price = expense_Price;
-        Expense_Date = expense_Date;
-        Expense_Time = expense_Time;
+        Expense_StartDate = expense_StartDate;
+        Expense_EndDate = expense_EndDate;
         Trip_ID = trip_ID;
     }
+
     public Expense(){
 
     }
@@ -109,20 +110,20 @@ public class Expense {
         Expense_Price = expense_Price;
     }
 
-    public String getExpense_Date() {
-        return Expense_Date;
+    public String getExpense_StartDate() {
+        return Expense_StartDate;
     }
 
-    public void setExpense_Date(String expense_Date) {
-        Expense_Date = expense_Date;
+    public void setExpense_StartDate(String expense_StartDate) {
+        Expense_StartDate = expense_StartDate;
     }
 
-    public String getExpense_Time() {
-        return Expense_Time;
+    public String getExpense_EndDate() {
+        return Expense_EndDate;
     }
 
-    public void setExpense_Time(String expense_Time) {
-        Expense_Time = expense_Time;
+    public void setExpense_EndDate(String expense_EndDate) {
+        Expense_EndDate = expense_EndDate;
     }
 
     public int getTrip_ID() {

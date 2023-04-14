@@ -1,4 +1,4 @@
-package com.example.travellink;
+package com.example.travellink.Expense;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -10,6 +10,7 @@ import android.Manifest;
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -24,8 +25,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.text.format.Time;
-import android.transition.AutoTransition;
-import android.transition.TransitionManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,10 +34,13 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.travellink.Trip.CreateNewTrip;
+import com.example.travellink.Expense.ExpenseModel.Expense;
+import com.example.travellink.MapWithSearchFragment;
+import com.example.travellink.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -51,15 +53,14 @@ import java.util.Date;
 import java.util.Locale;
 
 public class CreateNewExpense extends AppCompatActivity {
+    int myTripId;
     ConstraintLayout detail;
     AutoCompleteTextView selection;
     TextView title, title_bill;
     TextInputLayout name, departure, arrive, start_date, end_date, descript, destination, category, amount;
     LinearLayout billing, arrive_layout;
     TextInputEditText expenseName, expenseDeparture, expenseArrive, expenseStartDate, expenseEndDate, expenseDescription, expenseDestination, expenseAmount;
-    Calendar calendar;
-    DatePickerDialog datePickerDialog;
-    DatePickerDialog.OnDateSetListener dateListener, dateListener1;
+    final Calendar calendar = Calendar.getInstance();
     public ImageView back, image_bill;
     float v = 0;
     CardView category_layout;
@@ -83,11 +84,16 @@ public class CreateNewExpense extends AppCompatActivity {
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
     protected LocationManager locationManager;
+    String selectedText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_expense);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            myTripId = bundle.getInt("trip_ids");
+        }
 
         category_layout = findViewById(R.id.category_layout);
         detail = findViewById(R.id.detail_expense);
@@ -124,23 +130,22 @@ public class CreateNewExpense extends AppCompatActivity {
         selection.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedText = parent.getItemAtPosition(position).toString();
-                detail.setVisibility(View.GONE);
-                    if (selectedText.equals("Food") || selectedText.equals("Shopping") || selectedText.equals("Hotel") || selectedText.equals("Others")) {
-                        detail.setVisibility(View.VISIBLE);
-                        destination.setVisibility(View.VISIBLE);
-                        departure.setVisibility(View.GONE);
-                        arrive_layout.setVisibility(View.GONE);
-                    } else if (selectedText.equals("Flight") || selectedText.equals("Taxi")) {
-                        detail.setVisibility(View.VISIBLE);
-                        destination.setVisibility(View.GONE);
-                        departure.setVisibility(View.VISIBLE);
-                        arrive_layout.setVisibility(View.VISIBLE);
+                selectedText = parent.getItemAtPosition(position).toString();
+                if (selectedText.equals("Food") || selectedText.equals("Shopping") || selectedText.equals("Hotel") || selectedText.equals("Others")) {
+                    detail.setVisibility(View.VISIBLE);
+                    destination.setVisibility(View.VISIBLE);
+                    departure.setVisibility(View.GONE);
+                    arrive_layout.setVisibility(View.GONE);
+                } else if (selectedText.equals("Flight") || selectedText.equals("Taxi")) {
+                    detail.setVisibility(View.VISIBLE);
+                    destination.setVisibility(View.GONE);
+                    departure.setVisibility(View.VISIBLE);
+                    arrive_layout.setVisibility(View.VISIBLE);
 
-                    }
-                else if (selectedText.equals("")) {
+                } else if (selectedText.equals("")) {
                     detail.setVisibility(View.GONE);
                 }
+
             }
         });
 
@@ -149,13 +154,16 @@ public class CreateNewExpense extends AppCompatActivity {
         expenseStartDate = findViewById(R.id.start_date);
         expenseEndDate = findViewById(R.id.end_date);
         expenseDescription = findViewById(R.id.expenseDescription);
+        expenseDestination = findViewById(R.id.expense_destination);
         expenseDeparture = findViewById(R.id.expense_depart);
         expenseArrive = findViewById(R.id.expense_arrival);
+        expenseAmount = findViewById(R.id.expenseAmount);
 
         map = findViewById(R.id.open_map);
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                takeGPS();
                 MapWithSearchFragment mapsFragment = new MapWithSearchFragment();
                 mapsFragment.show(getSupportFragmentManager(), "Select location");
             }
@@ -189,67 +197,90 @@ public class CreateNewExpense extends AppCompatActivity {
         title.setAlpha(v);
         title.animate().translationY(0).alpha(1).setDuration(1000).setStartDelay(100).start();
 
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                // Set the selected date on the Calendar object
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                // Create the TimePickerDialog and set the onTimeSet listener
+                TimePickerDialog timePickerDialog = new TimePickerDialog(CreateNewExpense.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        // Set the selected time on the Calendar object
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
+
+                        // Format the date/time and set it on the EditText field
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        String dateTime = dateFormat.format(calendar.getTime());
+                        expenseStartDate.setText(dateTime);
+                    }
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+
+                // Show the TimePickerDialog
+                timePickerDialog.show();
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
         expenseStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-                datePickerDialog = new DatePickerDialog(CreateNewExpense.this, dateListener, year, month, day);
-
                 datePickerDialog.show();
-
             }
         });
-        dateListener = new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog datePickerDialog1 = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                CharSequence strDate = null;
-                Time chosenDate = new Time();
-                chosenDate.set(day, month, year);
-                long dtDob = chosenDate.toMillis(true);
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                // Set the selected date on the Calendar object
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                strDate = DateFormat.format("MM/dd/yyyy", dtDob);
+                // Create the TimePickerDialog and set the onTimeSet listener
+                TimePickerDialog timePickerDialog1 = new TimePickerDialog(CreateNewExpense.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        // Set the selected time on the Calendar object
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
 
-                expenseStartDate.setText(strDate);
+                        // Format the date/time and set it on the EditText field
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        String dateTime = dateFormat.format(calendar.getTime());
+                        expenseEndDate.setText(dateTime);
+                    }
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+
+                // Show the TimePickerDialog
+                timePickerDialog1.show();
             }
-        };
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
         expenseEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-                datePickerDialog = new DatePickerDialog(CreateNewExpense.this, dateListener, year, month, day);
-
-                datePickerDialog.show();
-
+                datePickerDialog1.show();
             }
         });
-        dateListener1 = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                CharSequence strDate = null;
-                Time chosenDate = new Time();
-                chosenDate.set(day, month, year);
-                long dtDob = chosenDate.toMillis(true);
 
-                strDate = DateFormat.format("MM/dd/yyyy", dtDob);
-
-                expenseEndDate.setText(strDate);
-            }
-        };
         billing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takePicture();
             }
         });
+        Create = findViewById(R.id.buttonCreateExpense);
+        Create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popUpConfirm();
+            }
+        });
     }
+
     //camera
     protected boolean allPermissionsGranted_CAMERA() {
         for (String permission : REQUIRED_PERMISSIONS)
@@ -257,6 +288,7 @@ public class CreateNewExpense extends AppCompatActivity {
                 return false;
         return true;
     }
+
     protected Uri saveImage(Bitmap bitmap) {
         String fileName = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US).format(new Date());
         String path = Environment.DIRECTORY_PICTURES + File.separator + "Travellink";
@@ -279,6 +311,7 @@ public class CreateNewExpense extends AppCompatActivity {
         }
         return image_uri;
     }
+
     protected void takePicture() {
         // Ask for camera permissions.
         if (!allPermissionsGranted_CAMERA()) {
@@ -314,6 +347,7 @@ public class CreateNewExpense extends AppCompatActivity {
             Toast.makeText(this, "Select Image Failed.", Toast.LENGTH_SHORT).show();
         }
     }
+
     private boolean allPermissionsGranted_GPS() {
         for (String permission : REQUIRED_PERMISSIONS_GPS)
             if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
@@ -340,4 +374,74 @@ public class CreateNewExpense extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private Expense get_data() {
+        int id = new Expense().getExpense_Id();
+        int trip_id = myTripId;
+        String expense_name = expenseName.getText().toString();
+        String expense_category = selectedText;
+        String expense_departure ="";
+        if (selectedText.equals("Food") || selectedText.equals("Shopping") || selectedText.equals("Hotel") || selectedText.equals("Others")) {
+             expense_departure = expenseDestination.getText().toString();
+        } else {
+             expense_departure = expenseDeparture.getText().toString();
+        }
+        String expense_arrive = expenseArrive.getText().toString();
+        String Start_dateandtime = expenseStartDate.getText().toString();
+        String End_dateandtime = expenseEndDate.getText().toString();
+        String expense_Price = expenseAmount.getText().toString();
+        String description = expenseDescription.getText().toString();
+        String inputImage;
+        if (image_uri == null) {
+            inputImage = "";
+        } else {
+            inputImage = String.valueOf(image_uri);
+        }
+        String expense_image = inputImage;
+        return new Expense( id, expense_name, expense_category, description, expense_image, expense_departure,expense_arrive, expense_Price, Start_dateandtime, End_dateandtime, trip_id);
+
+    }
+
+    private void popUpConfirm() {
+        if (validation() == true) {
+            Expense expense = get_data();
+            new ConfirmExpenseFragment(expense).show(getSupportFragmentManager(), null);
+            return;
+        }
+    }
+
+    protected boolean validation() {
+        if (expenseName.getText().toString().isEmpty()) {
+            name.setError("You need to enter your expense name !");
+            return false;
+        } else if (selectedText.equals("Food") || selectedText.equals("Shopping") || selectedText.equals("Hotel") || selectedText.equals("Others")) {
+            if (expenseDestination.getText().toString().isEmpty()) {
+                departure.setError("You need to enter your destination !");
+                return false;
+            }
+        } else if (selectedText.equals("Flight") || selectedText.equals("Taxi")) {
+            if (expenseDeparture.getText().toString().isEmpty()) {
+                departure.setError("You need to enter your departure destination !");
+                return false;
+            } else if (expenseArrive.getText().toString().isEmpty()) {
+                arrive.setError("You need to enter your arrival destination !");
+                return false;
+            }
+        } else if (expenseStartDate.getText().toString().isEmpty()) {
+            start_date.setError("You need to enter your start date !");
+            return false;
+        } else if (expenseEndDate.getText().toString().isEmpty()) {
+            end_date.setError("You need to enter your end date !");
+            return false;
+        } else {
+            name.setError(null);
+            departure.setError(null);
+            arrive.setError(null);
+            start_date.setError(null);
+            return true;
+        }
+        return true;
+    }
+
+
 }

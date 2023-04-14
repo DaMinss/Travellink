@@ -1,6 +1,7 @@
 package com.example.travellink.Trip.TripModel;
 
 import android.animation.LayoutTransition;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
-import com.example.travellink.CreateNewExpense;
 import com.example.travellink.R;
 import com.example.travellink.Trip.DeleteTripFragment;
 import com.example.travellink.Trip.UpdateTripFragment;
@@ -41,6 +41,9 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         listOfTrips = _list;
         this.context = context;
         notifyDataSetChanged();
+    }
+    private Context getContext() {
+        return context;
     }
 
 
@@ -134,9 +137,13 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Context context = view.getContext();
-                    context.startActivity(new Intent(context, TripDetails.class));
-
+                    TripDAO.Trip_withTotalPrice trip =  listOfTrips.get(getAdapterPosition());
+                    Intent intent = new Intent(view.getContext(), TripDetails.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("trip_id", trip.getTrip().getId());
+                    intent.putExtras(bundle);
+                    view.getContext().startActivity(intent);
+                   ((Activity) getContext()).overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
                 }
             });
 

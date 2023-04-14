@@ -16,9 +16,10 @@ public class ExpenseRepo {
     public ExpenseRepo(Application application) {
         TravelDatabase db = TravelDatabase.getInstance(application);
         expenseDAO = db.expenseDAO();
-        allExpense = expenseDAO.getAll();
     }
-    public LiveData<List<Expense>> getAllData() { return allExpense; }
+    public LiveData<List<Expense>> getAllExpensesByTripId(int trip_id) {
+        return expenseDAO.getAll(trip_id);
+    }
 //    public void insert(Trip trip) {
 //        TravelDatabase.databaseWriteExecutor.execute(() -> {
 //            tripDao.insertTrip(trip);
