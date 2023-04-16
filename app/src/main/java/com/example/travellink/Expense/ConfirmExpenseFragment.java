@@ -67,6 +67,7 @@ public class ConfirmExpenseFragment extends DialogFragment {
                     intent.putExtras(bundle);
                     view.getContext().startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                    getActivity().finish();
                 } else {
                     Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
                 }

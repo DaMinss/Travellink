@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
 <RelativeLayout
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
         <com.google.android.material.appbar.AppBarLayout
@@ -88,9 +89,9 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </RelativeLayout>
         </com.google.android.material.appbar.AppBarLayout>
-    <include android:layout_width="match_parent" android:layout_height="wrap_content"  layout="@layout/fragment_container" android:layout_above="@id/content" android:layout_below="@id/AppBar" />
+    <include android:layout_width="match_parent" android:layout_height="wrap_content"  layout="@layout/fragment_container" android:layout_above="@id/bottom_bar_layout" android:layout_below="@id/AppBar" />
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/content"
+        android:id="@+id/bottom_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">

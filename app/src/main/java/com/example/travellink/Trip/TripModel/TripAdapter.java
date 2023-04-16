@@ -10,6 +10,8 @@ import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,11 +29,14 @@ import com.example.travellink.Trip.UpdateTripFragment;
 import com.example.travellink.Trip.TripDetails;
 import com.example.travellink.database.TripDAO;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder> {
+public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder> implements Filterable {
     private String status = "";
     private List<TripDAO.Trip_withTotalPrice> listOfTrips;
+    private List<TripDAO.Trip_withTotalPrice> listOfTrips1;
 
     Context context;
     private ViewBinderHelper viewBinder = new ViewBinderHelper();
@@ -39,6 +44,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
 
     public TripAdapter(List<TripDAO.Trip_withTotalPrice> _list, Context context) {
         listOfTrips = _list;
+        listOfTrips1 = _list;
         this.context = context;
         notifyDataSetChanged();
     }
@@ -95,6 +101,8 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         }
         return 0;
     }
+
+
 
     public class TripViewHolder extends RecyclerView.ViewHolder {
         public TextView Trip_Name,Trip_Price, Trip_StartDate,Trip_endDate, Trip_Depart,Trip_Arrival, to;
@@ -166,6 +174,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
                     FragmentActivity fragmentActivity = (FragmentActivity) view.getContext();
                     Bundle bundle = new Bundle();
                     bundle.putInt("trip_id",trip.getTrip().getId());
+                    bundle.putInt("status",1);
                     DeleteTripFragment deleteTripFragment = new DeleteTripFragment();
                     deleteTripFragment.setArguments(bundle);
                     deleteTripFragment.show(fragmentActivity.getSupportFragmentManager(),null);
@@ -180,5 +189,40 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     public void restoreStates(Bundle inState) {
         viewBinder.restoreStates(inState);
     }
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String Search = charSequence.toString();
+                if (Search.isEmpty()) {
+                    listOfTrips = listOfTrips1;
+
+                } else {
+                    List<TripDAO.Trip_withTotalPrice> listsss = new ArrayList<>();
+                    for (TripDAO.Trip_withTotalPrice tripsss : listOfTrips1) {
+                        if (tripsss.getTrip().getTrip_name().toLowerCase(Locale.ROOT).contains(Search.toLowerCase()) ||
+                                tripsss.getTrip().getTrip_start_date().toLowerCase(Locale.ROOT).contains((Search.toLowerCase())) ||
+                                tripsss.getTrip().getTrip_arrival().toLowerCase(Locale.ROOT).contains((Search.toLowerCase()))) {
+                            listsss.add(tripsss);
+                        }
+                    }
+                    listOfTrips = listsss;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = listOfTrips;
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                listOfTrips = ( List<TripDAO.Trip_withTotalPrice>) filterResults.values;
+                notifyDataSetChanged();
+
+            }
+        };
+    }
+
 
 }

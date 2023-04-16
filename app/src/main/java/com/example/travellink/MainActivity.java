@@ -1,5 +1,6 @@
 package com.example.travellink;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
@@ -10,9 +11,12 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.example.travellink.Trip.ConfirmDialogFragment;
 import com.example.travellink.Trip.CreateNewTrip;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,7 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity{
     DrawerLayout drawerLayout;
-    CoordinatorLayout content;
+    RelativeLayout content;
     ImageView hamburger_bar;
     NavigationView navigationView;
     BottomNavigationView bottomNavigationView;
@@ -60,6 +64,18 @@ public class MainActivity extends AppCompatActivity{
                 overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
             }
         });
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.exitFragment:
+                        new ConfirmExitPersonalFragment().show(getSupportFragmentManager(), null);
+                        break;
+                }
+                return false;
+            }});
+
+
 
     }
     private void navigationDrawer(){

@@ -1,5 +1,3 @@
-
-
 package com.example.travellink;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -43,11 +41,12 @@ import com.google.protobuf.StringValue;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 
-public class MapWithSearchFragment extends DialogFragment implements OnMapReadyCallback {
-    public interface MapWithSearchFragmentInterface {
-        public void getLocationFromMap(String address);
+public class Map_WithSearchFragment2 extends DialogFragment implements OnMapReadyCallback {
+    public interface MapWithSearchFragmentInterface1 {
+        public void getLocationFromMap1(String address);
     }
 
     private GoogleMap Map;
@@ -58,7 +57,7 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
 
     private int ACCESS_LOCATION_REQUEST_CODE = 1001;
 
-    public MapWithSearchFragment() {
+    public Map_WithSearchFragment2() {
         // Required empty public constructor
     }
 
@@ -83,10 +82,10 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_map_with_search, container, false);
-        searchView = root.findViewById(R.id.searchLocation);
-        confirm = root.findViewById(R.id.add_location);
-        supportMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.googleMap);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_map_add, container, false);
+        searchView = root.findViewById(R.id.searchLocation1);
+        confirm = root.findViewById(R.id.add_location1);
+        supportMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.googleMap1);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -117,7 +116,7 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
                                 @Override
                                 public void onClick(View view) {
 
-                                    Map_WithSearchFragment2.MapWithSearchFragmentInterface1 itf = (Map_WithSearchFragment2.MapWithSearchFragmentInterface1) getActivity();
+                                    MapWithSearchFragmentInterface1 itf = (MapWithSearchFragmentInterface1) getActivity();
                                     itf.getLocationFromMap1(streetAddress);
                                     dismiss();
                                 }
@@ -215,7 +214,7 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
         } else {
             ActivityCompat.requestPermissions(this.getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    ACCESS_LOCATION_REQUEST_CODE);
+                   ACCESS_LOCATION_REQUEST_CODE);
         }
     }
 

@@ -44,6 +44,23 @@ public class ViewAllTripFragment extends Fragment {
             tripAdapter = new TripAdapter(trips, getActivity());
             viewTripList.setAdapter(tripAdapter);
         });
-       return root;
+        androidx.appcompat.widget.SearchView searchView = root.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                tripAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(tripAdapter != null) {
+                    tripAdapter.getFilter().filter(newText);
+                }
+                return true;
+            }
+        });
+
+        return root;
     }
 }

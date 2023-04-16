@@ -20,6 +20,9 @@ public class ExpenseRepo {
     public LiveData<List<Expense>> getAllExpensesByTripId(int trip_id) {
         return expenseDAO.getAll(trip_id);
     }
+    public LiveData<List<Expense>> getAllExpensesByTripId_andType(int trip_id, String type) {
+        return expenseDAO.getAllByType(trip_id,type);
+    }
     public List<ExpenseDAO.Expense_amountByType>getExpenseAmountByType(int trip_id) {
         return expenseDAO.getExpenseAmountByType(trip_id);
     }

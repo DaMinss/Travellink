@@ -18,4 +18,5 @@ public class ExpenseViewModel extends AndroidViewModel {
     }
     public LiveData<Expense> getExpense(int id) { return repo.getExpenseByID(id);}
     public LiveData<List<Expense>> getAllExpensesByTripId(int trip_id) { return repo.getAllExpensesByTripId(trip_id);}
+    public LiveData<List<Expense>> getAllExpensesByTripId_Type(int trip_id, String type) { return repo.getAllExpensesByTripId_andType(trip_id, type);}
 }

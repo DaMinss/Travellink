@@ -167,6 +167,7 @@
                             android:layout_height="wrap_content"
                             android:background="@color/trip_card"
                             android:textSize="15sp"
+                            android:focusable="false"
                             android:textStyle="bold" />
 
                     </com.google.android.material.textfield.TextInputLayout>

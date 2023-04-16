@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".Trip.ConfirmDialogFragment"
     app:cardCornerRadius="20dp"
     app:cardUseCompatPadding="true"
     app:cardElevation="10dp">
@@ -21,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="160dp"
-            android:text="Are you sure you want to delete"
+            android:text="Are you sure you want to log out
+             Personal Mode"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textSize="19sp"
@@ -32,39 +32,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/nameTrip"
-            android:layout_width="46dp"
-            android:layout_height="33dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="fdfdfdfdf"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView13"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView12"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
             android:id="@+id/textView13"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Please decide carefully before proceed"
+            android:text="Please decide carefully before proceed as your data wont be backup"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView12"
-            app:layout_constraintVertical_bias="0.36"
-            tools:layout_editor_absoluteX="9dp" />
+            app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView3"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_editor_absoluteX="3dp" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieAnimationView2"
@@ -78,7 +57,22 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
             app:lottie_autoPlay="true"
-            app:lottie_rawRes="@raw/delete"
+            app:lottie_rawRes="@raw/logout"
+            app:lottie_speed="1.7"></com.airbnb.lottie.LottieAnimationView>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimationView3"
+            android:scaleType="fitXY"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:minHeight="90dp"
+            app:layout_constraintEnd_toEndOf="@+id/textView12"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="@+id/textView12"
+            app:layout_constraintTop_toBottomOf="@+id/textView12"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/hello"
             app:lottie_speed="1.7"></com.airbnb.lottie.LottieAnimationView>
 
         <androidx.appcompat.widget.AppCompatButton

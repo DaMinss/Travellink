@@ -38,9 +38,11 @@ public class SplashScreen extends AppCompatActivity {
                 } else if(onBoardingFinished()){
                     startActivity(new Intent(SplashScreen.this, Login.class));
                     overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                    finish();
                 }else {
                     startActivity(new Intent(SplashScreen.this, OnboardingScreen.class));
                     overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                    finish();
                 }
 
             }

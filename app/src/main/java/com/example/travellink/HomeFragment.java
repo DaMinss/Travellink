@@ -59,9 +59,11 @@ public class HomeFragment extends Fragment {
         viewTripList.setAdapter(tripAdapter);
 
         listOfTop3Trips = tripRepo.getTop3TripAndSum();
-        top3List.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        tripTop3Adapter = new TripTop3Adapter(listOfTop3Trips, getActivity());
-        top3List.setAdapter(tripTop3Adapter);
+        if(listOfTop3Trips.get(0).getTotalOfExpense() != null && listOfTop3Trips.get(1).getTotalOfExpense() != null && listOfTop3Trips.get(2).getTotalOfExpense() != null) {
+            top3List.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+            tripTop3Adapter = new TripTop3Adapter(listOfTop3Trips, getActivity());
+            top3List.setAdapter(tripTop3Adapter);
+        }
         readData(listOfTrips.size());
 
         title1 = root.findViewById(R.id.recent);

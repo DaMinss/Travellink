@@ -1,9 +1,20 @@
 package com.example.travellink.Trip;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateFormat;
@@ -14,20 +25,24 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.travellink.MainActivity;
 import com.example.travellink.MapWithSearchFragment;
+import com.example.travellink.Map_WithSearchFragment2;
 import com.example.travellink.R;
 import com.example.travellink.Trip.TripModel.Trip;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
-public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFragment.MapWithSearchFragmentInterface {
+public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFragment.MapWithSearchFragmentInterface, Map_WithSearchFragment2.MapWithSearchFragmentInterface1 {
     TextView title;
-    TextInputLayout name,departure, arrive, date, note;
+    TextInputLayout name, departure, arrive, date, note;
     LinearLayout depart, arrival;
     TextInputEditText tripName, tripDeparture, tripArrive, tripStartDate, tripNote;
     Calendar calendar;
@@ -38,6 +53,18 @@ public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFra
     Button Create;
     ImageView map, map1;
     LottieAnimationView loading;
+    protected final int LOCATION_REFRESH_TIME = 1000; // 1 seconds to update.
+    protected final int LOCATION_REFRESH_DISTANCE = 5; // 5 meters to update.
+    protected final int REQUEST_CODE_PERMISSIONS_GPS = 105;
+    protected final String[] REQUIRED_PERMISSIONS_GPS = new String[]{
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+    protected LocationManager locationManager;
+
+    public CreateNewTrip() {
+        // Required empty public constructor
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +89,7 @@ public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFra
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                takeGPS();
                 MapWithSearchFragment mapsFragment = new MapWithSearchFragment();
                 mapsFragment.show(getSupportFragmentManager(), "Select location");
             }
@@ -70,7 +98,8 @@ public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFra
         map1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MapWithSearchFragment mapsFragment = new MapWithSearchFragment();
+                takeGPS();
+                Map_WithSearchFragment2 mapsFragment = new Map_WithSearchFragment2();
                 mapsFragment.show(getSupportFragmentManager(), "Select location");
 
             }
@@ -203,4 +232,53 @@ public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFra
     public void getLocationFromMap(String address) {
         tripDeparture.setText(address);
     }
+
+    @Override
+    public void getLocationFromMap1(String address) {
+        tripArrive.setText(address);
+    }
+
+    private boolean allPermissionsGranted_GPS() {
+        for (String permission : REQUIRED_PERMISSIONS_GPS)
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
+                return false;
+
+        return true;
+    }
+
+    protected void takeGPS() {
+        // Ask for camera permissions.
+        if (!allPermissionsGranted_GPS()) {
+            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS_GPS, REQUEST_CODE_PERMISSIONS_GPS);
+            return;
+        }
+        try {
+            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                return;
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, (long) LOCATION_REFRESH_TIME, (float) LOCATION_REFRESH_DISTANCE, (LocationListener) this);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_CODE_PERMISSIONS_GPS) {
+            if (allPermissionsGranted_GPS()) {
+                return;
+            }
+
+            Toast.makeText(this, "GPS Permissions not granted by the user.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

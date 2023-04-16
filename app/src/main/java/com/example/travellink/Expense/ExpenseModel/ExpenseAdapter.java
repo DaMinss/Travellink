@@ -25,16 +25,22 @@ import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.travellink.R;
 import com.example.travellink.Trip.DeleteTripFragment;
 import com.example.travellink.Trip.TripDetails;
+import com.example.travellink.database.ExpenseDAO;
 import com.example.travellink.database.TripDAO;
 import com.example.travellink.fragment_firstscreen;
 import com.example.travellink.fragment_secondscreen;
 import com.example.travellink.fragment_thirdscreen;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder> {
     private String date = "";
     private List<Expense> listOfExpense;
+    private int lastClickedPosition = -1;
 
     Context context;
     private ViewBinderHelper viewBinder = new ViewBinderHelper();
@@ -67,13 +73,31 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
             return;
         }
 
-//        if (status.equals(trip.getTrip_status())) {
-//            holder.types.setVisibility(View.GONE);
-//        } else {
-//            type = Trip.getTrip_Type();
-//            holder.types.setText(Trip.getTrip_Type());
-//            holder.types.setVisibility(View.VISIBLE);
-//        }
+        String datetimeString = expense.getExpense_StartDate();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = null;
+        Date currentDate = Calendar.getInstance().getTime();
+
+        try {
+            date1 = dateFormat.parse(datetimeString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+// Format the date as a string
+        String dateString = dateFormat.format(date1);
+        String current_dateString = dateFormat.format(currentDate);
+
+        if (date.equals(dateString)) {
+            holder.DateView.setVisibility(View.GONE);
+        } else {
+            date = dateString;
+            holder.DateView.setText(dateString);
+            holder.DateView.setVisibility(View.VISIBLE);
+        }
+        if(dateString.equals(current_dateString)){
+            holder.DateView.setText("Today");
+        }
         if(expense.getExpense_Type().equals("Food")) {
                 holder.food.setVisibility(View.VISIBLE);
                 holder.food1.setVisibility(View.VISIBLE);
@@ -109,6 +133,8 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
         viewBinder.bind(holder.swipe_Layout, String.valueOf(expense.getExpense_Id()));
         viewBinder.closeLayout(String.valueOf(listOfExpense.get(position).getExpense_Id()));
 
+
+
     }
 
     @Override
@@ -120,7 +146,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
     }
 
     public class ExpenseViewHolder extends RecyclerView.ViewHolder {
-        public TextView Expense_Name, Expense_Price, Expense_StartDate, Expense_endDate, Expense_Depart, Expense_Arrival;
+        public TextView Expense_Name, Expense_Price, Expense_StartDate, Expense_endDate, Expense_Depart, Expense_Arrival, DateView;
         public SwipeRevealLayout swipe_Layout;
         CardView cardView;
         public ImageView delete_expense, details, hotel, hotel1, shopping, shopping1, taxi, taxi1, plane, plane1, other, other1, food, food1;
@@ -130,6 +156,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
 
         public ExpenseViewHolder(@NonNull View item_view) {
             super(item_view);
+            DateView = item_view.findViewById(R.id.viewDate);
             hotel = item_view.findViewById(R.id.bedroom);
             hotel1 = item_view.findViewById(R.id.bedroom1);
             food = item_view.findViewById(R.id.food);
@@ -187,13 +214,14 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
             delete_expense.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    TripDAO.Trip_withTotalPrice trip =  listOfTrips.get(getAdapterPosition());
-//                    FragmentActivity fragmentActivity = (FragmentActivity) view.getContext();
-//                    Bundle bundle = new Bundle();
-//                    bundle.putInt("trip_id",trip.getTrip().getId());
-//                    DeleteTripFragment deleteTripFragment = new DeleteTripFragment();
-//                    deleteTripFragment.setArguments(bundle);
-//                    deleteTripFragment.show(fragmentActivity.getSupportFragmentManager(),null);
+                    Expense expense=  listOfExpense.get(getAdapterPosition());
+                    FragmentActivity fragmentActivity = (FragmentActivity) view.getContext();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("expense_id", expense.getExpense_Id());
+                    bundle.putInt("status",2);
+                    DeleteTripFragment deleteTripFragment = new DeleteTripFragment();
+                    deleteTripFragment.setArguments(bundle);
+                    deleteTripFragment.show(fragmentActivity.getSupportFragmentManager(),null);
                 }
             });
         }

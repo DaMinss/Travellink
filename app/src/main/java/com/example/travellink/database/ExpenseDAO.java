@@ -15,13 +15,15 @@ import java.util.List;
 
 @Dao
 public interface ExpenseDAO {
-    @Query("SELECT * FROM expense WHERE Trip_ID =:tripIds ")
+    @Query("SELECT * FROM expense WHERE Trip_ID =:tripIds  ORDER BY Expense_StartDate DESC")
     LiveData<List<Expense>>  getAll(int tripIds);
+    @Query("SELECT * FROM expense WHERE Trip_ID =:tripIds AND Expense_Type = :Type  ORDER BY Expense_StartDate DESC")
+    LiveData<List<Expense>>  getAllByType(int tripIds, String Type);
 
     @Query("SELECT * FROM expense WHERE Expense_Id = :expenseIds")
     LiveData<Expense> loadExpenseByID(int expenseIds);
 
-    @Query("SELECT Expense_Type as Type, SUM(Expense_Price)  as TotalOfExpenses  FROM expense WHERE Trip_ID =:tripIds")
+    @Query("SELECT Expense_Type as Type, SUM(Expense_Price)  as TotalOfExpenses  FROM expense WHERE Trip_ID =:tripIds GROUP BY Type")
     List<ExpenseDAO.Expense_amountByType> getExpenseAmountByType(int tripIds);
 
     class Expense_amountByType {

@@ -25,6 +25,7 @@ public class Personal extends AppCompatActivity {
                 onPersonal();
                 startActivity(new Intent(Personal.this, MainActivity.class));
                 overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                finish();
             }
         });
     }
