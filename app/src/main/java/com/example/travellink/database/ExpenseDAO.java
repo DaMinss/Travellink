@@ -25,6 +25,11 @@ public interface ExpenseDAO {
 
     @Query("SELECT Expense_Type as Type, SUM(Expense_Price)  as TotalOfExpenses  FROM expense WHERE Trip_ID =:tripIds GROUP BY Type")
     List<ExpenseDAO.Expense_amountByType> getExpenseAmountByType(int tripIds);
+    @Query("SELECT ((strftime('%d', datetime(Expense_StartDate)) - 1) / 7) + 1 as week, SUM(Expense_Price) as TotalOfExpenses \n" +
+            "FROM expense \n" +
+            "WHERE strftime('%Y-%m', Expense_StartDate) = strftime('%Y-%m', 'now') \n" +
+            "GROUP BY week;")
+    List<ExpenseDAO.Expense_amountByDate> getExpenseAmountByDate();
 
     class Expense_amountByType {
         @ColumnInfo(name = "Type")
@@ -34,6 +39,20 @@ public interface ExpenseDAO {
 
         public String getType() {
             return Type ;
+        }
+
+        public Float getTotalOfExpense() {
+            return TotalOfExpense;
+        }
+    }
+    class Expense_amountByDate {
+        @ColumnInfo(name = "week")
+        public int week;
+        @ColumnInfo(name = "TotalOfExpenses")
+        public Float TotalOfExpense;
+
+        public int getWeek() {
+            return week ;
         }
 
         public Float getTotalOfExpense() {

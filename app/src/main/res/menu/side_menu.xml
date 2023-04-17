@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
         <item android:id="@+id/homeFragment"
@@ -12,10 +15,12 @@
         <menu>
             <item android:id="@+id/accountFragment"
                 android:title="View Account"
-                android:visible="false"/>
+                />
+            <item android:id="@+id/exitUser"
+                android:title="Log Out"
+                />
             <item android:id="@+id/exitFragment"
-                android:title="Exit Personal Mode"
-                android:visible="true"/>
+                android:title="Exit Personal Mode" />
         </menu>
     </item>
 

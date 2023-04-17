@@ -2,21 +2,23 @@ package com.example.travellink;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.example.travellink.Trip.ConfirmDialogFragment;
+import com.example.travellink.Auth.ConfirmExitPersonalFragment;
 import com.example.travellink.Trip.CreateNewTrip;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity{
     DrawerLayout drawerLayout;
+    Menu optionMenu;
     RelativeLayout content;
     ImageView hamburger_bar;
     NavigationView navigationView;
@@ -64,11 +67,15 @@ public class MainActivity extends AppCompatActivity{
                 overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
             }
         });
+//        navigationView.getMenu().getItem()
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.exitFragment:
+                        new ConfirmExitPersonalFragment().show(getSupportFragmentManager(), null);
+                        break;
+                    case R.id.exitUser:
                         new ConfirmExitPersonalFragment().show(getSupportFragmentManager(), null);
                         break;
                 }
@@ -78,6 +85,21 @@ public class MainActivity extends AppCompatActivity{
 
 
     }
+
+
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.side_menu, menu);
+//        optionMenu = menu;
+//        if(){
+//            menu.getItem(R.id.exitUser).setVisible(true);
+//            menu.getItem(R.id.accountFragment).setVisible(true);
+//            menu.getItem(R.id.exitFragment).setVisible(false);
+//        }
+//        return super.onCreateOptionsMenu(menu);
+//    }
+
     private void navigationDrawer(){
            navigationView.bringToFront();
            hamburger_bar.setOnClickListener(new View.OnClickListener() {
@@ -132,4 +154,5 @@ public class MainActivity extends AppCompatActivity{
             super.onBackPressed();
         }
     }
+
 }

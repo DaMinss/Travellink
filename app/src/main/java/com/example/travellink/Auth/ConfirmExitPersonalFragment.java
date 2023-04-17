@@ -1,4 +1,4 @@
-package com.example.travellink;
+package com.example.travellink.Auth;
 
 import android.content.Context;
 import android.content.Intent;
