@@ -337,7 +337,7 @@
 
                         <TextView
                             android:id="@+id/expense_des"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:text="Tan san nhat airport"
@@ -350,7 +350,7 @@
 
                         <TextView
                             android:id="@+id/expense_des1"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:text="Noi Bai airport"

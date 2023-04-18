@@ -1,19 +1,23 @@
 package com.example.travellink;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.travellink.database.ExpenseDAO;
 import com.example.travellink.database.ExpenseRepo;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -25,6 +29,9 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.ParseException;
@@ -72,27 +79,58 @@ public class ViewStatFragment extends Fragment {
         LineDataSet dataSet = new LineDataSet(entries, "Total Expenses");
         LineData lineData = new LineData(dataSet);
         lineChart.setData(lineData);
-
+        dataSet.setDrawFilled(true);
+        dataSet.setValueTextColor(R.color.purple_600);
+        dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.NORMAL));
+        dataSet.setCircleColor(Color.rgb(225, 195, 255));
+        dataSet.setValueTextSize(11f);
+        dataSet.setColor(Color.rgb(225, 195, 255));
+        dataSet.setFillDrawable(ContextCompat.getDrawable(getContext(), R.drawable.chart_gradient));
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setValueFormatter(new LargeValueFormatter());
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
-
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return "Week " + ((int) value);
+            }
+        });
+        xAxis.setTextSize(10f);
         YAxis yAxis = lineChart.getAxisLeft();
+        yAxis.setTextSize(12f);
+        yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+
         yAxis.setValueFormatter(new LargeValueFormatter());
         yAxis.setGranularity(1f);
 
         lineChart.getAxisRight().setEnabled(false);
         lineChart.getDescription().setEnabled(false);
-        lineChart.setTouchEnabled(false);
-        lineChart.setDragEnabled(false);
-        lineChart.setScaleEnabled(false);
-        lineChart.setPinchZoom(false);
+        lineChart.setTouchEnabled(true);
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(true);
+        lineChart.setPinchZoom(true);
         lineChart.setExtraBottomOffset(-50);
-        lineChart.setMinimumHeight(250);
+        lineChart.setMinimumHeight(650);
+        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         lineChart.invalidate();
+        lineChart.setHighlightPerTapEnabled(true);
+        lineChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                float x = e.getX();
+                float y = e.getY();
+                Toast.makeText(getContext(), "Week " + ((int) x) + ": " + y + " $", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onNothingSelected() {
+                // do nothing
+            }
+        });
 
+        Legend legend = lineChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
 
 
     }

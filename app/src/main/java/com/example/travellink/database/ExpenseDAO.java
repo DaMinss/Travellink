@@ -23,6 +23,9 @@ public interface ExpenseDAO {
     @Query("SELECT * FROM expense WHERE Expense_Id = :expenseIds")
     LiveData<Expense> loadExpenseByID(int expenseIds);
 
+    @Query("SELECT * FROM expense WHERE Expense_Id = :expenseIds")
+    Expense getExpenseByID(int expenseIds);
+
     @Query("SELECT Expense_Type as Type, SUM(Expense_Price)  as TotalOfExpenses  FROM expense WHERE Trip_ID =:tripIds GROUP BY Type")
     List<ExpenseDAO.Expense_amountByType> getExpenseAmountByType(int tripIds);
     @Query("SELECT ((strftime('%d', datetime(Expense_StartDate)) - 1) / 7) + 1 as week, SUM(Expense_Price) as TotalOfExpenses \n" +

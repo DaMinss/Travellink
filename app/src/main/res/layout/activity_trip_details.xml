@@ -29,7 +29,7 @@
                 android:layout_marginStart="3dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="356dp"
-                app:layout_constraintBottom_toTopOf="@+id/textView9"
+                app:layout_constraintBottom_toTopOf="@+id/expense_Name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -45,10 +45,10 @@
                 android:text="Ho Chi Minh"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/textView9"
+                app:layout_constraintEnd_toStartOf="@+id/expense_Name"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                app:layout_constraintTop_toBottomOf="@+id/expense_Name" />
 
             <TextView
                 android:id="@+id/arriveName"
@@ -61,7 +61,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/departName"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/textView9"
+                app:layout_constraintStart_toEndOf="@+id/expense_Name"
                 app:layout_constraintTop_toTopOf="@+id/departName"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -145,7 +145,7 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/expense_Name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -184,9 +184,9 @@
                 android:layout_height="69dp"
                 android:layout_marginTop="24dp"
                 android:scaleType="fitXY"
-                app:layout_constraintEnd_toEndOf="@+id/textView9"
-                app:layout_constraintStart_toStartOf="@+id/textView9"
-                app:layout_constraintTop_toBottomOf="@+id/textView9"
+                app:layout_constraintEnd_toEndOf="@+id/expense_Name"
+                app:layout_constraintStart_toStartOf="@+id/expense_Name"
+                app:layout_constraintTop_toBottomOf="@+id/expense_Name"
                 app:srcCompat="@drawable/planeroute" />
 
             <ImageButton

@@ -10,9 +10,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -37,8 +34,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
 
 public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFragment.MapWithSearchFragmentInterface, Map_WithSearchFragment2.MapWithSearchFragmentInterface1 {
     TextView title;
@@ -70,7 +65,7 @@ public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_trip);
-        title = findViewById(R.id.textView9);
+        title = findViewById(R.id.expense_Name);
         name = findViewById(R.id.name);
         depart = findViewById(R.id.startDateandTime);
         departure = findViewById(R.id.depart1);

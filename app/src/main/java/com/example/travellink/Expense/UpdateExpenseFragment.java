@@ -1,11 +1,5 @@
 package com.example.travellink.Expense;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.animation.LayoutTransition;
 import android.app.Activity;
@@ -17,18 +11,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,11 +43,16 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.travellink.Expense.CreateNewExpense;
 import com.example.travellink.Expense.ExpenseModel.Expense;
 import com.example.travellink.MapWithSearchFragment;
+import com.example.travellink.Map_WithSearchFragment2;
 import com.example.travellink.R;
+import com.example.travellink.Trip.TripModel.Trip;
+import com.example.travellink.database.TravelDatabase;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,8 +62,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class CreateNewExpense extends AppCompatActivity {
-    int myTripId;
+
+public class UpdateExpenseFragment extends DialogFragment implements MapWithSearchFragment.MapWithSearchFragmentInterface, Map_WithSearchFragment2.MapWithSearchFragmentInterface1 {
+
+    int id;
     ConstraintLayout detail;
     AutoCompleteTextView selection;
     TextView title, title_bill;
@@ -60,9 +74,8 @@ public class CreateNewExpense extends AppCompatActivity {
     TextInputEditText expenseName, expenseDeparture, expenseArrive, expenseStartDate, expenseEndDate, expenseDescription, expenseDestination, expenseAmount;
     final Calendar calendar = Calendar.getInstance();
     public ImageView back, image_bill;
-    float v = 0;
     CardView category_layout;
-    Button Create, remove;
+    Button update, remove;
     LottieAnimationView map;
     Uri image_uri = null;
     ImageView billingImage;
@@ -83,41 +96,73 @@ public class CreateNewExpense extends AppCompatActivity {
     };
     protected LocationManager locationManager;
     String selectedText = "";
+    public ArrayAdapter<String> arrayAdapter;
+
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_new_expense);
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            myTripId = bundle.getInt("trip_ids");
-        }
+    public void onResume() {
+        super.onResume();
 
-        category_layout = findViewById(R.id.category_layout);
-        detail = findViewById(R.id.detail_expense);
-        arrive_layout = findViewById(R.id.arrive);
+        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_update_expense2, container, false);
+        category_layout = root.findViewById(R.id.category_layout);
+        detail = root.findViewById(R.id.detail_expense);
+        arrive_layout = root.findViewById(R.id.arrive);
         LayoutTransition layoutTransition = new LayoutTransition();
         layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
         category_layout.setLayoutTransition(layoutTransition);
-        billingImage = findViewById(R.id.image_billing);
-        title = findViewById(R.id.expense_Name);
-        name = findViewById(R.id.name);
-        descript = findViewById(R.id.description);
-        destination = findViewById(R.id.destination);
-        category = findViewById(R.id.category);
-        amount = findViewById(R.id.amount);
-        billing = findViewById(R.id.billing);
-        image_bill = findViewById(R.id.image_billing);
-        title_bill = findViewById(R.id.textView14);
-        departure = findViewById(R.id.depart1);
-        arrive = findViewById(R.id.arrive1);
-        start_date = findViewById(R.id.sDate);
-        end_date = findViewById(R.id.eDate);
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this, R.layout.spinner,
-                getResources().getStringArray(R.array.menu));
+        billingImage = root.findViewById(R.id.image_billing);
+        title = root.findViewById(R.id.expense_Name);
+        name = root.findViewById(R.id.name);
+        descript = root.findViewById(R.id.description);
+        destination = root.findViewById(R.id.destination);
+        category = root.findViewById(R.id.category);
+        amount = root.findViewById(R.id.amount);
+        billing = root.findViewById(R.id.billing);
+        image_bill = root.findViewById(R.id.image_billing);
+        title_bill = root.findViewById(R.id.textView14);
+        departure = root.findViewById(R.id.depart1);
+        arrive = root.findViewById(R.id.arrive1);
+        start_date = root.findViewById(R.id.sDate);
+        end_date = root.findViewById(R.id.eDate);
+        arrayAdapter = new ArrayAdapter<>(
+                getActivity(), R.layout.spinner,
+                getResources().getStringArray(R.array.menu)){
+            @Override
+            public Filter getFilter() {
+                return new Filter() {
+                    @Override
+                    protected FilterResults performFiltering(CharSequence constraint) {
+                        FilterResults filterResults = new FilterResults();
+                        filterResults.values = getResources().getStringArray(R.array.menu);
+                        filterResults.count = getResources().getStringArray(R.array.menu).length;
+                        return filterResults;
+                    }
 
-        selection = (AutoCompleteTextView) findViewById(R.id.selection);
+                    @Override
+                    protected void publishResults(CharSequence constraint, FilterResults results) {
+                        if (results != null && results.count > 0) {
+                            notifyDataSetChanged();
+                        } else {
+                            notifyDataSetInvalidated();
+                        }
+                    }
+                };
+            }
+        };
+
+        selection = (AutoCompleteTextView) root.findViewById(R.id.selection);
         selection.setAdapter(arrayAdapter);
         selection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,59 +188,30 @@ public class CreateNewExpense extends AppCompatActivity {
                 } else if (selectedText.equals("")) {
                     detail.setVisibility(View.GONE);
                 }
-
             }
         });
 
 
-        expenseName = findViewById(R.id.expenseName);
-        expenseStartDate = findViewById(R.id.start_date);
-        expenseEndDate = findViewById(R.id.end_date);
-        expenseDescription = findViewById(R.id.expenseDescription);
-        expenseDestination = findViewById(R.id.expense_destination);
-        expenseDeparture = findViewById(R.id.expense_depart);
-        expenseArrive = findViewById(R.id.expense_arrival);
-        expenseAmount = findViewById(R.id.expenseAmount);
 
-        map = findViewById(R.id.open_map);
+        expenseName = root.findViewById(R.id.expenseName);
+        expenseStartDate = root.findViewById(R.id.start_date);
+        expenseEndDate = root.findViewById(R.id.end_date);
+        expenseDescription = root.findViewById(R.id.expenseDescription);
+        expenseDestination = root.findViewById(R.id.expense_destination);
+        expenseDeparture = root.findViewById(R.id.expense_depart);
+        expenseArrive = root.findViewById(R.id.expense_arrival);
+        expenseAmount = root.findViewById(R.id.expenseAmount);
+
+        map = root.findViewById(R.id.open_map);
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takeGPS();
                 MapWithSearchFragment mapsFragment = new MapWithSearchFragment();
-                mapsFragment.show(getSupportFragmentManager(), "Select location");
+                mapsFragment.show(getActivity().getSupportFragmentManager(), "Select location");
             }
         });
-        back = findViewById(R.id.backBTN);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-        name.setTranslationX(800);
-        descript.setTranslationX(800);
-        billing.setTranslationX(800);
-        category.setTranslationX(800);
-        title_bill.setTranslationX(800);
-        amount.setTranslationX(800);
-
-        name.setAlpha(v);
-        descript.setAlpha(v);
-        billing.setAlpha(v);
-        amount.setAlpha(v);
-        name.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(300).start();
-        category.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(500).start();
-        descript.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(500).start();
-        title_bill.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(500).start();
-        billing.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(500).start();
-        amount.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(500).start();
-
-        title.setTranslationY(300);
-        title.setAlpha(v);
-        title.animate().translationY(0).alpha(1).setDuration(1000).setStartDelay(100).start();
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 // Set the selected date on the Calendar object
@@ -204,7 +220,7 @@ public class CreateNewExpense extends AppCompatActivity {
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                 // Create the TimePickerDialog and set the onTimeSet listener
-                TimePickerDialog timePickerDialog = new TimePickerDialog(CreateNewExpense.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         // Set the selected time on the Calendar object
@@ -229,7 +245,7 @@ public class CreateNewExpense extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-        DatePickerDialog datePickerDialog1 = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog datePickerDialog1 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 // Set the selected date on the Calendar object
@@ -238,7 +254,7 @@ public class CreateNewExpense extends AppCompatActivity {
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                 // Create the TimePickerDialog and set the onTimeSet listener
-                TimePickerDialog timePickerDialog1 = new TimePickerDialog(CreateNewExpense.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog1 = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         // Set the selected time on the Calendar object
@@ -271,7 +287,7 @@ public class CreateNewExpense extends AppCompatActivity {
             }
         });
 
-        remove = findViewById(R.id.buttonRemove);
+        remove = root.findViewById(R.id.buttonRemove);
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -280,19 +296,49 @@ public class CreateNewExpense extends AppCompatActivity {
                 remove.setVisibility(View.GONE);
             }
         });
-        Create = findViewById(R.id.buttonCreateExpense);
-        Create.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popUpConfirm();
-            }
-        });
+        Bundle bundle = getArguments();
+        id = bundle.getInt("ex_id");
+        Expense expense = TravelDatabase.getInstance(getActivity()).expenseDAO().getExpenseByID(id);
+        setDetails(expense);
+        return root;
     }
+
+    protected void setDetails(Expense expense) {
+        expenseName.setText(expense.getExpense_Name());
+        expenseDescription.setText(expense.getExpense_Comment());
+        expenseAmount.setText(expense.getExpense_Price());
+        expenseDeparture.setText(expense.getExpense_Location_Departure());
+        expenseDestination.setText(expense.getExpense_Location_Departure());
+        expenseArrive.setText(expense.getExpense_Location_Arrival());
+        expenseStartDate.setText(expense.getExpense_StartDate());
+        expenseEndDate.setText(expense.getExpense_EndDate());
+        selection.setText(expense.getExpense_Type());
+        selectedText = expense.getExpense_Type();
+        selection.setSelection(arrayAdapter.getPosition(expense.getExpense_Type()));
+        if (selectedText.equals("Food") || selectedText.equals("Shopping") || selectedText.equals("Hotel") || selectedText.equals("Others")) {
+            detail.setVisibility(View.VISIBLE);
+            destination.setVisibility(View.VISIBLE);
+            departure.setVisibility(View.GONE);
+            arrive_layout.setVisibility(View.GONE);
+        } else if (selectedText.equals("Flight") || selectedText.equals("Taxi")) {
+            detail.setVisibility(View.VISIBLE);
+            destination.setVisibility(View.GONE);
+            departure.setVisibility(View.VISIBLE);
+            arrive_layout.setVisibility(View.VISIBLE);
+        }
+        if (expense.getImage_Bill().isEmpty()) {
+            //expense_image.setImageResource(R.drawable.ic_baseline_image_24);
+        } else {
+            Picasso.get().load(expense.getImage_Bill()).into(image_bill);
+        }
+    }
+
+
 
     //camera
     protected boolean allPermissionsGranted_CAMERA() {
         for (String permission : REQUIRED_PERMISSIONS)
-            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
+            if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED)
                 return false;
         return true;
     }
@@ -306,14 +352,14 @@ public class CreateNewExpense extends AppCompatActivity {
         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
 
-        ContentResolver resolver = this.getContentResolver();
+        ContentResolver resolver = getActivity().getContentResolver();
         image_uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
         try (OutputStream stream = resolver.openOutputStream(image_uri)) {
             // Perform operations on "stream".
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Saving Image FAILED.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Saving Image FAILED.", Toast.LENGTH_SHORT).show();
             return null;
 
         }
@@ -323,7 +369,7 @@ public class CreateNewExpense extends AppCompatActivity {
     protected void takePicture() {
         // Ask for camera permissions.
         if (!allPermissionsGranted_CAMERA()) {
-            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS_CAMERA);
+            ActivityCompat.requestPermissions(getActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS_CAMERA);
             return;
         }
         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -353,13 +399,13 @@ public class CreateNewExpense extends AppCompatActivity {
                 remove.setVisibility(View.VISIBLE);
                 return;
             }
-            Toast.makeText(this, "Select Image Failed.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Select Image Failed.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private boolean allPermissionsGranted_GPS() {
         for (String permission : REQUIRED_PERMISSIONS_GPS)
-            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
+            if (ContextCompat.checkSelfPermission(getContext(), permission) != PackageManager.PERMISSION_GRANTED)
                 return false;
 
         return true;
@@ -368,54 +414,19 @@ public class CreateNewExpense extends AppCompatActivity {
     protected void takeGPS() {
         // Ask for permissions.
         if (!allPermissionsGranted_GPS()) {
-            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS_GPS, REQUEST_CODE_PERMISSIONS_GPS);
+            ActivityCompat.requestPermissions(getActivity(), REQUIRED_PERMISSIONS_GPS, REQUEST_CODE_PERMISSIONS_GPS);
             return;
         }
         try {
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                 return;
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, (long) LOCATION_REFRESH_TIME, (float) LOCATION_REFRESH_DISTANCE, (LocationListener) CreateNewExpense.this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, (long) LOCATION_REFRESH_TIME, (float) LOCATION_REFRESH_DISTANCE, (LocationListener) getActivity());
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    private Expense get_data() {
-        int id = new Expense().getExpense_Id();
-        int trip_id = myTripId;
-        String expense_name = expenseName.getText().toString();
-        String expense_category = selectedText;
-        String expense_departure ="";
-        if (selectedText.equals("Food") || selectedText.equals("Shopping") || selectedText.equals("Hotel") || selectedText.equals("Others")) {
-             expense_departure = expenseDestination.getText().toString();
-        } else {
-             expense_departure = expenseDeparture.getText().toString();
-        }
-        String expense_arrive = expenseArrive.getText().toString();
-        String Start_dateandtime = expenseStartDate.getText().toString();
-        String End_dateandtime = expenseEndDate.getText().toString();
-        String expense_Price = expenseAmount.getText().toString();
-        String description = expenseDescription.getText().toString();
-        String inputImage;
-        if (image_uri == null) {
-            inputImage = "";
-        } else {
-            inputImage = String.valueOf(image_uri);
-        }
-        String expense_image = inputImage;
-        return new Expense( id, expense_name, expense_category, description, expense_image, expense_departure,expense_arrive, expense_Price, Start_dateandtime, End_dateandtime, trip_id);
-
-    }
-
-    private void popUpConfirm() {
-        if (validation() == true) {
-            Expense expense = get_data();
-            new ConfirmExpenseFragment(expense, myTripId).show(getSupportFragmentManager(), null);
-            return;
         }
     }
 
@@ -452,5 +463,12 @@ public class CreateNewExpense extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void getLocationFromMap(String address) {
+    }
 
+    @Override
+    public void getLocationFromMap1(String address) {
+
+    }
 }

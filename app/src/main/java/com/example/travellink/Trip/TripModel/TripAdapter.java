@@ -121,7 +121,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             Trip_Arrival = item_view.findViewById(R.id.endDateandTime);
             Trip_StartDate = item_view.findViewById(R.id.start_date);
             swipe_Layout = item_view.findViewById(R.id.swipe_layout);
-            update_trip = item_view.findViewById(R.id.updateTrips);
+            update_trip = item_view.findViewById(R.id.updateExpense);
             delete_trip = item_view.findViewById(R.id.deleteTrips);
 //            types = item_view.findViewById(R.id.viewType);
             cardView = item_view.findViewById(R.id.expense_Id);

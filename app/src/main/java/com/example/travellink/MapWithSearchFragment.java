@@ -117,8 +117,8 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
                                 @Override
                                 public void onClick(View view) {
 
-                                    Map_WithSearchFragment2.MapWithSearchFragmentInterface1 itf = (Map_WithSearchFragment2.MapWithSearchFragmentInterface1) getActivity();
-                                    itf.getLocationFromMap1(streetAddress);
+                                    MapWithSearchFragment.MapWithSearchFragmentInterface itf = (MapWithSearchFragment.MapWithSearchFragmentInterface) getActivity();
+                                    itf.getLocationFromMap(streetAddress);
                                     dismiss();
                                 }
                             });

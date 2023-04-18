@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.example.travellink.Expense.ExpenseDetails;
 import com.example.travellink.R;
 import com.example.travellink.Trip.DeleteTripFragment;
 import com.example.travellink.Trip.TripDetails;
@@ -200,13 +201,14 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
             details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    TripDAO.Trip_withTotalPrice trip =  listOfTrips.get(getAdapterPosition());
-//                    Intent intent = new Intent(view.getContext(), TripDetails.class);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putInt("trip_id", trip.getTrip().getId());
-//                    intent.putExtras(bundle);
-//                    view.getContext().startActivity(intent);
-//                    ((Activity) getContext()).overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                    Expense expenses  =  listOfExpense.get(getAdapterPosition());
+                    Intent intent = new Intent(view.getContext(), ExpenseDetails.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("expense_id", expenses.getExpense_Id());
+                    bundle.putInt("trip_id", expenses.getTrip_ID());
+                    intent.putExtras(bundle);
+                    view.getContext().startActivity(intent);
+                    ((Activity) getContext()).overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
                 }
             });
 
