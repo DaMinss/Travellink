@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.travellink.database.ExpenseDAO;
@@ -46,6 +47,7 @@ public class ViewStatFragment extends Fragment {
     LineChart lineChart;
     ExpenseRepo expenseRepo;
     List<ExpenseDAO.Expense_amountByDate> amountByDate;
+    TextView currentMonth;
 
     public ViewStatFragment() {
         // Required empty public constructor
@@ -63,6 +65,11 @@ public class ViewStatFragment extends Fragment {
         expenseRepo = new ExpenseRepo(getActivity().getApplication());
         amountByDate = expenseRepo.getExpenseAmountByDate();
         loadLineChartData();
+        currentMonth = root.findViewById(R.id.currentMonth);
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM");
+        String current = dateFormat.format(calendar.getTime());
+        currentMonth.setText(current);
         return root;
     }
 

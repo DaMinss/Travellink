@@ -63,9 +63,9 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class UpdateExpenseFragment extends DialogFragment implements MapWithSearchFragment.MapWithSearchFragmentInterface, Map_WithSearchFragment2.MapWithSearchFragmentInterface1 {
+public class UpdateExpenseFragment extends DialogFragment implements MapWithSearchFragment.OnLocationSelectedListener, Map_WithSearchFragment2.OnLocationSelectedListener1 {
 
-    int id;
+    int id, trip_id;
     ConstraintLayout detail;
     AutoCompleteTextView selection;
     TextView title, title_bill;
@@ -76,7 +76,7 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
     public ImageView back, image_bill;
     CardView category_layout;
     Button update, remove;
-    LottieAnimationView map;
+    LottieAnimationView map, map1;
     Uri image_uri = null;
     ImageView billingImage;
     //access camera
@@ -174,6 +174,9 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedText = parent.getItemAtPosition(position).toString();
+                expenseDeparture.setText("");
+                expenseDestination.setText("");
+                expenseArrive.setText("");
                 if (selectedText.equals("Food") || selectedText.equals("Shopping") || selectedText.equals("Hotel") || selectedText.equals("Others")) {
                     detail.setVisibility(View.VISIBLE);
                     destination.setVisibility(View.VISIBLE);
@@ -207,8 +210,15 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
             @Override
             public void onClick(View view) {
                 takeGPS();
-                MapWithSearchFragment mapsFragment = new MapWithSearchFragment();
-                mapsFragment.show(getActivity().getSupportFragmentManager(), "Select location");
+                showMapWithSearchFragmentDialog();
+            }
+        });
+        map1 = root.findViewById(R.id.open_map1);
+        map1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takeGPS();
+                showMapWithSearchFragmentDialog1();
             }
         });
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
@@ -294,14 +304,35 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
                 image_uri = null;
                 billingImage.setImageURI(null);
                 remove.setVisibility(View.GONE);
+                Picasso.get().load(R.drawable.transparent_bg).into(image_bill);
             }
         });
         Bundle bundle = getArguments();
         id = bundle.getInt("ex_id");
+        trip_id = bundle.getInt("t_id");
         Expense expense = TravelDatabase.getInstance(getActivity()).expenseDAO().getExpenseByID(id);
         setDetails(expense);
+        update = root.findViewById(R.id.buttonUpdateExpense);
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                validation();
+                if (validation() == false) {
+                    return;
+                } else {
+                    int status = TravelDatabase.getInstance(getActivity()).expenseDAO().updateExpense(get_data(id));
+                    if(status > 0){
+                        Toast.makeText(getActivity(), "The selected trip has been update successfully", Toast.LENGTH_SHORT).show();
+                        dismiss();
+                    }else {
+                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
         return root;
     }
+    String image_bill_url;
 
     protected void setDetails(Expense expense) {
         expenseName.setText(expense.getExpense_Name());
@@ -326,13 +357,43 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
             departure.setVisibility(View.VISIBLE);
             arrive_layout.setVisibility(View.VISIBLE);
         }
+        image_bill_url = expense.getImage_Bill();
         if (expense.getImage_Bill().isEmpty()) {
-            //expense_image.setImageResource(R.drawable.ic_baseline_image_24);
+            Toast.makeText(getActivity(), "No billing attachment", Toast.LENGTH_SHORT).show();
         } else {
-            Picasso.get().load(expense.getImage_Bill()).into(image_bill);
+            Picasso.get().load(image_bill_url).into(image_bill);
+            remove.setVisibility(View.VISIBLE);
         }
     }
+    private Expense get_data(int _id) {
+        int ex_id = _id;
+        int t_id = trip_id ;
+        String expense_name = expenseName.getText().toString();
+        String expense_category = selectedText;
+        String expense_departure ="";
+        if (selectedText.equals("Food") || selectedText.equals("Shopping") || selectedText.equals("Hotel") || selectedText.equals("Others")) {
+            expense_departure = expenseDestination.getText().toString();
+        } else {
+            expense_departure = expenseDeparture.getText().toString();
+        }
+        String expense_arrive = expenseArrive.getText().toString();
+        String Start_dateandtime = expenseStartDate.getText().toString();
+        String End_dateandtime = expenseEndDate.getText().toString();
+        String expense_Price = expenseAmount.getText().toString();
+        String description = expenseDescription.getText().toString();
+        String inputImage;
+        if(image_uri != null){
+            inputImage= String.valueOf(image_uri);
+        }else if(image_uri == null){
+            inputImage = "";
+        }
+        else {
+           inputImage = image_bill_url;
+        }
+        String expense_image = inputImage;
+        return new Expense( ex_id, expense_name, expense_category, description, expense_image, expense_departure,expense_arrive, expense_Price, Start_dateandtime, End_dateandtime, t_id);
 
+    }
 
 
     //camera
@@ -463,12 +524,36 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
         return true;
     }
 
+    private void showMapWithSearchFragmentDialog() {
+        Bundle bundle = new Bundle();
+        bundle.putInt("status",1);
+        MapWithSearchFragment mapDialog = new MapWithSearchFragment();
+        mapDialog.setArguments(bundle);
+        mapDialog.setOnLocationSelectedListener(this);
+        mapDialog.show(getChildFragmentManager(), "map_dialog");
+    }
+    private void showMapWithSearchFragmentDialog1() {
+        Bundle bundle = new Bundle();
+        bundle.putInt("status",1);
+        Map_WithSearchFragment2 mapDialog = new Map_WithSearchFragment2();
+        mapDialog.setArguments(bundle);
+        mapDialog.setOnLocationSelectedListener1(this);
+        mapDialog.show(getChildFragmentManager(), "map_dialog");
+    }
+
+
     @Override
-    public void getLocationFromMap(String address) {
+    public void onLocationSelected(String data) {
+        if (selectedText.equals("Food") || selectedText.equals("Shopping") || selectedText.equals("Hotel") || selectedText.equals("Others")) {
+            expenseDestination.setText(data);
+        } else {
+            expenseDeparture.setText(data);
+        }
+
     }
 
     @Override
-    public void getLocationFromMap1(String address) {
-
+    public void onLocationSelected1(String data) {
+            expenseArrive.setText(data);
     }
 }

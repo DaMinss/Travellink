@@ -48,6 +48,14 @@ public class Map_WithSearchFragment2 extends DialogFragment implements OnMapRead
     public interface MapWithSearchFragmentInterface1 {
         public void getLocationFromMap1(String address);
     }
+    public interface OnLocationSelectedListener1 {
+        void onLocationSelected1(String data);
+    }
+
+    private Map_WithSearchFragment2.OnLocationSelectedListener1 mListener;
+    public void setOnLocationSelectedListener1(Map_WithSearchFragment2.OnLocationSelectedListener1 listener) {
+        mListener = listener;
+    }
 
     private GoogleMap Map;
     SupportMapFragment supportMapFragment;
@@ -83,6 +91,8 @@ public class Map_WithSearchFragment2 extends DialogFragment implements OnMapRead
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_map_add, container, false);
+        Bundle bundle = getArguments();
+        int status = bundle.getInt("status");
         searchView = root.findViewById(R.id.searchLocation1);
         confirm = root.findViewById(R.id.add_location1);
         supportMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.googleMap1);
@@ -115,9 +125,12 @@ public class Map_WithSearchFragment2 extends DialogFragment implements OnMapRead
                             confirm.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
-                                    MapWithSearchFragmentInterface1 itf = (MapWithSearchFragmentInterface1) getActivity();
-                                    itf.getLocationFromMap1(streetAddress);
+                                    if(status == 1) {
+                                        mListener.onLocationSelected1(streetAddress);
+                                    }else {
+                                        MapWithSearchFragmentInterface1 itf = (MapWithSearchFragmentInterface1) getActivity();
+                                        itf.getLocationFromMap1(streetAddress);
+                                    }
                                     dismiss();
                                 }
                             });

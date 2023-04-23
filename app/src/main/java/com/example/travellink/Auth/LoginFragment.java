@@ -16,7 +16,10 @@ import android.widget.Toast;
 
 import com.example.travellink.MainActivity;
 import com.example.travellink.R;
+import com.example.travellink.database.CloudRepo;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -122,8 +125,10 @@ public class LoginFragment extends Fragment {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()) {
                         progress.dismiss();
-                        startActivity(new Intent(getContext(), MainActivity.class));
-                        getActivity().finish();
+                        CloudRepo cloudRepo = new CloudRepo(getContext());
+                        cloudRepo.ImportData(myAuth.getCurrentUser().getUid());
+//                        startActivity(new Intent(getContext(), MainActivity.class));
+//                        getActivity().finish();
                     }else {
                         Toast.makeText(getActivity(), "Fail to login, check your credentials", Toast.LENGTH_SHORT).show();
                         progress.dismiss();

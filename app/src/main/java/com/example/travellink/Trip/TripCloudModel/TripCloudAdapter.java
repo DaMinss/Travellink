@@ -1,4 +1,5 @@
-package com.example.travellink.Trip.TripModel;
+package com.example.travellink.Trip.TripCloudModel;
+
 
 import android.animation.LayoutTransition;
 import android.app.Activity;
@@ -28,28 +29,30 @@ import com.example.travellink.R;
 import com.example.travellink.Trip.DeleteTripFragment;
 import com.example.travellink.Trip.UpdateTripFragment;
 import com.example.travellink.Trip.TripDetails;
-import com.example.travellink.database.TripDAO;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder> implements Filterable {
+public class TripCloudAdapter extends RecyclerView.Adapter<TripCloudAdapter.TripViewHolder> implements Filterable {
     private String status = "";
-    private List<TripDAO.Trip_withTotalPrice> listOfTrips;
-    private List<TripDAO.Trip_withTotalPrice> listOfTrips1;
+    private List<TripWithTotalExpense> listOfTrips;
+    private List<TripWithTotalExpense> listOfTrips1;
 
     Context context;
     private ViewBinderHelper viewBinder = new ViewBinderHelper();
 
 
-    public TripAdapter(List<TripDAO.Trip_withTotalPrice> _list, Context context) {
+    public TripCloudAdapter(List<TripWithTotalExpense> _list, Context context) {
         listOfTrips = _list;
         listOfTrips1 = _list;
         this.context = context;
+    }
+    public void setTrip(List<TripWithTotalExpense> tripList) {
+        listOfTrips = tripList;
+        listOfTrips1 = tripList;
         notifyDataSetChanged();
     }
-
     private Context getContext() {
         return context;
     }
@@ -65,38 +68,40 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TripViewHolder holder, int position) {
-        TripDAO.Trip_withTotalPrice trip_withTotalPrice = listOfTrips.get(position);
+        TripWithTotalExpense trip_withTotalPrice = listOfTrips.get(position);
         if (trip_withTotalPrice == null) {
             return;
         }
 
-        if (status.equals(trip_withTotalPrice.getTrip().getTrip_status())) {
+        if (status.equals(trip_withTotalPrice.getTrips().getTrip_status())) {
             holder.Status.setVisibility(View.GONE);
         } else {
-            status = trip_withTotalPrice.getTrip().getTrip_status();
-            holder.Status.setText(trip_withTotalPrice.getTrip().getTrip_status());
+            status = trip_withTotalPrice.getTrips().getTrip_status();
+            holder.Status.setText(trip_withTotalPrice.getTrips().getTrip_status());
             holder.Status.setVisibility(View.VISIBLE);
         }
-        holder.Trip_Name.setText(trip_withTotalPrice.getTrip().getTrip_name());
-        holder.Trip_StartDate.setText(trip_withTotalPrice.getTrip().getTrip_start_date());
-        holder.Trip_endDate.setText(trip_withTotalPrice.getTrip().getTrip_end_date());
-        if(trip_withTotalPrice.getTotalOfExpense() != null){
-        holder.Trip_Price.setText(String.format("%.2f", trip_withTotalPrice.getTotalOfExpense()));}
+        holder.Trip_Name.setText(trip_withTotalPrice.getTrips().getTrip_name());
+        holder.Trip_StartDate.setText(trip_withTotalPrice.getTrips().getTrip_start_date());
+        holder.Trip_endDate.setText(trip_withTotalPrice.getTrips().getTrip_end_date());
+        if(trip_withTotalPrice.getPrice() != 0.0f){
+            holder.Trip_Price.setText(String.format("%.2f", trip_withTotalPrice.getPrice()));}
         else{
             holder.Trip_Price.setText("0.0");
         }
-        if(trip_withTotalPrice.getTrip().getTrip_end_date() == null){
+        if(trip_withTotalPrice.getTrips().getTrip_end_date() == null){
             holder.to.setVisibility(View.GONE);
         }
-        holder.Trip_Depart.setText(trip_withTotalPrice.getTrip().getTrip_departure());
-        holder.Trip_Arrival.setText(trip_withTotalPrice.getTrip().getTrip_arrival());
-        holder.Trip_Status.setText(trip_withTotalPrice.getTrip().getTrip_status());
-        if(trip_withTotalPrice.getTrip().getTrip_status().equals("Submitted")){
-            holder.Trip_Status.setTextColor(Color.rgb(57, 148, 4 ));
+        holder.Trip_Depart.setText(trip_withTotalPrice.getTrips().getTrip_departure());
+        holder.Trip_Arrival.setText(trip_withTotalPrice.getTrips().getTrip_arrival());
+        holder.Trip_Status.setText(trip_withTotalPrice.getTrips().getTrip_status());
+        if(trip_withTotalPrice.getTrips().getTrip_status().equals("Submitted")){
+            holder.Status.setText("Pending");
+            holder.Trip_Status.setText("Pending");
+            holder.Trip_Status.setTextColor(Color.rgb(212, 172, 13));
         }
         viewBinder.setOpenOnlyOne(true);
-        viewBinder.bind(holder.swipe_Layout, String.valueOf(trip_withTotalPrice.getTrip().getId()));
-        viewBinder.closeLayout(String.valueOf(listOfTrips.get(position).getTrip().getId()));
+        viewBinder.bind(holder.swipe_Layout, String.valueOf(trip_withTotalPrice.getTrips().getId()));
+        viewBinder.closeLayout(String.valueOf(listOfTrips.get(position).getTrips().getId()));
 
     }
 
@@ -153,23 +158,23 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    TripDAO.Trip_withTotalPrice trip =  listOfTrips.get(getAdapterPosition());
+                    TripWithTotalExpense trip =  listOfTrips.get(getAdapterPosition());
                     Intent intent = new Intent(view.getContext(), TripDetails.class);
                     Bundle bundle = new Bundle();
-                    bundle.putInt("trip_id", trip.getTrip().getId());
+                    bundle.putInt("trip_id", trip.getTrips().getId());
                     intent.putExtras(bundle);
                     view.getContext().startActivity(intent);
-                   ((Activity) getContext()).overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                    ((Activity) getContext()).overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
                 }
             });
 
             update_trip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    TripDAO.Trip_withTotalPrice trip =  listOfTrips.get(getAdapterPosition());
+                    TripWithTotalExpense trip =  listOfTrips.get(getAdapterPosition());
                     FragmentActivity fragmentActivity = (FragmentActivity) view.getContext();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("trip_id",trip.getTrip().getId());
+                    bundle.putInt("trip_id",trip.getTrips().getId());
                     UpdateTripFragment updateTripFragment = new UpdateTripFragment();
                     updateTripFragment.setArguments(bundle);
                     updateTripFragment.show(fragmentActivity.getSupportFragmentManager(),null);
@@ -178,10 +183,10 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             delete_trip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    TripDAO.Trip_withTotalPrice trip =  listOfTrips.get(getAdapterPosition());
+                    TripWithTotalExpense trip =  listOfTrips.get(getAdapterPosition());
                     FragmentActivity fragmentActivity = (FragmentActivity) view.getContext();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("trip_id",trip.getTrip().getId());
+                    bundle.putInt("trip_id",trip.getTrips().getId());
                     bundle.putInt("status",1);
                     DeleteTripFragment deleteTripFragment = new DeleteTripFragment();
                     deleteTripFragment.setArguments(bundle);
@@ -207,11 +212,11 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
                     listOfTrips = listOfTrips1;
 
                 } else {
-                    List<TripDAO.Trip_withTotalPrice> listsss = new ArrayList<>();
-                    for (TripDAO.Trip_withTotalPrice tripsss : listOfTrips1) {
-                        if (tripsss.getTrip().getTrip_name().toLowerCase(Locale.ROOT).contains(Search.toLowerCase()) ||
-                                tripsss.getTrip().getTrip_start_date().toLowerCase(Locale.ROOT).contains((Search.toLowerCase())) ||
-                                tripsss.getTrip().getTrip_arrival().toLowerCase(Locale.ROOT).contains((Search.toLowerCase()))) {
+                    List<TripWithTotalExpense> listsss = new ArrayList<>();
+                    for (TripWithTotalExpense tripsss : listOfTrips1) {
+                        if (tripsss.getTrips().getTrip_name().toLowerCase(Locale.ROOT).contains(Search.toLowerCase()) ||
+                                tripsss.getTrips().getTrip_start_date().toLowerCase(Locale.ROOT).contains((Search.toLowerCase())) ||
+                                tripsss.getTrips().getTrip_arrival().toLowerCase(Locale.ROOT).contains((Search.toLowerCase()))) {
                             listsss.add(tripsss);
                         }
                     }
@@ -225,7 +230,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                listOfTrips = ( List<TripDAO.Trip_withTotalPrice>) filterResults.values;
+                listOfTrips = ( List<TripWithTotalExpense>) filterResults.values;
                 notifyDataSetChanged();
 
             }

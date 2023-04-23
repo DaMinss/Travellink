@@ -17,22 +17,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.travellink.Auth.ConfirmExitPersonalFragment;
 import com.example.travellink.Trip.CreateNewTrip;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     Menu optionMenu;
     RelativeLayout content;
     ImageView hamburger_bar;
     NavigationView navigationView;
     BottomNavigationView bottomNavigationView;
+    TextView headerName, headerMail;
     NavController navController;
     NavHostFragment navHostFragment;
     FirebaseAuth myAuth;
@@ -40,13 +47,14 @@ public class MainActivity extends AppCompatActivity{
     String user_id = "";
     FloatingActionButton add;
     static final float END_SCALE = 0.7f;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myAuth = FirebaseAuth.getInstance();
         fire_store = FirebaseFirestore.getInstance();
-//        initUser();
+        initUser();
         drawerLayout = findViewById(R.id.drawer_layout);
         content = findViewById(R.id.content);
         hamburger_bar = findViewById(R.id.menu_bar);
@@ -73,59 +81,52 @@ public class MainActivity extends AppCompatActivity{
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.exitFragment:
-                        new ConfirmExitPersonalFragment().show(getSupportFragmentManager(), null);
+                        ConfirmExitPersonalFragment confirmExitPersonalFragment = new ConfirmExitPersonalFragment();
+                        confirmExitPersonalFragment.show(getSupportFragmentManager(), null);
                         break;
                     case R.id.exitUser:
-                        new ConfirmExitPersonalFragment().show(getSupportFragmentManager(), null);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("status", 1);
+                        confirmExitPersonalFragment = new ConfirmExitPersonalFragment();
+                        confirmExitPersonalFragment.setArguments(bundle);
+                        confirmExitPersonalFragment.show(getSupportFragmentManager(), null);
                         break;
                 }
                 return false;
-            }});
-
+            }
+        });
 
 
     }
 
 
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.side_menu, menu);
-//        optionMenu = menu;
-//        if(){
-//            menu.getItem(R.id.exitUser).setVisible(true);
-//            menu.getItem(R.id.accountFragment).setVisible(true);
-//            menu.getItem(R.id.exitFragment).setVisible(false);
-//        }
-//        return super.onCreateOptionsMenu(menu);
-//    }
-
-    private void navigationDrawer(){
-           navigationView.bringToFront();
-           hamburger_bar.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View view) {
-                    if(drawerLayout.isDrawerVisible(GravityCompat.START)){
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                    }else {
-                        drawerLayout.openDrawer(GravityCompat.START);
-                    }
-               }
-           });
-           animateNavigationDrawer();
+    private void navigationDrawer() {
+        navigationView.bringToFront();
+        hamburger_bar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                } else {
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
+            }
+        });
+        animateNavigationDrawer();
     }
-    private void animateNavigationDrawer(){
+
+    private void animateNavigationDrawer() {
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 //scale view
-                final float diffScaleOffset = slideOffset * (1-END_SCALE);
+                final float diffScaleOffset = slideOffset * (1 - END_SCALE);
                 final float offsetScale = 1 - diffScaleOffset;
                 content.setScaleX(offsetScale);
                 content.setScaleY(offsetScale);
 
                 final float xOffSet = drawerView.getWidth() * slideOffset;
-                final float xOffSetDiff = content.getWidth() * diffScaleOffset /2;
+                final float xOffSetDiff = content.getWidth() * diffScaleOffset / 2;
                 final float xTranslation = xOffSet - xOffSetDiff;
                 content.setTranslationX(xTranslation);
             }
@@ -146,6 +147,37 @@ public class MainActivity extends AppCompatActivity{
             }
         });
     }
+
+    private void initUser() {
+        if (myAuth.getCurrentUser() != null) {
+            navigationView = findViewById(R.id.navigation_view);
+            navigationView.getMenu().findItem(R.id.exitFragment).setVisible(false);
+            navigationView.getMenu().findItem(R.id.exitUser).setVisible(true);
+            navigationView.getMenu().findItem(R.id.accountFragment).setVisible(true);
+            headerName = navigationView.getHeaderView(0).findViewById(R.id.header_username);
+            user_id = myAuth.getCurrentUser().getUid();
+            DocumentReference documentReference = fire_store.collection("user").document(user_id);
+            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+                        headerName.setText((documentSnapshot.getString("last_name")) + " " + (documentSnapshot.getString("first_name")));
+                    } else {
+                        Toast.makeText(MainActivity.this, "Fail ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MainActivity.this, "Fail ", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            return;
+        }
+
+    }
+
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

@@ -1,5 +1,6 @@
 package com.example.travellink.Expense;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -38,9 +39,18 @@ import android.widget.Toast;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.travellink.Expense.ExpenseModel.Expense;
 import com.example.travellink.MapWithSearchFragment;
+import com.example.travellink.Map_WithSearchFragment2;
 import com.example.travellink.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,8 +59,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
-public class CreateNewExpense extends AppCompatActivity {
+public class CreateNewExpense extends AppCompatActivity implements MapWithSearchFragment.MapWithSearchFragmentInterface, Map_WithSearchFragment2.MapWithSearchFragmentInterface1 {
     int myTripId;
     ConstraintLayout detail;
     AutoCompleteTextView selection;
@@ -63,7 +74,7 @@ public class CreateNewExpense extends AppCompatActivity {
     float v = 0;
     CardView category_layout;
     Button Create, remove;
-    LottieAnimationView map;
+    LottieAnimationView map, map1;
     Uri image_uri = null;
     ImageView billingImage;
     //access camera
@@ -163,6 +174,15 @@ public class CreateNewExpense extends AppCompatActivity {
             public void onClick(View view) {
                 takeGPS();
                 MapWithSearchFragment mapsFragment = new MapWithSearchFragment();
+                mapsFragment.show(getSupportFragmentManager(), "Select location");
+            }
+        });
+        map1 = findViewById(R.id.open_map1);
+        map1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takeGPS();
+                Map_WithSearchFragment2 mapsFragment = new Map_WithSearchFragment2();
                 mapsFragment.show(getSupportFragmentManager(), "Select location");
             }
         });
@@ -384,16 +404,20 @@ public class CreateNewExpense extends AppCompatActivity {
         }
     }
 
+    FirebaseAuth myAuth;
+    FirebaseStorage fire_store;
+    String image_storage_url;
+
     private Expense get_data() {
         int id = new Expense().getExpense_Id();
         int trip_id = myTripId;
         String expense_name = expenseName.getText().toString();
         String expense_category = selectedText;
-        String expense_departure ="";
+        String expense_departure = "";
         if (selectedText.equals("Food") || selectedText.equals("Shopping") || selectedText.equals("Hotel") || selectedText.equals("Others")) {
-             expense_departure = expenseDestination.getText().toString();
+            expense_departure = expenseDestination.getText().toString();
         } else {
-             expense_departure = expenseDeparture.getText().toString();
+            expense_departure = expenseDeparture.getText().toString();
         }
         String expense_arrive = expenseArrive.getText().toString();
         String Start_dateandtime = expenseStartDate.getText().toString();
@@ -407,8 +431,7 @@ public class CreateNewExpense extends AppCompatActivity {
             inputImage = String.valueOf(image_uri);
         }
         String expense_image = inputImage;
-        return new Expense( id, expense_name, expense_category, description, expense_image, expense_departure,expense_arrive, expense_Price, Start_dateandtime, End_dateandtime, trip_id);
-
+        return new Expense(id, expense_name, expense_category, description, expense_image, expense_departure, expense_arrive, expense_Price, Start_dateandtime, End_dateandtime, trip_id);
     }
 
     private void popUpConfirm() {
@@ -442,6 +465,8 @@ public class CreateNewExpense extends AppCompatActivity {
         } else if (expenseEndDate.getText().toString().isEmpty()) {
             end_date.setError("You need to enter your end date !");
             return false;
+        } else if (image_storage_url.toString().isEmpty()) {
+            return false;
         } else {
             name.setError(null);
             departure.setError(null);
@@ -453,4 +478,17 @@ public class CreateNewExpense extends AppCompatActivity {
     }
 
 
+    @Override
+    public void getLocationFromMap(String address) {
+        if (selectedText.equals("Food") || selectedText.equals("Shopping") || selectedText.equals("Hotel") || selectedText.equals("Others")) {
+            expenseDestination.setText(address);
+        } else {
+            expenseDeparture.setText(address);
+        }
+    }
+
+    @Override
+    public void getLocationFromMap1(String address) {
+        expenseArrive.setText(address);
+    }
 }

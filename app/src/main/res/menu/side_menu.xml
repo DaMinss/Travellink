@@ -15,9 +15,11 @@
         <menu>
             <item android:id="@+id/accountFragment"
                 android:title="View Account"
+                android:visible="false"
                 />
             <item android:id="@+id/exitUser"
                 android:title="Log Out"
+                android:visible="false"
                 />
             <item android:id="@+id/exitFragment"
                 android:title="Exit Personal Mode" />

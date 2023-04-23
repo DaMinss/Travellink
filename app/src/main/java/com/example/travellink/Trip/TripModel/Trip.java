@@ -1,6 +1,7 @@
 package com.example.travellink.Trip.TripModel;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -8,6 +9,7 @@ import androidx.room.PrimaryKey;
 public class Trip {
     @NonNull
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "trip_id")
     private int id;
     private String Trip_name;
     private String Trip_departure;

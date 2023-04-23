@@ -3,11 +3,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewStatFragment">
+    tools:context=".ViewStatFragment"
+    android:padding="10dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/darker_grotesque_semibold"
+        android:text="Weekly total expense of the current month"
+        android:textAlignment="center"
+        android:textSize="25dp"
+        android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/darker_grotesque_semibold"
+            android:text="Current month:"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/currentMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/darker_grotesque_semibold"
+                android:text="April"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_chart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </FrameLayout>

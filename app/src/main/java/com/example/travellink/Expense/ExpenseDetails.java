@@ -6,11 +6,15 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.travellink.MapWithSearchFragment;
+import com.example.travellink.Trip.TripDetails;
+import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 
 
@@ -23,13 +27,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ExpenseDetails extends AppCompatActivity {
+public class ExpenseDetails extends AppCompatActivity{
     int Ex_id, trip_id;
     Expense expense;
-    public TextView Expense_Name, Expense_Price, Expense_StartDate, Expense_endDate, Expense_Depart, Expense_Arrival, DateView, description, Type;
+    public TextView Expense_Name, Expense_Price, Expense_StartDate, Expense_endDate, expense_Depart, expense_Arrival, DateView, description, Type;
     public ImageView edit_expense, hotel1, shopping1, taxi1, plane1, other1, food1, image_bill;
     CardView cardView;
     ConstraintLayout detail;
+    ImageView back;
     float v = 0;
 
     @Override
@@ -42,6 +47,19 @@ public class ExpenseDetails extends AppCompatActivity {
             Ex_id = bundle.getInt("expense_id");
             trip_id = bundle.getInt("trip_id");
         }
+        back = findViewById(R.id.backBTN);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ExpenseDetails.this, TripDetails.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("trip_id", trip_id);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                finish();
+            }
+        });
         ExpenseViewModel expenseViewModel = new ViewModelProvider(this).get(ExpenseViewModel.class);
         expenseViewModel.getExpense(Ex_id).observe(this, expenses -> {
             expense = expenses;
@@ -60,8 +78,8 @@ public class ExpenseDetails extends AppCompatActivity {
         Expense_Price = findViewById(R.id.amount);
         Expense_endDate = findViewById(R.id.endDateandTime);
         Expense_StartDate = findViewById(R.id.startDateandTime);
-        Expense_Depart = findViewById(R.id.expense_des);
-        Expense_Arrival = findViewById(R.id.expense_des1);
+        expense_Depart = findViewById(R.id.expense_des);
+        expense_Arrival = findViewById(R.id.expense_des1);
         description = findViewById(R.id.description);
         Type = findViewById(R.id.category);
         image_bill = findViewById(R.id.image_billing);
@@ -72,6 +90,7 @@ public class ExpenseDetails extends AppCompatActivity {
                 FragmentActivity fragmentActivity = (FragmentActivity) view.getContext();
                 Bundle bundle = new Bundle();
                 bundle.putInt("ex_id", Ex_id);
+                 bundle.putInt("t_id", trip_id);
                 UpdateExpenseFragment updateExpenseFragment = new UpdateExpenseFragment();
                 updateExpenseFragment.setArguments(bundle);
                 updateExpenseFragment.show(getSupportFragmentManager(),null);
@@ -98,14 +117,14 @@ public class ExpenseDetails extends AppCompatActivity {
         Expense_Name.setText(expense.getExpense_Name());
         description.setText(expense.getExpense_Comment());
         Expense_Price.setText(expense.getExpense_Price());
-        Expense_Depart.setText(expense.getExpense_Location_Departure());
-        Expense_Arrival.setText(expense.getExpense_Location_Arrival());
+        expense_Depart.setText(expense.getExpense_Location_Departure());
+        expense_Arrival.setText(expense.getExpense_Location_Arrival());
         Expense_StartDate.setText(expense.getExpense_StartDate());
         DateView.setText(expense.getExpense_StartDate());
         Expense_endDate.setText(expense.getExpense_EndDate());
         Type.setText(expense.getExpense_Type());
         if(expense.getImage_Bill().isEmpty()){
-            //expense_image.setImageResource(R.drawable.ic_baseline_image_24);
+            Picasso.get().load(R.drawable.transparent_bg).into(image_bill);
         }else {
             Picasso.get().load(expense.getImage_Bill()).into(image_bill);
         }
@@ -146,4 +165,5 @@ public class ExpenseDetails extends AppCompatActivity {
             other1.setVisibility(View.VISIBLE);
         }
     }
+
 }

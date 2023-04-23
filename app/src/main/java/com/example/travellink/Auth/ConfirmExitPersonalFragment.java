@@ -16,17 +16,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.travellink.Auth.Login;
 import com.example.travellink.Auth.Personal;
 import com.example.travellink.Expense.ExpenseModel.ExpenseViewModel;
 import com.example.travellink.R;
 import com.example.travellink.Trip.TripModel.TripViewModel;
 import com.example.travellink.database.TravelDatabase;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ConfirmExitPersonalFragment extends DialogFragment {
     Button proceed;
     TextView name;
-
+    FirebaseAuth firebaseAuth;
+    LottieAnimationView personal, online;
     public ConfirmExitPersonalFragment() {
 
     }
@@ -48,16 +51,31 @@ public class ConfirmExitPersonalFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_confirm_exit_personal, container, false);
+        firebaseAuth = FirebaseAuth.getInstance();
         Bundle bundle = getArguments();
-//        int status = bundle.getInt("status");
+        personal = root.findViewById(R.id.lottieAnimationView2);
+        online = root.findViewById(R.id.lottieAnimationView4);
+       int status = bundle.getInt("status");
+       if(status == 1){
+            online.setVisibility(View.VISIBLE);
+            personal.setVisibility(View.GONE);
+       }
         proceed= root.findViewById(R.id.confirmExit);
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onPersonal();
-                startActivity(new Intent(getContext(), Login.class));
-               getActivity().overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
-                getActivity().finish();
+                if(firebaseAuth.getCurrentUser() != null){
+                    firebaseAuth.signOut();
+                    TravelDatabase.getInstance(getActivity()).tripDAO().deleteAll();
+                    startActivity(new Intent(getActivity(), SplashScreen.class));
+                    getActivity().finish();
+                }else {
+                    onPersonal();
+                    TravelDatabase.getInstance(getActivity()).tripDAO().deleteAll();
+                    startActivity(new Intent(getContext(), Login.class));
+                    getActivity().overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                    getActivity().finish();
+                }
             }
         });
 

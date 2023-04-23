@@ -50,6 +50,7 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
         public void getLocationFromMap(String address);
     }
 
+
     private GoogleMap Map;
     SupportMapFragment supportMapFragment;
     androidx.appcompat.widget.SearchView searchView;
@@ -61,6 +62,15 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
     public MapWithSearchFragment() {
         // Required empty public constructor
     }
+    public interface OnLocationSelectedListener {
+        void onLocationSelected(String data);
+    }
+
+    private OnLocationSelectedListener mListener;
+    public void setOnLocationSelectedListener(OnLocationSelectedListener listener) {
+        mListener = listener;
+    }
+
 
     @Override
     public void onResume() {
@@ -84,6 +94,8 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_map_with_search, container, false);
+        Bundle bundle = getArguments();
+        int status = bundle.getInt("status");
         searchView = root.findViewById(R.id.searchLocation);
         confirm = root.findViewById(R.id.add_location);
         supportMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.googleMap);
@@ -108,7 +120,7 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
                                 @Override
                                 public boolean onMarkerClick(@NonNull Marker marker) {
                                     searchView.setQuery(streetAddress, false);
-//                                    btn_add_location.setVisibility(View.VISIBLE);
+                                    confirm.setVisibility(View.VISIBLE);
                                     return false;
                                 }
                             });
@@ -116,9 +128,12 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
                             confirm.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
-                                    MapWithSearchFragment.MapWithSearchFragmentInterface itf = (MapWithSearchFragment.MapWithSearchFragmentInterface) getActivity();
-                                    itf.getLocationFromMap(streetAddress);
+                                    if(status == 1) {
+                                        mListener.onLocationSelected(streetAddress);
+                                    }else {
+                                        MapWithSearchFragment.MapWithSearchFragmentInterface itf = (MapWithSearchFragment.MapWithSearchFragmentInterface) getActivity();
+                                        itf.getLocationFromMap(streetAddress);
+                                    }
                                     dismiss();
                                 }
                             });

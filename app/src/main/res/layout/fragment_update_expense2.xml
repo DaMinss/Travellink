@@ -7,7 +7,8 @@
     app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true"
     tools:context=".Trip.UpdateTripFragment"
-    android:backgroundTint="@color/transparent">
+    android:backgroundTint="@color/transparent"
+    android:id="@+id/updateEx">
 
 
     <ScrollView

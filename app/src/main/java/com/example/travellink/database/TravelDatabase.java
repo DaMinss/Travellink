@@ -12,7 +12,7 @@ import com.example.travellink.Trip.TripModel.Trip;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Trip.class, Expense.class}, version = 3)
+@Database(entities = {Trip.class, Expense.class}, version = 2)
 public abstract class TravelDatabase extends RoomDatabase {
     private static  final String DATBASE_NAME = "travellink.db";
     private static TravelDatabase instance;

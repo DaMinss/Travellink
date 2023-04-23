@@ -34,4 +34,8 @@
         android:name="com.example.travellink.Trip.CreateNewTrip"
         android:label="activity_create_new_trip"
         tools:layout="@layout/activity_create_new_trip" />
+    <dialog
+        android:id="@+id/updateExpenseFragment"
+        android:name="com.example.travellink.Expense.UpdateExpenseFragment"
+        android:label="UpdateExpenseFragment" />
 </navigation>

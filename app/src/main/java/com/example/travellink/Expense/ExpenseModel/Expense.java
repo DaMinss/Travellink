@@ -1,6 +1,7 @@
 package com.example.travellink.Expense.ExpenseModel;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -8,7 +9,7 @@ import androidx.room.PrimaryKey;
 import com.example.travellink.Trip.TripModel.Trip;
 
 @Entity(tableName = "expense", foreignKeys = {@ForeignKey(entity = Trip.class,
-        parentColumns = "id",
+        parentColumns = "trip_id",
         childColumns = "Trip_ID",
         onDelete = ForeignKey.CASCADE)
 })
@@ -25,8 +26,7 @@ public class Expense {
     private String Expense_Price;
     private String Expense_StartDate;
     private String Expense_EndDate;
-
-
+    @ColumnInfo(index = true)
     private int Trip_ID;
 
     public Expense(int expense_Id, String expense_Name, String expense_Type, String expense_Comment, String image_Bill, String expense_Location_Departure, String expense_Location_Arrival, String expense_Price, String expense_StartDate, String expense_EndDate, int trip_ID) {

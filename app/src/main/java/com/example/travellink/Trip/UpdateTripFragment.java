@@ -1,10 +1,13 @@
 package com.example.travellink.Trip;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -22,17 +25,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.travellink.MapWithSearchFragment;
+import com.example.travellink.Map_WithSearchFragment2;
 import com.example.travellink.R;
 import com.example.travellink.Trip.TripModel.Trip;
+import com.example.travellink.Trip.TripModel.TripViewModel;
 import com.example.travellink.database.TravelDatabase;
 import com.example.travellink.database.TripDAO;
+import com.example.travellink.database.TripRepo;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
+import java.util.Date;
 
 
-public class UpdateTripFragment extends DialogFragment {
+public class UpdateTripFragment extends DialogFragment implements MapWithSearchFragment.OnLocationSelectedListener, Map_WithSearchFragment2.OnLocationSelectedListener1 {
 
     TextInputLayout name,departure, arrive, date, note;
     TextInputEditText tripName, tripDeparture, tripArrive, tripStartDate, tripNote;
@@ -40,9 +56,10 @@ public class UpdateTripFragment extends DialogFragment {
     DatePickerDialog datePickerDialog;
     DatePickerDialog.OnDateSetListener dateListener;
     Button Edit;
-    ImageView map;
+    ImageView map, map2;
     int id;
-
+    FirebaseFirestore firestore;
+    FirebaseAuth myAuth;
     public UpdateTripFragment() {
         // Required empty public constructor
     }
@@ -64,6 +81,8 @@ public class UpdateTripFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_update_trip, container, false);
+        myAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
         name = root.findViewById(R.id.name);
         departure = root.findViewById(R.id.depart1);
         arrive = root.findViewById(R.id.arrival);
@@ -78,8 +97,14 @@ public class UpdateTripFragment extends DialogFragment {
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MapWithSearchFragment mapsFragment = new MapWithSearchFragment();
-                mapsFragment.show(getActivity().getSupportFragmentManager(), "Select location");
+                showMapWithSearchFragmentDialog();
+            }
+        });
+        map2 = root.findViewById(R.id.edit_open_map1);
+        map2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMapWithSearchFragmentDialog1();
             }
         });
         tripStartDate.setOnClickListener(new View.OnClickListener() {
@@ -115,19 +140,29 @@ public class UpdateTripFragment extends DialogFragment {
                 if (validation() == false) {
                     return;
                 } else {
-                    int status = TravelDatabase.getInstance(getActivity()).tripDAO().updateTrip(get_data(id));
-                    if(status > 0){
-                        Toast.makeText(getActivity(), "The selected trip has been update successfully", Toast.LENGTH_SHORT).show();
-                        dismiss();
+                    if(myAuth.getCurrentUser() != null){
+                        String userID = myAuth.getCurrentUser().getUid();
+                        TripRepo repo = new TripRepo(getActivity().getApplication());
+                        TripViewModel viewModel = new TripViewModel(getActivity().getApplication());
+                        Toast.makeText(getContext(), "Your Trip Has Been Updated", Toast.LENGTH_SHORT).show();
+                        viewModel.updateTrip(get_data(id));
+                        viewModel.setData(new Date().toString());
+                       dismiss();
                     }else {
-                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                        int status = TravelDatabase.getInstance(getActivity()).tripDAO().updateTrip(get_data(id));
+                        if (status > 0) {
+                            Toast.makeText(getActivity(), "The selected trip has been update successfully", Toast.LENGTH_SHORT).show();
+                            dismiss();
+                        } else {
+                            Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
         });
 
         Trip trip = TravelDatabase.getInstance(getActivity()).tripDAO().TripByID(id);
-        setView(trip);
+            setView(trip);
         return root;
     }
     private Trip get_data(int id) {
@@ -174,5 +209,33 @@ public class UpdateTripFragment extends DialogFragment {
         tripStartDate.setText(trip.getTrip_start_date());
         tripNote.setText(trip.getNote());
 
+    }
+
+
+    private void showMapWithSearchFragmentDialog() {
+        Bundle bundle = new Bundle();
+        bundle.putInt("status",1);
+        MapWithSearchFragment mapDialog = new MapWithSearchFragment();
+        mapDialog.setArguments(bundle);
+        mapDialog.setOnLocationSelectedListener(this);
+        mapDialog.show(getChildFragmentManager(), "map_dialog");
+    }
+    private void showMapWithSearchFragmentDialog1() {
+        Bundle bundle = new Bundle();
+        bundle.putInt("status",1);
+        Map_WithSearchFragment2 mapDialog = new Map_WithSearchFragment2();
+        mapDialog.setArguments(bundle);
+        mapDialog.setOnLocationSelectedListener1(this);
+        mapDialog.show(getChildFragmentManager(), "map_dialog");
+    }
+
+    @Override
+    public void onLocationSelected(String data) {
+        tripDeparture.setText(data);
+    }
+
+    @Override
+    public void onLocationSelected1(String data) {
+        tripArrive.setText(data);
     }
 }

@@ -38,21 +38,20 @@
 
             <TextView
                 android:id="@+id/departName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="20dp"
                 android:text="Ho Chi Minh"
+                android:textAlignment="textEnd"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/expense_Name"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/expense_Name" />
 
             <TextView
                 android:id="@+id/arriveName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:text="Ho Chi Minh"
@@ -60,8 +59,6 @@
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/departName"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/expense_Name"
                 app:layout_constraintTop_toTopOf="@+id/departName"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -75,6 +72,29 @@
                 app:layout_constraintStart_toStartOf="@+id/departName"
                 app:layout_constraintTop_toBottomOf="@+id/route"
                 app:srcCompat="@drawable/ic_baseline_calendar_month_24" />
+
+            <ImageView
+                android:id="@+id/note"
+                android:layout_width="28dp"
+                android:layout_height="26dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/white"
+                app:layout_constraintStart_toStartOf="@+id/calendar"
+                app:layout_constraintTop_toBottomOf="@+id/calendar"
+                android:src="@drawable/ic_baseline_notes_24" />
+
+            <TextView
+                android:id="@+id/tripNote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="bla bla bal"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/note"
+                app:layout_constraintStart_toStartOf="@+id/startDate"
+                app:layout_constraintTop_toBottomOf="@+id/calendar"
+                app:layout_constraintVertical_bias="0.812" />
 
             <ImageButton
                 android:id="@+id/chart"
@@ -160,9 +180,10 @@
                 android:id="@+id/layout_chart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center"
                 android:visibility="gone"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -176,6 +197,34 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:gravity="center" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Spent:"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_gravity="left"
+                    android:layout_marginStart="20dp"
+                    />
+                    <TextView
+                        android:id="@+id/total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:layout_marginStart="5dp"
+                        />
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_baseline_attach_money_24" />
+                ></LinearLayout>
             </LinearLayout>
 
             <ImageView
@@ -236,7 +285,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="44dp"
             android:background="@drawable/btn_login"
-            android:text="Unsubmit trip"
+            android:text="Not-submitted trip"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="16sp"

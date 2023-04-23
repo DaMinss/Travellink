@@ -56,9 +56,9 @@ public class TripTop3Adapter extends RecyclerView.Adapter<TripTop3Adapter.TripVi
 
         if (!listOfTrips.isEmpty() && trip_withTotalPrice.getTotalOfExpense() != null) {
             highest = listOfTrips.get(0).getTotalOfExpense();
-            if (listOfTrips.size() > 1 && trip_withTotalPrice.getTotalOfExpense() != null) {
+            if (listOfTrips.size() > 1 && trip_withTotalPrice.getTotalOfExpense() != null && listOfTrips.get(1).getTotalOfExpense() != null) {
                 secondHighest = listOfTrips.get(1).getTotalOfExpense();
-                if (listOfTrips.size() > 2 && trip_withTotalPrice.getTotalOfExpense() != null) {
+                if (listOfTrips.size() > 2 && trip_withTotalPrice.getTotalOfExpense() != null && listOfTrips.get(2).getTotalOfExpense() != null) {
                     thirdHighest = listOfTrips.get(2).getTotalOfExpense();
                 }
             }

@@ -17,19 +17,23 @@ public interface TripDAO {
     @Query("SELECT * FROM trip")
     List<Trip> getAll();
 
-    @Query("SELECT * FROM trip WHERE id = :tripIds")
+    @Query("SELECT * FROM trip WHERE trip_id = :tripIds")
     LiveData<Trip> loadTripByID(int tripIds);
 
-    @Query("SELECT * FROM trip WHERE id = :tripIds")
+
+    @Query("SELECT * FROM trip WHERE trip_id = :tripIds")
     Trip TripByID(int tripIds);
 
-    @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.id = expense.Trip_ID  GROUP BY trip.id")
+    @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.trip_id = expense.Trip_ID  GROUP BY trip.trip_id ORDER BY trip.Trip_start_date DESC")
     LiveData<List<Trip_withTotalPrice>> getAllTripWithTotalExpense();
 
-    @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.id = expense.Trip_ID  GROUP BY trip.id ORDER BY trip.Trip_start_date DESC LIMIT 5")
+    @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.trip_id = expense.Trip_ID WHERE trip.trip_id = :tripIds ")
+    LiveData<Trip_withTotalPrice> getTripWithTotalExpense(int tripIds);
+
+    @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.trip_id = expense.Trip_ID  GROUP BY trip.trip_id ORDER BY trip.Trip_start_date DESC LIMIT 5")
     List<Trip_withTotalPrice> getRecent5TripWithTotalExpense();
 
-    @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.id = expense.Trip_ID  GROUP BY trip.id ORDER BY TotalOfExpenses DESC LIMIT 3")
+    @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.trip_id = expense.Trip_ID  GROUP BY trip.trip_id ORDER BY TotalOfExpenses DESC LIMIT 3")
     List<Trip_withTotalPrice> getTop3TripWithTotalExpense();
 
     class Trip_withTotalPrice {
@@ -53,7 +57,7 @@ public interface TripDAO {
     @Update
     int updateTrip(Trip trip);
 
-    @Query("Delete FROM trip WHERE  id = :tripIds")
+    @Query("Delete FROM trip WHERE  trip_id = :tripIds")
     int Delete(int tripIds);
 
     @Query("DELETE FROM Trip")

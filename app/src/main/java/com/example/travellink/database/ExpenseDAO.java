@@ -67,7 +67,7 @@ public interface ExpenseDAO {
     long insertExpense(Expense expense);
 
     @Update
-    int updateTrip(Trip trip);
+    int updateExpense(Expense expense);
 
     @Query("Delete FROM expense WHERE Expense_Id = :expenseIds")
     int DeleteExpense(int expenseIds);
