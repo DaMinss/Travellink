@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:fontFamily="@font/darker_grotesque_semibold"
+
         android:text="Weekly total expense of the current month"
         android:textAlignment="center"
         android:textSize="25dp"
@@ -25,22 +25,36 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:fontFamily="@font/darker_grotesque_semibold"
-            android:text="Current month:"
+            android:text="Current year:"
             android:textSize="18dp"
             android:textStyle="bold" />
             <TextView
                 android:id="@+id/currentMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 android:layout_marginStart="5dp"
-                android:fontFamily="@font/darker_grotesque_semibold"
-                android:text="April"
+                android:text="2023"
                 android:textSize="18dp"
                 android:textStyle="bold" />
         </LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/category"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="Choose Month"
+            >
+
+            <AutoCompleteTextView
+                android:id="@+id/selection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/trip_card"
+                android:textSize="15sp"
+                android:focusable="false"
+                android:textStyle="bold" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_chart"

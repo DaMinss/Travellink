@@ -75,6 +75,7 @@ public class ConfirmExpenseFragment extends DialogFragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_confirm_expense, container, false);
         myAuth = FirebaseAuth.getInstance();
         fire_store = FirebaseFirestore.getInstance();
+        fire_storage = FirebaseStorage.getInstance();
         Return = root.findViewById(R.id.Return);
         Return.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +94,89 @@ public class ConfirmExpenseFragment extends DialogFragment {
     }
 
     private void Cloud() {
+        if (myAuth.getCurrentUser() != null) {
+            user_id = myAuth.getCurrentUser().getUid();
+            CollectionReference expensesRef = fire_store.collection("my_expenses").document(user_id).collection("expenses");
 
+            String imageUri = expense.getImage_Bill();
+            if (!imageUri.equals("")) {
+
+                StorageReference imageRef = fire_storage.getReference().child(user_id);
+
+                UploadTask uploadTask = imageRef.putFile(Uri.parse(imageUri));
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Image upload successful, get the download URL
+                        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri downloadUrl) {
+                                // Image download URL retrieved, save the expense to Firestore
+                                expense.setImage_Bill(downloadUrl.toString());
+                                expensesRef.add(expense)
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+                                                // Expense added successfully
+                                                long status = TravelDatabase.getInstance(getActivity()).expenseDAO().insertExpense(expense);
+                                                if (status > 0) {
+                                                    Toast.makeText(getActivity(), "Your expense has been uploaded successfully", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(getContext(), TripDetails.class);
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putInt("trip_id", trip_id);
+                                                    intent.putExtras(bundle);
+                                                    getContext().startActivity(intent);
+                                                    getActivity().overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                                                    getActivity().finish();
+                                                } else {
+                                                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getContext(), "Failed to upload expense", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Error uploading image
+                        Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                expensesRef.add(expense)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                long status = TravelDatabase.getInstance(getActivity()).expenseDAO().insertExpense(expense);
+                                if (status > 0) {
+                                    Toast.makeText(getActivity(), "Your expense has been uploaded successfully", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getContext(), TripDetails.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("trip_id", trip_id);
+                                    intent.putExtras(bundle);
+                                    getContext().startActivity(intent);
+                                    getActivity().overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                                    getActivity().finish();
+                                } else {
+                                    Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "Failed to upload expense", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        } else {
             long status = TravelDatabase.getInstance(getActivity()).expenseDAO().insertExpense(expense);
             if (status > 0) {
                 Toast.makeText(getActivity(), "Your expense has been added successfully", Toast.LENGTH_SHORT).show();
@@ -108,6 +191,7 @@ public class ConfirmExpenseFragment extends DialogFragment {
                 Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
             }
         }
+    }
 
 
 }

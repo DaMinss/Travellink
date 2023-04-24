@@ -85,7 +85,7 @@ public class ConfirmDialogFragment extends DialogFragment {
             CollectionReference tripRef = fire_store.collection("my_trips").document(user_id).collection("trips");
             Query query = tripRef.orderBy("id", Query.Direction.DESCENDING).limit(1);
             query.get().addOnSuccessListener(queryDocumentSnapshots -> {
-                int nextId = 0;
+                int nextId = 1;
                 if (!queryDocumentSnapshots.isEmpty()) {
                     DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                     nextId = documentSnapshot.getLong("id").intValue() + 1;
@@ -97,7 +97,7 @@ public class ConfirmDialogFragment extends DialogFragment {
                             public void onSuccess(DocumentReference documentReference) {
                                 long status = TravelDatabase.getInstance(getActivity()).tripDAO().insertTrip(trip);
                                 if (status > 0) {
-                                    Toast.makeText(getActivity(), "Your trip has been added successfully", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Your trip has been uploaded successfully", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(getContext(), MainActivity.class));
                                     getActivity().overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
                                 } else {

@@ -405,7 +405,6 @@ public class CreateNewExpense extends AppCompatActivity implements MapWithSearch
     }
 
     FirebaseAuth myAuth;
-    FirebaseStorage fire_store;
     String image_storage_url;
 
     private Expense get_data() {

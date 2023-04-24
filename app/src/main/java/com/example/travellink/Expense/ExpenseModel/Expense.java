@@ -15,7 +15,7 @@ import com.example.travellink.Trip.TripModel.Trip;
 })
 public class Expense {
     @NonNull
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey (autoGenerate = true)
     private int Expense_Id;
     private String Expense_Name;
     private String Expense_Type;

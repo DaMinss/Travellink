@@ -30,9 +30,9 @@ public interface ExpenseDAO {
     List<ExpenseDAO.Expense_amountByType> getExpenseAmountByType(int tripIds);
     @Query("SELECT ((strftime('%d', datetime(Expense_StartDate)) - 1) / 7) + 1 as week, SUM(Expense_Price) as TotalOfExpenses \n" +
             "FROM expense \n" +
-            "WHERE strftime('%Y-%m', Expense_StartDate) = strftime('%Y-%m', 'now') \n" +
+            "WHERE strftime('%Y-%m', Expense_StartDate) = :yearAndMonth \n" +
             "GROUP BY week;")
-    List<ExpenseDAO.Expense_amountByDate> getExpenseAmountByDate();
+    List<ExpenseDAO.Expense_amountByDate> getExpenseAmountByDate(String yearAndMonth);
 
     class Expense_amountByType {
         @ColumnInfo(name = "Type")
