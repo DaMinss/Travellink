@@ -18,11 +18,11 @@ public class Trip {
     private String Trip_start_date;
     private String Trip_end_date;
     private String Note;
-
+    private String uid;
     public Trip() {
     }
 
-    public Trip(int id, String trip_name, String trip_departure, String trip_arrival, String trip_status, String trip_start_date, String trip_end_date, String note) {
+    public Trip(int id, String trip_name, String trip_departure, String trip_arrival, String trip_status, String trip_start_date, String trip_end_date, String note, String Uid) {
         this.id = id;
         Trip_name = trip_name;
         Trip_departure = trip_departure;
@@ -31,6 +31,15 @@ public class Trip {
         Trip_start_date = trip_start_date;
         Trip_end_date = trip_end_date;
         Note = note;
+        uid = Uid;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public int getId() {

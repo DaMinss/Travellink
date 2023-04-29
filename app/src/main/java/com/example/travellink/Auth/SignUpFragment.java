@@ -1,13 +1,11 @@
 package com.example.travellink.Auth;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +20,6 @@ import com.example.travellink.MainActivity;
 import com.example.travellink.R;
 import com.example.travellink.UserData;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -35,8 +32,8 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hbb20.CountryCodePicker;
 
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import in.aabhasjindal.otptextview.OtpTextView;
@@ -52,7 +49,8 @@ public class SignUpFragment extends Fragment {
     FirebaseAuth myAuth;
     FirebaseFirestore fire_store;
     TextView phone, back, resent;
-    ProgressBar progressBar;
+    ProgressBar progressBar, progressBar1;
+    CountryCodePicker ccp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,12 +60,14 @@ public class SignUpFragment extends Fragment {
         myAuth = FirebaseAuth.getInstance();
         fire_store = FirebaseFirestore.getInstance();
         progressBar = root.findViewById(R.id.progress);
+        progressBar1 = root.findViewById(R.id.progress1);
         firstName = root.findViewById(R.id.registerFirstName);
         lastName = root.findViewById(R.id.registerLastName);
         email = root.findViewById(R.id.registerEmail);
         phoneNumb = root.findViewById(R.id.registerPhonenumb);
         pass = root.findViewById(R.id.registerPassword);
         confirmPass = root.findViewById(R.id.ConfirmPassword);
+        ccp = root.findViewById(R.id.ccp);
         otpLayout = root.findViewById(R.id.otpLayout);
         phone = root.findViewById(R.id.phone);
         otpTextView = root.findViewById(R.id.OTPView);
@@ -85,7 +85,7 @@ public class SignUpFragment extends Fragment {
                 }
             }
         });
-        Signup = root.findViewById(R.id.buttonSignup);
+        Signup = root.findViewById(R.id.buttonEdit);
         Signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -202,18 +202,20 @@ public class SignUpFragment extends Fragment {
     }
 
     private void SignUpUser() {
+        progressBar1.setVisibility(View.VISIBLE);
         if (!validate_first_name() || !validate_last_name() || !validate_email() || !validate_phoneNum() || !validate_password() || !validate_confirm_password()) {
             return;
         }
         first_name = firstName.getText().toString();
         last_name = lastName.getText().toString();
         userEmail = email.getText().toString();
-        userPhone = phoneNumb.getText().toString();
+        userPhone = ccp.getSelectedCountryCodeWithPlus() + phoneNumb.getText().toString().trim() ;
         userPass = pass.getText().toString();
         userConfirmPass = confirmPass.getText().toString();
 
         if (compare_pass()) {
             OTPVerify(userPhone);
+            progressBar1.setVisibility(View.GONE);
         }
     }
 
@@ -228,7 +230,7 @@ public class SignUpFragment extends Fragment {
                                 progressBar.setVisibility(View.GONE);
                                 userID = myAuth.getCurrentUser().getUid();
                                 DocumentReference documentReference = fire_store.collection("user").document(userID);
-                                UserData userData = new UserData(userID, first_name, last_name, userEmail, userPhone, userPass);
+                                UserData userData = new UserData(userID, first_name, last_name, userEmail, userPhone, "No");
                                 documentReference.set(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {

@@ -17,13 +17,12 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -38,20 +37,30 @@ import android.widget.DatePicker;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.travellink.Expense.CreateNewExpense;
 import com.example.travellink.Expense.ExpenseModel.Expense;
 import com.example.travellink.MapWithSearchFragment;
 import com.example.travellink.Map_WithSearchFragment2;
 import com.example.travellink.R;
-import com.example.travellink.Trip.TripModel.Trip;
 import com.example.travellink.database.TravelDatabase;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -79,6 +88,7 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
     LottieAnimationView map, map1;
     Uri image_uri = null;
     ImageView billingImage;
+    ProgressBar progressBar;
     //access camera
     protected static final int REQUEST_CODE_CAMERA = 1000;
     protected static final int REQUEST_CODE_PERMISSIONS_CAMERA = 1250;
@@ -97,7 +107,9 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
     protected LocationManager locationManager;
     String selectedText = "";
     public ArrayAdapter<String> arrayAdapter;
-
+    FirebaseAuth myAuth;
+    FirebaseFirestore fire_store;
+    FirebaseStorage fire_storage;
 
 
     @Override
@@ -116,13 +128,17 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_update_expense2, container, false);
+        myAuth = FirebaseAuth.getInstance();
+        fire_store = FirebaseFirestore.getInstance();
+        fire_storage = FirebaseStorage.getInstance();
         category_layout = root.findViewById(R.id.category_layout);
+        progressBar = root.findViewById(R.id.progress);
         detail = root.findViewById(R.id.detail_expense);
         arrive_layout = root.findViewById(R.id.arrive);
         LayoutTransition layoutTransition = new LayoutTransition();
         layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
         category_layout.setLayoutTransition(layoutTransition);
-        billingImage = root.findViewById(R.id.image_billing);
+        billingImage = root.findViewById(R.id.image_profile);
         title = root.findViewById(R.id.expense_Name);
         name = root.findViewById(R.id.name);
         descript = root.findViewById(R.id.description);
@@ -130,7 +146,7 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
         category = root.findViewById(R.id.category);
         amount = root.findViewById(R.id.amount);
         billing = root.findViewById(R.id.billing);
-        image_bill = root.findViewById(R.id.image_billing);
+        image_bill = root.findViewById(R.id.image_profile);
         title_bill = root.findViewById(R.id.textView14);
         departure = root.findViewById(R.id.depart1);
         arrive = root.findViewById(R.id.arrive1);
@@ -138,7 +154,7 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
         end_date = root.findViewById(R.id.eDate);
         arrayAdapter = new ArrayAdapter<>(
                 getActivity(), R.layout.spinner,
-                getResources().getStringArray(R.array.menu)){
+                getResources().getStringArray(R.array.menu)) {
             @Override
             public Filter getFilter() {
                 return new Filter() {
@@ -193,7 +209,6 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
                 }
             }
         });
-
 
 
         expenseName = root.findViewById(R.id.expenseName);
@@ -320,18 +335,124 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
                 if (validation() == false) {
                     return;
                 } else {
-                    int status = TravelDatabase.getInstance(getActivity()).expenseDAO().updateExpense(get_data(id));
-                    if(status > 0){
-                        Toast.makeText(getActivity(), "The selected trip has been update successfully", Toast.LENGTH_SHORT).show();
-                        dismiss();
-                    }else {
-                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                    if (myAuth.getCurrentUser() != null) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        String user_id = myAuth.getCurrentUser().getUid();
+                        CollectionReference expensesRef = fire_store.collection("my_expenses").document(user_id).collection("expenses");
+                        Query expenseRef = expensesRef.whereEqualTo("expense_Id", id);
+                        Expense expenseUpdate = get_data(id);
+                        String imageUri = expenseUpdate.getImage_Bill();
+                        Uri image = Uri.parse(imageUri);
+                        if (!imageUri.equals("") && !imageUri.equals(image_bill_url)) {
+                            File imageFile = new File(image.getPath());
+                            String imageName = imageFile.getName();
+                            StorageReference imageRef = fire_storage.getReference().child("UserImage/").child(user_id).child(imageName);
+
+                            UploadTask uploadTask = imageRef.putFile(image);
+                            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    // Image upload successful, get the download URL
+                                    imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri downloadUrl) {
+                                            // Image download URL retrieved, save the expense to Firestore
+                                            expenseUpdate.setImage_Bill(downloadUrl.toString());
+                                            expenseRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                                        // Update the expense with the new data
+                                                        documentSnapshot.getReference().set(expenseUpdate)
+                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+                                                                        // Expense updated successfully
+                                                                        int status = TravelDatabase.getInstance(getActivity()).expenseDAO().updateExpense(get_data(id));
+                                                                        if (status > 0) {
+                                                                            progressBar.setVisibility(View.GONE);
+                                                                            Toast.makeText(getActivity(), "The selected trip has been update successfully", Toast.LENGTH_SHORT).show();
+                                                                            dismiss();
+                                                                        } else {
+                                                                            Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                                                                        }
+
+                                                                    }
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        // Error updating expense
+                                                                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Error retrieving matching expenses
+                                            Toast.makeText(getContext(), "Failed to retrieve", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Error uploading image
+                                    Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            expenseRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                        // Update the expense with the new data
+                                        documentSnapshot.getReference().set(expenseUpdate)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        // Expense updated successfully
+                                                        int status = TravelDatabase.getInstance(getActivity()).expenseDAO().updateExpense(get_data(id));
+                                                        if (status > 0) {
+                                                            progressBar.setVisibility(View.GONE);
+                                                            Toast.makeText(getActivity(), "The selected trip has been update successfully", Toast.LENGTH_SHORT).show();
+                                                            dismiss();
+                                                        } else {
+                                                            Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                                                        }
+
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        // Error updating expense
+                                                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    }
+                                }
+                            });
+                        }
+                    } else {
+                        int status = TravelDatabase.getInstance(getActivity()).expenseDAO().updateExpense(get_data(id));
+                        if (status > 0) {
+                            Toast.makeText(getActivity(), "The selected trip has been update successfully", Toast.LENGTH_SHORT).show();
+                            dismiss();
+                        } else {
+                            Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
         });
         return root;
     }
+
     String image_bill_url;
 
     protected void setDetails(Expense expense) {
@@ -365,12 +486,13 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
             remove.setVisibility(View.VISIBLE);
         }
     }
+
     private Expense get_data(int _id) {
         int ex_id = _id;
-        int t_id = trip_id ;
+        int t_id = trip_id;
         String expense_name = expenseName.getText().toString();
         String expense_category = selectedText;
-        String expense_departure ="";
+        String expense_departure = "";
         if (selectedText.equals("Food") || selectedText.equals("Shopping") || selectedText.equals("Hotel") || selectedText.equals("Others")) {
             expense_departure = expenseDestination.getText().toString();
         } else {
@@ -382,16 +504,15 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
         String expense_Price = expenseAmount.getText().toString();
         String description = expenseDescription.getText().toString();
         String inputImage;
-        if(image_uri != null){
-            inputImage= String.valueOf(image_uri);
-        }else if(image_uri == null){
+        if (image_uri != null) {
+            inputImage = String.valueOf(image_uri);
+        } else if (image_uri == null) {
             inputImage = "";
-        }
-        else {
-           inputImage = image_bill_url;
+        } else {
+            inputImage = image_bill_url;
         }
         String expense_image = inputImage;
-        return new Expense( ex_id, expense_name, expense_category, description, expense_image, expense_departure,expense_arrive, expense_Price, Start_dateandtime, End_dateandtime, t_id);
+        return new Expense(ex_id, expense_name, expense_category, description, expense_image, expense_departure, expense_arrive, expense_Price, Start_dateandtime, End_dateandtime, t_id);
 
     }
 
@@ -526,15 +647,16 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
 
     private void showMapWithSearchFragmentDialog() {
         Bundle bundle = new Bundle();
-        bundle.putInt("status",1);
+        bundle.putInt("status", 1);
         MapWithSearchFragment mapDialog = new MapWithSearchFragment();
         mapDialog.setArguments(bundle);
         mapDialog.setOnLocationSelectedListener(this);
         mapDialog.show(getChildFragmentManager(), "map_dialog");
     }
+
     private void showMapWithSearchFragmentDialog1() {
         Bundle bundle = new Bundle();
-        bundle.putInt("status",1);
+        bundle.putInt("status", 1);
         Map_WithSearchFragment2 mapDialog = new Map_WithSearchFragment2();
         mapDialog.setArguments(bundle);
         mapDialog.setOnLocationSelectedListener1(this);
@@ -554,6 +676,6 @@ public class UpdateExpenseFragment extends DialogFragment implements MapWithSear
 
     @Override
     public void onLocationSelected1(String data) {
-            expenseArrive.setText(data);
+        expenseArrive.setText(data);
     }
 }

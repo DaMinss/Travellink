@@ -1,7 +1,10 @@
 package com.example.travellink.Trip.TripModel;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.travellink.R;
+import com.example.travellink.Trip.TripDetails;
 import com.example.travellink.database.TripDAO;
 
 import java.util.List;
@@ -36,7 +40,9 @@ public class TripTop3Adapter extends RecyclerView.Adapter<TripTop3Adapter.TripVi
         this.context = context;
         notifyDataSetChanged();
     }
-
+    private Context getContext() {
+        return context;
+    }
 
     @NonNull
     @Override
@@ -54,11 +60,11 @@ public class TripTop3Adapter extends RecyclerView.Adapter<TripTop3Adapter.TripVi
         }
 
 
-        if (!listOfTrips.isEmpty() && trip_withTotalPrice.getTotalOfExpense() != null) {
+        if (!listOfTrips.isEmpty() && trip_withTotalPrice.getTotalOfExpense() != null && trip_withTotalPrice.getTotalOfExpense() != 0.0) {
             highest = listOfTrips.get(0).getTotalOfExpense();
-            if (listOfTrips.size() > 1 && trip_withTotalPrice.getTotalOfExpense() != null && listOfTrips.get(1).getTotalOfExpense() != null) {
+            if (listOfTrips.size() > 1 && trip_withTotalPrice.getTotalOfExpense() != null && listOfTrips.get(1).getTotalOfExpense() != null && !listOfTrips.get(1).getTotalOfExpense().equals(0.0)) {
                 secondHighest = listOfTrips.get(1).getTotalOfExpense();
-                if (listOfTrips.size() > 2 && trip_withTotalPrice.getTotalOfExpense() != null && listOfTrips.get(2).getTotalOfExpense() != null) {
+                if (listOfTrips.size() > 2 && trip_withTotalPrice.getTotalOfExpense() != null && listOfTrips.get(2).getTotalOfExpense() != null && listOfTrips.get(2).getTotalOfExpense() != 0.0) {
                     thirdHighest = listOfTrips.get(2).getTotalOfExpense();
                 }
             }
@@ -88,7 +94,7 @@ public class TripTop3Adapter extends RecyclerView.Adapter<TripTop3Adapter.TripVi
         } else {
             holder.Trip_Price.setText("0.0");
         }
-        if (trip_withTotalPrice.getTrip().getTrip_end_date() == null) {
+        if(trip_withTotalPrice.getTrip().getTrip_end_date() == null || trip_withTotalPrice.getTrip().getTrip_end_date().equals("")) {
             holder.to.setVisibility(View.GONE);
         }
 
@@ -127,6 +133,13 @@ public class TripTop3Adapter extends RecyclerView.Adapter<TripTop3Adapter.TripVi
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    TripDAO.Trip_withTotalPrice trip =  listOfTrips.get(getAdapterPosition());
+                    Intent intent = new Intent(view.getContext(), TripDetails.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("trip_id", trip.getTrip().getId());
+                    intent.putExtras(bundle);
+                    view.getContext().startActivity(intent);
+                    ((Activity) getContext()).overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
 
                 }
             });

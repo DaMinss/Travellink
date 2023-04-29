@@ -1,13 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Trip.ViewAllTripFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationViewNodata"
+        android:layout_width="wrap_content"
+        android:layout_height="413dp"
+        android:layout_gravity="center_horizontal"
+        android:minHeight="90dp"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/nodata"
+        app:lottie_speed="1"
+        android:visibility="gone"></com.airbnb.lottie.LottieAnimationView>
+
+    <LinearLayout
+        android:id="@+id/notrip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lottieAnimationViewNodata"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/instruct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:fontFamily="@font/darker_grotesque_semibold"
+            android:text="Unavailable trip currently
+
+                         You can add your new trip here"
+            android:textSize="28sp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimationViewArrow"
+            android:layout_width="46dp"
+            android:layout_height="95dp"
+            android:layout_gravity="center_horizontal"
+            android:minHeight="90dp"
+            android:scaleType="fitXY"
+            app:lottie_autoPlay="true"
+            app:lottie_colorFilter="@color/purple_200"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/arrow"
+            app:lottie_speed="1"></com.airbnb.lottie.LottieAnimationView>
+    </LinearLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/viewTrips"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -42,4 +88,4 @@
             app:layout_constraintTop_toBottomOf="@+id/search_view"
             app:layout_constraintVertical_bias="0.061"></androidx.recyclerview.widget.RecyclerView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+</RelativeLayout>

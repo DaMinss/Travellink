@@ -12,6 +12,20 @@
         <item>Food</item>
         <item>Others</item>
     </string-array>
+    <string-array name="month">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
     <string-array name="menu1">
         <item>All Expense</item>
         <item>Flight</item>
@@ -20,5 +34,13 @@
         <item>Shopping</item>
         <item>Food</item>
         <item>Others</item>
+    </string-array>
+
+    <string-array name="currency_codes">
+        <item>USD</item>
+        <item>EUR</item>
+        <item>KRW</item>
+        <item>JPY</item>
+        <item>VND</item>
     </string-array>
 </resources>

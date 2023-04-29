@@ -69,6 +69,24 @@
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/hello"
                     app:lottie_speed="0.8"></com.airbnb.lottie.LottieAnimationView>
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottieAnimationView1"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerVertical="true"
+                    android:minHeight="90dp"
+                    android:scaleType="fitXY"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.478"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_colorFilter="@color/purple_600"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/hello"
+                    app:lottie_speed="0.8"
+                    android:visibility="gone"></com.airbnb.lottie.LottieAnimationView>
 
                 <TextView
                     android:id="@+id/mode_name"
@@ -124,11 +142,8 @@
                 android:layout_marginRight="16dp"
                 android:background="@drawable/transparent_bg"
                 app:menu="@menu/bottom_menu"
-
                 />
         </com.google.android.material.bottomappbar.BottomAppBar>
-
-
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

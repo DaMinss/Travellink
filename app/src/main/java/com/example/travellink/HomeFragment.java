@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.travellink.Trip.TripModel.TripCloudAdapter;
 import com.example.travellink.Trip.TripModel.TripHomeAdapter;
 import com.example.travellink.Trip.TripModel.TripTop3Adapter;
 import com.example.travellink.Trip.TripModel.TripViewModel;
@@ -53,21 +54,25 @@ public class HomeFragment extends Fragment {
         viewTripList = (RecyclerView) root.findViewById(R.id.recent_trip);
         top3List = (RecyclerView) root.findViewById(R.id.top_trip);
         tripRepo = new TripRepo(getActivity().getApplication());
-        listOfTrips = tripRepo.getRecentTripAndSum();
-        viewTripList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        tripAdapter = new TripHomeAdapter(listOfTrips, getActivity());
-        viewTripList.setAdapter(tripAdapter);
+        TripViewModel tripViewModel = new TripViewModel(getActivity().getApplication());
+        tripViewModel.getRecent().observe(getActivity(), trips -> {
+            Log.d("trip==>", "==>" + trips);
+            listOfTrips = trips;
+            viewTripList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+            tripAdapter = new TripHomeAdapter(trips, getActivity());
+            viewTripList.setAdapter(tripAdapter);
+            readData(listOfTrips.size());
+        });
+        tripViewModel.getTop3().observe(getActivity(), trips -> {
+            Log.d("trip==>", "==>" + trips);
+            listOfTop3Trips = trips;
+            top3List.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+            tripTop3Adapter = new TripTop3Adapter(listOfTop3Trips, getActivity());
+            top3List.setAdapter(tripTop3Adapter);
+            readData(listOfTop3Trips.size());
+        });
 
-        listOfTop3Trips = tripRepo.getTop3TripAndSum();
-        if(!listOfTop3Trips.isEmpty()) {
-//            if (listOfTop3Trips.get(0).getTotalOfExpense() != null && listOfTop3Trips.get(1).getTotalOfExpense() != null && listOfTop3Trips.get(2).getTotalOfExpense() != null) {
-                top3List.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-                tripTop3Adapter = new TripTop3Adapter(listOfTop3Trips, getActivity());
-                top3List.setAdapter(tripTop3Adapter);
-//            }
 
-        }
-        readData(listOfTrips.size());
 
         title1 = root.findViewById(R.id.recent);
         title2 = root.findViewById(R.id.top_spent);

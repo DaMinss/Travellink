@@ -1,10 +1,5 @@
 package com.example.travellink.Trip;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -24,6 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.travellink.MainActivity;
 import com.example.travellink.MapWithSearchFragment;
@@ -36,18 +36,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Calendar;
 
 public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFragment.MapWithSearchFragmentInterface, Map_WithSearchFragment2.MapWithSearchFragmentInterface1 {
-    TextView title;
-    TextInputLayout name, departure, arrive, date, note;
-    LinearLayout depart, arrival;
-    TextInputEditText tripName, tripDeparture, tripArrive, tripStartDate, tripNote;
-    Calendar calendar;
-    DatePickerDialog datePickerDialog;
-    DatePickerDialog.OnDateSetListener dateListener;
-    private ImageView back;
-    float v = 0;
-    Button Create;
-    ImageView map, map1;
-    LottieAnimationView loading;
     protected final int LOCATION_REFRESH_TIME = 1000; // 1 seconds to update.
     protected final int LOCATION_REFRESH_DISTANCE = 5; // 5 meters to update.
     protected final int REQUEST_CODE_PERMISSIONS_GPS = 105;
@@ -56,6 +44,18 @@ public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFra
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
     protected LocationManager locationManager;
+    TextView title;
+    TextInputLayout name, departure, arrive, date, note;
+    LinearLayout depart, arrival;
+    TextInputEditText tripName, tripDeparture, tripArrive, tripStartDate, tripNote;
+    Calendar calendar;
+    DatePickerDialog datePickerDialog;
+    DatePickerDialog.OnDateSetListener dateListener;
+    float v = 0;
+    Button Create;
+    ImageView map, map1;
+    LottieAnimationView loading;
+    private ImageView back;
 
     public CreateNewTrip() {
         // Required empty public constructor
@@ -85,8 +85,11 @@ public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFra
             @Override
             public void onClick(View view) {
                 takeGPS();
-                MapWithSearchFragment mapsFragment = new MapWithSearchFragment();
-                mapsFragment.show(getSupportFragmentManager(), "Select location");
+                Bundle bundle = new Bundle();
+                bundle.putInt("status", 0);
+                MapWithSearchFragment mapDialog = new MapWithSearchFragment();
+                mapDialog.setArguments(bundle);
+                mapDialog.show(getSupportFragmentManager(), "map_dialog");
             }
         });
         map1 = findViewById(R.id.open_map1);
@@ -188,8 +191,8 @@ public class CreateNewTrip extends AppCompatActivity implements MapWithSearchFra
         String Start_date = tripStartDate.getText().toString();
         String Note = tripNote.getText().toString();
         String status = "Draft";
-        String End_date = null;
-        return new Trip(id, trip_name, trip_depart, trip_arrive, status, Start_date, End_date, Note);
+        String End_date = "";
+        return new Trip(id, trip_name, trip_depart, trip_arrive, status, Start_date, End_date, Note, "");
 
     }
 

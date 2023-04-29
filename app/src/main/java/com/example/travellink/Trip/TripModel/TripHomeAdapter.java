@@ -65,7 +65,7 @@ public class TripHomeAdapter extends RecyclerView.Adapter<TripHomeAdapter.TripVi
         else{
             holder.Trip_Price.setText("0.0");
         }
-        if(trip_withTotalPrice.getTrip().getTrip_end_date() == null){
+        if(trip_withTotalPrice.getTrip().getTrip_end_date() == null || trip_withTotalPrice.getTrip().getTrip_end_date().equals("")) {
             holder.to.setVisibility(View.GONE);
         }
 

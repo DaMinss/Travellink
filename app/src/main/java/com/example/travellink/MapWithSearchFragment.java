@@ -1,8 +1,4 @@
-
-
 package com.example.travellink;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -11,6 +7,10 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
@@ -18,14 +18,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -38,7 +30,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.protobuf.StringValue;
 
 import java.io.IOException;
 import java.util.List;
@@ -46,31 +37,21 @@ import java.util.Locale;
 
 
 public class MapWithSearchFragment extends DialogFragment implements OnMapReadyCallback {
-    public interface MapWithSearchFragmentInterface {
-        public void getLocationFromMap(String address);
-    }
-
-
-    private GoogleMap Map;
     SupportMapFragment supportMapFragment;
     androidx.appcompat.widget.SearchView searchView;
     Address currentAddress;
     AppCompatButton confirm;
-
+    private GoogleMap Map;
     private int ACCESS_LOCATION_REQUEST_CODE = 1001;
+    private OnLocationSelectedListener mListener;
 
     public MapWithSearchFragment() {
         // Required empty public constructor
     }
-    public interface OnLocationSelectedListener {
-        void onLocationSelected(String data);
-    }
 
-    private OnLocationSelectedListener mListener;
     public void setOnLocationSelectedListener(OnLocationSelectedListener listener) {
         mListener = listener;
     }
-
 
     @Override
     public void onResume() {
@@ -87,7 +68,6 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NO_FRAME, android.R.style.Theme_Holo_Light);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -128,9 +108,9 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
                             confirm.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    if(status == 1) {
+                                    if (status == 1) {
                                         mListener.onLocationSelected(streetAddress);
-                                    }else {
+                                    } else {
                                         MapWithSearchFragment.MapWithSearchFragmentInterface itf = (MapWithSearchFragment.MapWithSearchFragmentInterface) getActivity();
                                         itf.getLocationFromMap(streetAddress);
                                     }
@@ -173,16 +153,9 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
         getLocationPermission();
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        fusedLocationClient.getLastLocation().addOnSuccessListener( getActivity(), new OnSuccessListener<Location>() {
+        fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
@@ -243,5 +216,13 @@ public class MapWithSearchFragment extends DialogFragment implements OnMapReadyC
                 getLocationPermission();
             }
         }
+    }
+
+    public interface MapWithSearchFragmentInterface {
+        public void getLocationFromMap(String address);
+    }
+
+    public interface OnLocationSelectedListener {
+        void onLocationSelected(String data);
     }
 }

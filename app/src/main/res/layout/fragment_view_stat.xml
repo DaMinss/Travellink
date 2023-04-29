@@ -1,11 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ViewStatFragment"
-    android:padding="10dp">
+    android:padding="15dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationViewNodata"
+        android:layout_width="wrap_content"
+        android:layout_height="413dp"
+        android:layout_gravity="center_horizontal"
+        android:minHeight="90dp"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/nodata"
+        app:lottie_speed="1"
+        android:visibility="gone"></com.airbnb.lottie.LottieAnimationView>
+
     <LinearLayout
+        android:id="@+id/noExpense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lottieAnimationViewNodata"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/instruct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:fontFamily="@font/darker_grotesque_semibold"
+            android:text="Please add your expense to view the statistic"
+            android:textSize="28sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/stats_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -13,8 +46,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-
-        android:text="Weekly total expense of the current month"
+        android:fontFamily="@font/darker_grotesque_semibold"
+        android:text="Total expense of the current month"
         android:textAlignment="center"
         android:textSize="25dp"
         android:textStyle="bold" />
@@ -26,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Current year:"
+            android:fontFamily="@font/darker_grotesque_semibold"
             android:textSize="18dp"
             android:textStyle="bold" />
             <TextView
@@ -34,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:text="2023"
+                android:fontFamily="@font/darker_grotesque_semibold"
                 android:textSize="18dp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -49,8 +84,9 @@
                 android:id="@+id/selection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/trip_card"
+                android:background="@color/transparent"
                 android:textSize="15sp"
+                android:fontFamily="@font/darker_grotesque_semibold"
                 android:focusable="false"
                 android:textStyle="bold" />
 
@@ -60,6 +96,26 @@
         android:id="@+id/line_chart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/bar_chart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/darker_grotesque_semibold"
+            android:text="Spending overview:"
+            android:textSize="25dp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold" />
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pie_chart"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="230dp"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            />
     </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>

@@ -34,6 +34,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.32"
         app:srcCompat="@drawable/back_btn" />
+
     <ImageView
         android:id="@+id/logo1"
         android:layout_width="wrap_content"
@@ -166,8 +167,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/trip_card"
-                            android:textSize="15sp"
                             android:focusable="false"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -180,12 +181,12 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="24dp"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/category"
-                        app:layout_constraintVertical_bias="0.0"
-                        android:visibility="gone">
+                        app:layout_constraintVertical_bias="0.0">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/sDate"
@@ -364,30 +365,55 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.google.android.material.textfield.TextInputLayout
+
+                    <LinearLayout
                         android:id="@+id/amount"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="32dp"
-                        android:hint="Enter your amount"
-                        app:errorEnabled="true"
+                        android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/expenseAmount"
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/trip_card"
-                            android:drawableRight="@drawable/request_money"
-                            android:inputType="number"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            tools:ignore="TouchTargetSizeCheck" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:layout_marginTop="9dp"
+                            app:errorEnabled="true">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/countryCodeHolder"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/trip_card"
+                                android:focusable="false"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="0.2"
+                            android:layout_marginEnd="32dp"
+                            android:hint="Enter your amount"
+                            app:errorEnabled="true">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/expenseAmount"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@color/trip_card"
+                                android:drawableRight="@drawable/request_money"
+                                android:inputType="number"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                tools:ignore="TouchTargetSizeCheck" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/textView14"
@@ -408,28 +434,28 @@
                         android:layout_marginEnd="122dp"
                         android:layout_marginBottom="8dp"
                         android:gravity="center_horizontal"
+                        android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView14"
-                        app:layout_constraintVertical_bias="0.315"
-                        android:orientation="vertical">
+                        app:layout_constraintVertical_bias="0.315">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="10sp"
-                            android:text="Click Here To Attach Your Receipt" />
+                            android:text="Click Here To Attach Your Receipt"
+                            android:textSize="10sp" />
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_sharp_receipt_24"
                             android:alpha="0.6"
-                            />
+                            android:src="@drawable/ic_sharp_receipt_24" />
                     </LinearLayout>
 
                     <ImageView
-                        android:id="@+id/image_billing"
+                        android:id="@+id/image_profile"
                         android:layout_width="0dp"
                         android:layout_height="270dp"
                         android:layout_marginStart="80dp"
@@ -437,6 +463,7 @@
                         android:layout_marginEnd="80dp"
                         android:layout_marginBottom="8dp"
                         android:gravity="center_horizontal"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -456,11 +483,11 @@
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/image_billing"
-                        app:layout_constraintStart_toStartOf="@+id/image_billing"
-                        app:layout_constraintTop_toBottomOf="@+id/image_billing"
-                        android:visibility="gone"/>
+                        app:layout_constraintEnd_toEndOf="@+id/image_profile"
+                        app:layout_constraintStart_toStartOf="@+id/image_profile"
+                        app:layout_constraintTop_toBottomOf="@+id/image_profile" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -470,6 +497,7 @@
                 android:id="@+id/buttonCreateExpense"
                 android:layout_width="180dp"
                 android:layout_height="35dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="44dp"
                 android:background="@drawable/btn_login"
@@ -477,8 +505,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_gravity="center"/>
+                android:textStyle="bold" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>

@@ -38,4 +38,9 @@
         android:id="@+id/updateExpenseFragment"
         android:name="com.example.travellink.Expense.UpdateExpenseFragment"
         android:label="UpdateExpenseFragment" />
+    <fragment
+        android:id="@+id/viewAccountFragment"
+        android:name="com.example.travellink.Auth.ViewAccountFragment"
+        android:label="fragment_view_account"
+        tools:layout="@layout/fragment_view_account" />
 </navigation>

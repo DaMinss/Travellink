@@ -11,7 +11,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.travellink.Expense.ExpenseModel.Expense;
 import com.example.travellink.Trip.TripModel.Trip;
-import com.example.travellink.Trip.TripCloudModel.TripWithTotalExpense;
 import com.example.travellink.Trip.TripModel.TripViewModel;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,7 +45,6 @@ public class TripRepo {
     private TripDAO tripDao;
     private ExpenseDAO expenseDAO;
     private LiveData<List<TripDAO.Trip_withTotalPrice>> allTripSum;
-    private MutableLiveData<List<TripWithTotalExpense>> tripListLiveData = new MutableLiveData<>();
     private LiveData<List<Trip>> allTrips;
     FirebaseFirestore fire_store;
 
@@ -64,6 +62,12 @@ public class TripRepo {
     public void insert(Trip trip) {
         TravelDatabase.databaseWriteExecutor.execute(() -> {
             tripDao.insertTrip(trip);
+        });
+    }
+    public void insertCloud(Trip trip) {
+        TravelDatabase.databaseWriteExecutor.execute(() -> {
+            long id = tripDao.insertTrip(trip);
+            trip.setId((int) id); // set the generated id back to the Trip object
         });
     }
 
@@ -85,11 +89,15 @@ public class TripRepo {
         return tripDao.getAllTripWithTotalExpense();
     }
 
-    public List<TripDAO.Trip_withTotalPrice> getRecentTripAndSum() {
+    public LiveData<List<TripDAO.Trip_withTotalPrice>> getSubmittedTripAndSum() {
+        return tripDao.getAllSubmittedTripWithTotalExpense();
+    }
+
+    public LiveData<List<TripDAO.Trip_withTotalPrice>> getRecentTripAndSum() {
         return tripDao.getRecent5TripWithTotalExpense();
     }
 
-    public List<TripDAO.Trip_withTotalPrice> getTop3TripAndSum() {
+    public LiveData<List<TripDAO.Trip_withTotalPrice>> getTop3TripAndSum() {
         return tripDao.getTop3TripWithTotalExpense();
     }
 
@@ -114,10 +122,7 @@ public class TripRepo {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 // Update the LiveData list
-                              tripListLiveData.setValue(tripListLiveData.getValue());
-                                if (onTripDataChangedListener != null) {
-                                    onTripDataChangedListener.onTripDataChanged();
-                                }
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {

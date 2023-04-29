@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.travellink.Trip.TripCloudModel.TripWithTotalExpense;
 import com.example.travellink.database.ExpenseRepo;
 
 import java.util.List;

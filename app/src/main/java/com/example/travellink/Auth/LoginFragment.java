@@ -1,43 +1,56 @@
 package com.example.travellink.Auth;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.travellink.MainActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import com.example.travellink.Admin.AdminWelcome;
 import com.example.travellink.R;
 import com.example.travellink.database.CloudRepo;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class LoginFragment extends Fragment {
 
+    private static final int RC_SIGN_IN = 9001;
     TextInputLayout email, password;
     TextView createNewAccount, textView2, forgotPass;
     Button Login, Google, Personal, personal;
     float v = 0;
-    private FirebaseAuth myAuth;
     ProgressDialog progress;
     String userEmail, userPass;
     TextInputEditText Email, Password;
-
+    private FirebaseAuth myAuth;
+    private GoogleSignInClient googleSignInClient;
+    ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,8 +62,24 @@ public class LoginFragment extends Fragment {
         password = root.findViewById(R.id.arrive);
         textView2 = root.findViewById(R.id.textView2);
         forgotPass = root.findViewById(R.id.forgot_password);
+        progressBar = root.findViewById(R.id.progress1);
         Login = root.findViewById(R.id.buttonLogin);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+// Build a GoogleSignInClient with the options specified by gso
+        googleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+
         Google = root.findViewById(R.id.googleAuth);
+        Google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+        });
         Personal = root.findViewById(R.id.offline);
 
         email.setTranslationX(800);
@@ -98,8 +127,8 @@ public class LoginFragment extends Fragment {
         forgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View my_view) {
-//                startActivity(new Intent(getContext(), ForgotPassword.class));
-//                finish();
+                RecoverPass recoverPass = new RecoverPass();
+                recoverPass.show(getActivity().getSupportFragmentManager(), null);
             }
         });
 
@@ -113,25 +142,87 @@ public class LoginFragment extends Fragment {
 
         return root;
     }
-    private void LoginUser(){
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            // Get the result of the Google Sign In activity
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Sign in to Firebase with the Google account
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                Log.w(TAG, "Google sign in failed", e);
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        myAuth.signInWithCredential(credential)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            progress.dismiss();
+                            CloudRepo cloudRepo = new CloudRepo(getContext());
+                            cloudRepo.ImportData(myAuth.getCurrentUser().getUid());
+                            startActivity(new Intent(getContext(), SplashScreen2.class));
+                            getActivity().finish();
+
+                        } else {
+                            Toast.makeText(getContext(), "Fail", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void LoginUser() {
         userEmail = Email.getText().toString();
         userPass = Password.getText().toString();
-        if(userEmail.isEmpty() || userPass.isEmpty()){
+        if (userEmail.isEmpty() || userPass.isEmpty()) {
             Toast.makeText(getContext(), "Please enter your user name and password", Toast.LENGTH_SHORT).show();
-        }else{
-            progress.show();
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
             myAuth.signInWithEmailAndPassword(userEmail, userPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()) {
-                        progress.dismiss();
-                        CloudRepo cloudRepo = new CloudRepo(getContext());
-                        cloudRepo.ImportData(myAuth.getCurrentUser().getUid());
-//                        startActivity(new Intent(getContext(), MainActivity.class));
-//                        getActivity().finish();
-                    }else {
-                        Toast.makeText(getActivity(), "Fail to login, check your credentials", Toast.LENGTH_SHORT).show();
-                        progress.dismiss();
+                    if (task.isSuccessful()) {
+                        progressBar.setVisibility(View.GONE);
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        db.collection("user").document(myAuth.getCurrentUser().getUid())
+                                .get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists()) {
+                                            String isAdmin = documentSnapshot.getString("admin");
+                                            Log.d(TAG, "DocumentSnapshot exists.");
+                                            if (documentSnapshot.contains("isAdmin")) {
+                                                isAdmin = documentSnapshot.getString("admin");
+                                                Log.d(TAG, "isAdmin value: " + isAdmin);
+                                            }
+
+                                            if (isAdmin != null && isAdmin.equals("Yes")) {
+                                                startActivity(new Intent(getContext(), AdminWelcome.class));
+                                                getActivity().finish();
+                                            } else {
+                                                CloudRepo cloudRepo = new CloudRepo(getContext());
+                                                cloudRepo.ImportData(myAuth.getCurrentUser().getUid());
+                                                startActivity(new Intent(getContext(), SplashScreen2.class));
+                                                getActivity().finish();
+
+                                            }
+                                        }
+                                    }
+                                });
+                    } else {
+                        Toast.makeText(getActivity(), "Fail to login, check your credentials or your connectivity", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
                     }
                 }
             });

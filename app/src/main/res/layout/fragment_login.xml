@@ -69,15 +69,32 @@
             android:layout_width="139dp"
             android:layout_height="15dp"
             android:layout_marginStart="70dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="283dp"
+            android:layout_marginBottom="18dp"
             android:text="Don't have an account?"
             android:textColor="#A7A7A7"
             android:textSize="13sp"
+            app:layout_constraintBottom_toTopOf="@+id/googleAuth"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progress1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/purple_200"
+            android:indeterminateTintMode="src_atop"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="@+id/buttonLogin"
+            app:layout_constraintStart_toStartOf="@+id/buttonLogin"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
+            app:layout_constraintVertical_bias="0.466" />
 
         <TextView
             android:id="@+id/forgot_password"
@@ -85,7 +102,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="228dp"
             android:layout_marginEnd="70dp"
-
             android:text="Forgot Password?"
             android:textColor="@color/purple_200"
             app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
@@ -100,7 +116,6 @@
             android:layout_width="135dp"
             android:layout_height="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="17dp"
             android:layout_marginEnd="32dp"
             android:text="Swipe left to SIGNUP"
             android:textColor="@color/purple_200"
@@ -109,7 +124,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.157"
             app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
+            app:layout_constraintTop_toTopOf="@+id/textView2" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/googleAuth"

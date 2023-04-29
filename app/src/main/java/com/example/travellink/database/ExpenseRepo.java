@@ -40,13 +40,23 @@ public class ExpenseRepo {
     public List<ExpenseDAO.Expense_amountByType> getExpenseAmountByType(int trip_id) {
         return expenseDAO.getExpenseAmountByType(trip_id);
     }
+    public List<ExpenseDAO.Expense_amountByType> getExpenseAmountByTypeByDate(String date) {
+        return expenseDAO.getExpenseAmountByTypeByDate(date);
+    }
 
-    public List<ExpenseDAO.Expense_amountByDate> getExpenseAmountByDate() {
-        return expenseDAO.getExpenseAmountByDate();
+    public List<ExpenseDAO.Expense_amountByDate> getExpenseAmountByDate(String date) {
+        return expenseDAO.getExpenseAmountByDate(date);
     }
 
     public LiveData<Expense> getExpenseByID(int id) {
         return expenseDAO.loadExpenseByID(id);
+    }
+
+    public void insertCloud(Expense expense) {
+        TravelDatabase.databaseWriteExecutor.execute(() -> {
+            long id = expenseDAO.insertExpense(expense);
+            expense.setExpense_Id((int) id); // set the generated id back to the Trip object
+        });
     }
 
     public LiveData<List<Expense>> getCloudExpensesByUserId(String userId, int tripId) {

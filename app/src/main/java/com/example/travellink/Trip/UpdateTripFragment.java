@@ -141,13 +141,17 @@ public class UpdateTripFragment extends DialogFragment implements MapWithSearchF
                     return;
                 } else {
                     if(myAuth.getCurrentUser() != null){
-                        String userID = myAuth.getCurrentUser().getUid();
-                        TripRepo repo = new TripRepo(getActivity().getApplication());
                         TripViewModel viewModel = new TripViewModel(getActivity().getApplication());
-                        Toast.makeText(getContext(), "Your Trip Has Been Updated", Toast.LENGTH_SHORT).show();
-                        viewModel.updateTrip(get_data(id));
-                        viewModel.setData(new Date().toString());
-                       dismiss();
+                        Trip trips = get_data(id);
+                        trips.setUid(myAuth.getCurrentUser().getUid());
+                        viewModel.updateTrip(trips);
+                        int status = TravelDatabase.getInstance(getActivity()).tripDAO().updateTrip(trips);
+                        if (status > 0) {
+                            Toast.makeText(getActivity(), "The selected trip has been update successfully", Toast.LENGTH_SHORT).show();
+                            dismiss();
+                        } else {
+                            Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                        }
                     }else {
                         int status = TravelDatabase.getInstance(getActivity()).tripDAO().updateTrip(get_data(id));
                         if (status > 0) {
@@ -172,8 +176,8 @@ public class UpdateTripFragment extends DialogFragment implements MapWithSearchF
         String Start_date = tripStartDate.getText().toString();
         String Note = tripNote.getText().toString();
         String status = "Draft";
-        String End_date = null;
-        return new Trip(id, trip_name, trip_depart, trip_arrive, status, Start_date, End_date, Note);
+        String End_date = "";
+        return new Trip(id, trip_name, trip_depart, trip_arrive, status, Start_date, End_date, Note,"");
 
     }
 

@@ -85,14 +85,21 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         else{
             holder.Trip_Price.setText("0.0");
         }
-        if(trip_withTotalPrice.getTrip().getTrip_end_date() == null){
+        if(trip_withTotalPrice.getTrip().getTrip_end_date() == null || trip_withTotalPrice.getTrip().getTrip_end_date().equals("")) {
             holder.to.setVisibility(View.GONE);
         }
         holder.Trip_Depart.setText(trip_withTotalPrice.getTrip().getTrip_departure());
         holder.Trip_Arrival.setText(trip_withTotalPrice.getTrip().getTrip_arrival());
         holder.Trip_Status.setText(trip_withTotalPrice.getTrip().getTrip_status());
         if(trip_withTotalPrice.getTrip().getTrip_status().equals("Submitted")){
+            holder.Trip_Status.setTextColor(Color.rgb(216, 165, 45 ));
+            holder.Trip_Status.setText("Pending");
+        }else if (trip_withTotalPrice.getTrip().getTrip_status().equals("Approved")){
             holder.Trip_Status.setTextColor(Color.rgb(57, 148, 4 ));
+            holder.Trip_Status.setText("Approve");
+        }else if(trip_withTotalPrice.getTrip().getTrip_status().equals("Declined")){
+            holder.Trip_Status.setTextColor(Color.RED);
+            holder.Trip_Status.setText(trip_withTotalPrice.getTrip().getTrip_status());
         }
         viewBinder.setOpenOnlyOne(true);
         viewBinder.bind(holder.swipe_Layout, String.valueOf(trip_withTotalPrice.getTrip().getId()));

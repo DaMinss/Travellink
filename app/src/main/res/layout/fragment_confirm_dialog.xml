@@ -45,6 +45,20 @@
             app:layout_constraintVertical_bias="0.0"
             tools:layout_editor_absoluteX="10dp" />
 
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/purple_200"
+            android:indeterminateTintMode="src_atop"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Return" />
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieAnimationView2"
             android:layout_width="193dp"
@@ -64,7 +78,7 @@
             android:id="@+id/Return"
             android:layout_width="96dp"
             android:layout_height="31dp"
-            android:layout_marginStart="64dp"
+            android:layout_marginStart="68dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="24dp"
             android:background="@drawable/btn_login"
@@ -73,7 +87,8 @@
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView13" />
+            app:layout_constraintTop_toBottomOf="@+id/textView13"
+            app:layout_constraintVertical_bias="0.153" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/confirm"

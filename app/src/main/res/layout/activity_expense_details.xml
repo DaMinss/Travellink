@@ -284,7 +284,7 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/text3"
-                app:layout_constraintTop_toBottomOf="@+id/image_billing" />
+                app:layout_constraintTop_toBottomOf="@+id/image_profile" />
 
             <TextView
                 android:id="@+id/description"
@@ -383,7 +383,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/image_billing"
+                android:id="@+id/image_profile"
                 android:layout_width="0dp"
                 android:layout_height="300dp"
                 android:layout_marginStart="70dp"

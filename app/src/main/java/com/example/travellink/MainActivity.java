@@ -1,5 +1,7 @@
 package com.example.travellink;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -12,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,10 +23,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.travellink.Auth.ConfirmExitPersonalFragment;
 import com.example.travellink.Trip.CreateNewTrip;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -31,6 +36,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
@@ -39,14 +47,17 @@ public class MainActivity extends AppCompatActivity {
     ImageView hamburger_bar;
     NavigationView navigationView;
     BottomNavigationView bottomNavigationView;
-    TextView headerName, headerMail;
+    BottomAppBar userBar, adminBar;
+    TextView headerName, headerMail, mode;
     NavController navController;
     NavHostFragment navHostFragment;
     FirebaseAuth myAuth;
     FirebaseFirestore fire_store;
     String user_id = "";
     FloatingActionButton add;
+    LottieAnimationView personal, online, online1, personal1;
     static final float END_SCALE = 0.7f;
+    CircleImageView profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +65,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         myAuth = FirebaseAuth.getInstance();
         fire_store = FirebaseFirestore.getInstance();
-        initUser();
+        personal = findViewById(R.id.lottieAnimationView);
+        online = findViewById(R.id.lottieAnimationView1);
+        mode =findViewById(R.id.mode_name);
+        userBar = findViewById(R.id.bottom_bar);
+        adminBar = findViewById(R.id.bottom_barAdmin);
         drawerLayout = findViewById(R.id.drawer_layout);
         content = findViewById(R.id.content);
         hamburger_bar = findViewById(R.id.menu_bar);
@@ -64,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(navigationView, navController);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        navigationView.setNavigationItemSelectedListener(
+                item -> NavigationUI.onNavDestinationSelected(item, navController)
+        );
         navigationDrawer();
         View headerView = navigationView.getHeaderView(0);
         ImageView app_logo = headerView.findViewById(R.id.app_logo);
@@ -81,21 +99,33 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.exitFragment:
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("status", 0);
                         ConfirmExitPersonalFragment confirmExitPersonalFragment = new ConfirmExitPersonalFragment();
+                        confirmExitPersonalFragment.setArguments(bundle);
                         confirmExitPersonalFragment.show(getSupportFragmentManager(), null);
                         break;
                     case R.id.exitUser:
-                        Bundle bundle = new Bundle();
+                         bundle = new Bundle();
                         bundle.putInt("status", 1);
                         confirmExitPersonalFragment = new ConfirmExitPersonalFragment();
                         confirmExitPersonalFragment.setArguments(bundle);
                         confirmExitPersonalFragment.show(getSupportFragmentManager(), null);
                         break;
+                    case R.id.viewAccountFragment:
+                        navController.navigate(R.id.viewAccountFragment);
+                        navigationView.setCheckedItem(R.id.viewAccountFragment);
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    case R.id.homeFragment:
+                        navController.navigate(R.id.homeFragment);
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
                 }
                 return false;
             }
         });
-
+        initUser();
 
     }
 
@@ -153,25 +183,45 @@ public class MainActivity extends AppCompatActivity {
             navigationView = findViewById(R.id.navigation_view);
             navigationView.getMenu().findItem(R.id.exitFragment).setVisible(false);
             navigationView.getMenu().findItem(R.id.exitUser).setVisible(true);
-            navigationView.getMenu().findItem(R.id.accountFragment).setVisible(true);
+            navigationView.getMenu().findItem(R.id.viewAccountFragment).setVisible(true);
+            online.setVisibility(View.VISIBLE);
+            mode.setText("Online Mode");
+            personal = navigationView.getHeaderView(0).findViewById(R.id.lottieAnimationView);
             headerName = navigationView.getHeaderView(0).findViewById(R.id.header_username);
+            online1 = navigationView.getHeaderView(0).findViewById(R.id.lottieAnimationView1);
+            online1.setVisibility(View.VISIBLE);
             user_id = myAuth.getCurrentUser().getUid();
             DocumentReference documentReference = fire_store.collection("user").document(user_id);
             documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     if (documentSnapshot.exists()) {
-                        headerName.setText((documentSnapshot.getString("last_name")) + " " + (documentSnapshot.getString("first_name")));
+                        headerName.setText((documentSnapshot.getString("first_name")) + " " + (documentSnapshot.getString("last_name")));
+
                     } else {
-                        Toast.makeText(MainActivity.this, "Fail ", Toast.LENGTH_SHORT).show();
+                        if(myAuth.getCurrentUser().getDisplayName() != null){
+                            headerName.setText(myAuth.getCurrentUser().getDisplayName());
+                        }else {
+                            Toast.makeText(MainActivity.this, "Fail to get user information ", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(MainActivity.this, "Fail ", Toast.LENGTH_SHORT).show();
+                    if(myAuth.getCurrentUser().getDisplayName() != null){
+                        headerName.setText(myAuth.getCurrentUser().getDisplayName());
+                    }else {
+                        Toast.makeText(MainActivity.this, "Fail ", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
+            if(myAuth.getCurrentUser().getPhotoUrl() != null){
+                profile= navigationView.getHeaderView(0).findViewById(R.id.img_profile);
+                Picasso.get().load(myAuth.getCurrentUser().getPhotoUrl()).into(profile);
+                online1.setVisibility(View.GONE);
+                personal.setVisibility(View.GONE);
+            }
         } else {
             return;
         }

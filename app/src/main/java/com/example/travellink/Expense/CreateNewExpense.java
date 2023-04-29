@@ -1,16 +1,12 @@
 package com.example.travellink.Expense;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import static android.content.ContentValues.TAG;
 
 import android.Manifest;
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -21,9 +17,11 @@ import android.graphics.Bitmap;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,47 +34,38 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.travellink.Expense.ExpenseModel.Expense;
 import com.example.travellink.MapWithSearchFragment;
 import com.example.travellink.Map_WithSearchFragment2;
 import com.example.travellink.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 public class CreateNewExpense extends AppCompatActivity implements MapWithSearchFragment.MapWithSearchFragmentInterface, Map_WithSearchFragment2.MapWithSearchFragmentInterface1 {
-    int myTripId;
-    ConstraintLayout detail;
-    AutoCompleteTextView selection;
-    TextView title, title_bill;
-    TextInputLayout name, departure, arrive, start_date, end_date, descript, destination, category, amount;
-    LinearLayout billing, arrive_layout;
-    TextInputEditText expenseName, expenseDeparture, expenseArrive, expenseStartDate, expenseEndDate, expenseDescription, expenseDestination, expenseAmount;
-    final Calendar calendar = Calendar.getInstance();
-    public ImageView back, image_bill;
-    float v = 0;
-    CardView category_layout;
-    Button Create, remove;
-    LottieAnimationView map, map1;
-    Uri image_uri = null;
-    ImageView billingImage;
     //access camera
     protected static final int REQUEST_CODE_CAMERA = 1000;
     protected static final int REQUEST_CODE_PERMISSIONS_CAMERA = 1250;
@@ -92,8 +81,26 @@ public class CreateNewExpense extends AppCompatActivity implements MapWithSearch
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
+    final Calendar calendar = Calendar.getInstance();
+    public ImageView back, image_bill;
     protected LocationManager locationManager;
+    int myTripId;
+    ConstraintLayout detail;
+    AutoCompleteTextView selection, countryCode;
+    TextView title, title_bill;
+    TextInputLayout name, departure, arrive, start_date, end_date, descript, destination, category;
+    LinearLayout billing, arrive_layout, amount;
+    TextInputEditText expenseName, expenseDeparture, expenseArrive, expenseStartDate, expenseEndDate, expenseDescription, expenseDestination, expenseAmount;
+    float v = 0;
+    CardView category_layout;
+    Button Create, remove;
+    LottieAnimationView map, map1;
+    Uri image_uri = null;
+    ImageView billingImage;
     String selectedText = "";
+    String selectedCode = "";
+    FirebaseAuth myAuth;
+    String image_storage_url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +117,26 @@ public class CreateNewExpense extends AppCompatActivity implements MapWithSearch
         LayoutTransition layoutTransition = new LayoutTransition();
         layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
         category_layout.setLayoutTransition(layoutTransition);
-        billingImage = findViewById(R.id.image_billing);
+        billingImage = findViewById(R.id.image_profile);
+        billingImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(CreateNewExpense.this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+                dialog.setContentView(R.layout.fragment_view_image);
+
+                //Getting custom dialog views
+                ImageView Image = dialog.findViewById(R.id.img);
+                ImageView back = dialog.findViewById(R.id.backBTN);
+                Picasso.get().load(image_uri).into(Image);
+                back.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
         title = findViewById(R.id.expense_Name);
         name = findViewById(R.id.name);
         descript = findViewById(R.id.description);
@@ -118,7 +144,7 @@ public class CreateNewExpense extends AppCompatActivity implements MapWithSearch
         category = findViewById(R.id.category);
         amount = findViewById(R.id.amount);
         billing = findViewById(R.id.billing);
-        image_bill = findViewById(R.id.image_billing);
+        image_bill = findViewById(R.id.image_profile);
         title_bill = findViewById(R.id.textView14);
         departure = findViewById(R.id.depart1);
         arrive = findViewById(R.id.arrive1);
@@ -127,7 +153,9 @@ public class CreateNewExpense extends AppCompatActivity implements MapWithSearch
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this, R.layout.spinner,
                 getResources().getStringArray(R.array.menu));
-
+        final ArrayAdapter<String> arrayAdapterCode = new ArrayAdapter<String>(
+                this, R.layout.spinner,
+                getResources().getStringArray(R.array.currency_codes));
         selection = (AutoCompleteTextView) findViewById(R.id.selection);
         selection.setAdapter(arrayAdapter);
         selection.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +195,36 @@ public class CreateNewExpense extends AppCompatActivity implements MapWithSearch
         expenseDeparture = findViewById(R.id.expense_depart);
         expenseArrive = findViewById(R.id.expense_arrival);
         expenseAmount = findViewById(R.id.expenseAmount);
-
+        expenseAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+//                    String amountString = expenseAmount.getText().toString();
+//                    double amount = Double.parseDouble(amountString);
+//                    convertCurrency(amount, selectedCode);
+                }
+            }
+        });
+        countryCode = (AutoCompleteTextView) findViewById(R.id.countryCodeHolder);
+        countryCode.setAdapter(arrayAdapterCode);
+        countryCode.setEnabled(false);
+        countryCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                selection.showDropDown();
+            }
+        });
+//        countryCode.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                    String amountString = expenseAmount.getText().toString();
+//                    String currencyCode = parent.getItemAtPosition(position).toString();
+//                    String apiKey = "LJZcTUGQ5q6SYEovWi8QDNXd1Rrn7PV9";
+//                new CurrencyConverter("EUR", "USD").execute();
+//            }
+//        });
+        countryCode.setText("USD");
         map = findViewById(R.id.open_map);
         map.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,6 +354,7 @@ public class CreateNewExpense extends AppCompatActivity implements MapWithSearch
             public void onClick(View view) {
                 image_uri = null;
                 billingImage.setImageURI(null);
+                billing.setVisibility(View.VISIBLE);
                 remove.setVisibility(View.GONE);
             }
         });
@@ -309,6 +367,50 @@ public class CreateNewExpense extends AppCompatActivity implements MapWithSearch
         });
     }
 
+//    //Currency
+//    private class CurrencyConverter extends AsyncTask<String, Void, Double> {
+//        private String fromCurrency;
+//        private String toCurrency;
+//
+//        public CurrencyConverter(String fromCurrency, String toCurrency) {
+//            this.fromCurrency = fromCurrency;
+//            this.toCurrency = toCurrency;
+//        }
+//
+//        @Override
+//        protected Double doInBackground(String... params) {
+//            String apiKey = "LJZcTUGQ5q6SYEovWi8QDNXd1Rrn7PV9";
+//            String url = "https://api.apilayer.com/exchangerates_data/exchangerates_data?access_key=" + apiKey + "&currencies=" + fromCurrency + "," + toCurrency;
+//            Double exchangeRate = null;
+//            try {
+//                URL apiUrl = new URL(url);
+//                HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
+//                connection.setRequestMethod("GET");
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//                String response = reader.readLine();
+//                JSONObject json = new JSONObject(response);
+//                exchangeRate = json.getJSONObject("result").getDouble(fromCurrency + toCurrency);
+//            } catch (IOException | JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//            return exchangeRate;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Double exchangeRate) {
+//            if (exchangeRate != null) {
+//                String amountString = expenseAmount.getText().toString();
+//                if (!amountString.isEmpty()) {
+//                    double amount = Double.parseDouble(amountString);
+//                    double convertedAmount = amount / exchangeRate;
+//                    expenseAmount.setText(String.format(Locale.getDefault(), "%.2f", convertedAmount));
+//                }
+//            } else {
+//                Toast.makeText(CreateNewExpense.this, "Failed to convert currency", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
     //camera
     protected boolean allPermissionsGranted_CAMERA() {
         for (String permission : REQUIRED_PERMISSIONS)
@@ -369,7 +471,9 @@ public class CreateNewExpense extends AppCompatActivity implements MapWithSearch
                     uri = saveImage(bitmap);
                 }
                 image_uri = uri;
+                billingImage.setVisibility(View.VISIBLE);
                 billingImage.setImageURI(uri);
+                billing.setVisibility(View.GONE);
                 remove.setVisibility(View.VISIBLE);
                 return;
             }
@@ -403,9 +507,6 @@ public class CreateNewExpense extends AppCompatActivity implements MapWithSearch
             e.printStackTrace();
         }
     }
-
-    FirebaseAuth myAuth;
-    String image_storage_url;
 
     private Expense get_data() {
         int id = new Expense().getExpense_Id();

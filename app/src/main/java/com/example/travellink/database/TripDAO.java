@@ -14,7 +14,7 @@ import java.util.List;
 
 @Dao
 public interface TripDAO {
-    @Query("SELECT * FROM trip")
+    @Query("SELECT * FROM trip ORDER BY trip.Trip_start_date DESC")
     List<Trip> getAll();
 
     @Query("SELECT * FROM trip WHERE trip_id = :tripIds")
@@ -27,14 +27,30 @@ public interface TripDAO {
     @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.trip_id = expense.Trip_ID  GROUP BY trip.trip_id ORDER BY trip.Trip_start_date DESC")
     LiveData<List<Trip_withTotalPrice>> getAllTripWithTotalExpense();
 
+    @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.trip_id = expense.Trip_ID WHERE trip.Trip_status IN ('Submitted', 'Approved', 'Declined')  GROUP BY trip.trip_id ORDER BY trip.Trip_start_date DESC")
+    LiveData<List<Trip_withTotalPrice>> getAllSubmittedTripWithTotalExpense();
+
+
     @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.trip_id = expense.Trip_ID WHERE trip.trip_id = :tripIds ")
     LiveData<Trip_withTotalPrice> getTripWithTotalExpense(int tripIds);
 
     @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.trip_id = expense.Trip_ID  GROUP BY trip.trip_id ORDER BY trip.Trip_start_date DESC LIMIT 5")
-    List<Trip_withTotalPrice> getRecent5TripWithTotalExpense();
+    LiveData<List<Trip_withTotalPrice>> getRecent5TripWithTotalExpense();
 
     @Query("SELECT trip.*, SUM(expense.Expense_Price) as TotalOfExpenses  FROM trip LEFT OUTER JOIN expense ON trip.trip_id = expense.Trip_ID  GROUP BY trip.trip_id ORDER BY TotalOfExpenses DESC LIMIT 3")
-    List<Trip_withTotalPrice> getTop3TripWithTotalExpense();
+    LiveData<List<Trip_withTotalPrice>> getTop3TripWithTotalExpense();
+
+    @Insert
+    long insertTrip(Trip trip);
+
+    @Update
+    int updateTrip(Trip trip);
+
+    @Query("Delete FROM trip WHERE  trip_id = :tripIds")
+    int Delete(int tripIds);
+
+    @Query("DELETE FROM Trip")
+    void deleteAll();
 
     class Trip_withTotalPrice {
         @Embedded
@@ -50,18 +66,6 @@ public interface TripDAO {
             return TotalOfExpense;
         }
     }
-
-    @Insert
-    long insertTrip(Trip trip);
-
-    @Update
-    int updateTrip(Trip trip);
-
-    @Query("Delete FROM trip WHERE  trip_id = :tripIds")
-    int Delete(int tripIds);
-
-    @Query("DELETE FROM Trip")
-    void deleteAll();
 
 
 }

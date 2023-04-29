@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_admin"
+    app:startDestination="@id/viewStatFragment2">
+
+    <fragment
+        android:id="@+id/viewStatFragment2"
+        android:name="com.example.travellink.ViewStatFragment"
+        android:label="fragment_view_stat"
+        tools:layout="@layout/fragment_view_stat" />
+    <fragment
+        android:id="@+id/viewAllTripFragment2"
+        android:name="com.example.travellink.Trip.ViewAllTripFragment"
+        android:label="fragment_view_all_trip"
+        tools:layout="@layout/fragment_view_all_trip" />
+    <fragment
+        android:id="@+id/viewAccountFragment2"
+        android:name="com.example.travellink.Auth.ViewAccountFragment"
+        android:label="fragment_view_account"
+        tools:layout="@layout/fragment_view_account" />
+    <fragment
+        android:id="@+id/settingFragment2"
+        android:name="com.example.travellink.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
+</navigation>

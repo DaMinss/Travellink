@@ -6,16 +6,19 @@ public class UserData {
     private String last_name = null;
     private String Email = null;
     private String phone = null;
-    private String password = null;
+    private String isAdmin = "No";
 
+    public UserData(){
 
-    public UserData(String id, String first_name, String last_name, String email, String phone, String password) {
+    }
+
+    public UserData(String id, String first_name, String last_name, String email, String phone, String isAdmin) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
         Email = email;
         this.phone = phone;
-        this.password = password;
+        this.isAdmin = isAdmin;
     }
 
     public String getId() {
@@ -58,11 +61,11 @@ public class UserData {
         this.phone = phone;
     }
 
-    public String getPassword() {
-        return password;
+    public String isAdmin() {
+        return isAdmin;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAdmin(String admin) {
+        isAdmin = admin;
     }
 }

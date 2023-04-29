@@ -45,6 +45,20 @@
             app:layout_constraintVertical_bias="0.0"
             tools:layout_editor_absoluteX="10dp" />
 
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/purple_200"
+            android:indeterminateTintMode="src_atop"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Return" />
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieAnimationView2"
             android:layout_width="193dp"

@@ -40,12 +40,14 @@
                 android:id="@+id/departName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="2dp"
                 android:text="Ho Chi Minh"
                 android:textAlignment="textEnd"
                 android:textColor="@color/white"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/route"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/expense_Name" />
 
@@ -53,12 +55,14 @@
                 android:id="@+id/arriveName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="8dp"
                 android:text="Ho Chi Minh"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/departName"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/route"
                 app:layout_constraintTop_toTopOf="@+id/departName"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -258,6 +262,7 @@
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_ofExpense"
         android:layout_width="match_parent"
@@ -277,7 +282,8 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:visibility="gone"/>
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonUnSubmit"
             android:layout_width="180dp"
@@ -292,5 +298,36 @@
             android:textStyle="bold"
             android:layout_gravity="center"
             android:visibility="gone"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonApprove"
+                android:layout_width="180dp"
+                android:layout_height="35dp"
+                android:background="@drawable/btn_login"
+                android:text="Approve trip"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonDecline"
+                android:layout_width="180dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/btn_login"
+                android:text="Decline trip"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+        </LinearLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>

@@ -10,10 +10,9 @@
 
         <item android:id="@+id/aboutFragment"
             android:title="About"/>
-    </group>
     <item android:title="Account">
         <menu>
-            <item android:id="@+id/accountFragment"
+            <item android:id="@+id/viewAccountFragment"
                 android:title="View Account"
                 android:visible="false"
                 />
@@ -25,5 +24,6 @@
                 android:title="Exit Personal Mode" />
         </menu>
     </item>
+    </group>
 
 </menu>
